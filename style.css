@@ -535,3 +535,38 @@ section[id],
 #equipa {
   scroll-margin-top: var(--nav-h) !important;
 }
+
+/* ==========================================================================
+   ÁREAS DE PRÁTICA (CARDS), ATRIBUTOS CLICÁVEIS E MÉTODO DE TRABALHO
+   ========================================================================== */
+.area-card {
+  position: relative; display: flex; flex-direction: column; gap: 14px;
+  padding: 32px; border-radius: 24px; cursor: pointer;
+  background: rgba(46, 27, 18, 0.78); border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+  transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease;
+}
+.area-card:hover { transform: translateY(-4px); border-color: rgba(59, 180, 242, .6); box-shadow: 0 14px 40px rgba(59, 180, 242, .18); }
+.area-card:focus-visible, .attr-card:focus-visible { outline: 2px solid #3BB4F2; outline-offset: 3px; }
+.area-card__top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.area-card__icon { width: 48px; height: 48px; border-radius: 16px; display: flex; align-items: center; justify-content: center;
+  background: #4A2C1B; border: 1px solid rgba(255,255,255,.1); color: #3BB4F2; transition: all .3s ease; }
+.area-card:hover .area-card__icon { background: #3BB4F2; color: #1F120B; }
+.area-card__num { font-family: 'Times New Roman', serif; font-weight: 700; font-size: 14px; color: rgba(217,195,176,.6); }
+.area-card__title { font-weight: 700; font-size: 22px; line-height: 1.25; color: #fff; }
+.area-card__text { font-size: 14.5px; line-height: 1.65; color: #D9C3B0; flex: 1; }
+.area-card__more { font-size: 13px; font-weight: 700; letter-spacing: .04em; color: #3BB4F2; margin-top: 6px; }
+.area-card:hover .area-card__more span { display: inline-block; transform: translateX(4px); }
+
+.attr-card { position: relative; cursor: pointer; transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease; }
+.attr-card:hover { transform: translateY(-3px); border-color: rgba(59,180,242,.6) !important; box-shadow: 0 10px 28px rgba(59,180,242,.22); }
+.attr-more { display: block; margin-top: 10px; font-size: 12px; font-weight: 700; color: #3BB4F2; letter-spacing: .04em; }
+
+.metodo-grid { list-style: none; display: grid; gap: 20px; max-width: 1200px; margin: 0 auto; grid-template-columns: 1fr; counter-reset: m; }
+@media (min-width: 768px) { .metodo-grid { grid-template-columns: repeat(5, 1fr); gap: 16px; } }
+.metodo-step { position: relative; padding: 28px 22px; border-radius: 20px; background: rgba(46,27,18,.78);
+  border: 1px solid rgba(255,255,255,.12); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+.metodo-step::after { content: ''; position: absolute; left: 22px; top: 0; width: 40px; height: 3px; background: #3BB4F2; border-radius: 0 0 3px 3px; }
+.metodo-step__n { display: block; font-weight: 800; font-size: 34px; color: #3BB4F2; line-height: 1; margin-bottom: 14px; }
+.metodo-step h3 { font-weight: 700; font-size: 18px; color: #fff; margin-bottom: 8px; }
+.metodo-step p { font-size: 13.5px; line-height: 1.6; color: #D9C3B0; }
