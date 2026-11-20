@@ -171,6 +171,7 @@ export const contactos = {
   endereco: 'Loanda Towers, 11º Andar, Sala 04, Luanda, Angola',
   mapsUrl: 'https://maps.app.goo.gl/5nbpGcAmgWva6rXJA',
   telefones: ['+244 933 364 301', '+244 923 514 369'],
+  whatsapp: '+244 931 092 703',
   email: 'jpires@jpires-advogados.ao',
   assuntoEmail: 'Pedido de sessão de diagnóstico'
 };

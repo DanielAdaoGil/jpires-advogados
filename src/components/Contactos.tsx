@@ -70,7 +70,7 @@ export const Contactos: React.FC = () => {
                 <Phone className="w-6 h-6" strokeWidth={2} />
               </div>
               <h3 className="font-syne font-bold text-sm text-[#D9C3B0] uppercase tracking-wider mb-2">
-                TELEFONE
+                TELEFONE FIXO
               </h3>
               <div className="space-y-1.5">
                 {contactos.telefones.map((tel) => (
@@ -82,6 +82,14 @@ export const Contactos: React.FC = () => {
                     {tel}
                   </a>
                 ))}
+                {contactos.whatsapp && (
+                  <a
+                    href={`https://wa.me/${contactos.whatsapp.replace(/\s+/g, '')}`}
+                    className="font-syne font-bold text-sm sm:text-base text-white hover:text-[#3BB4F2] transition-colors block"
+                  >
+                    Whatsapp: {contactos.whatsapp}
+                  </a>
+                )}
               </div>
             </div>
             <div className="pt-6 mt-6 border-t border-white/10">

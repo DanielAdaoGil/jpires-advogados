@@ -18,10 +18,10 @@ export const Honorarios: React.FC = () => {
             MODELOS DE COLABORAÇÃO
           </span>
           <h2 className="font-syne font-extrabold text-3xl sm:text-4xl md:text-5xl text-[#2E1B12] tracking-tight">
-            Honorários <span className="text-[#1B8FD0]">Transparentes</span>
+            Honorários
           </h2>
           <p className="font-inter text-sm sm:text-base text-[#2E1B12]/85 leading-relaxed pt-2 font-normal">
-            Os nossos honorários são definidos em função do perfil do cliente, da complexidade do mandato e das condições do mercado. Prezamos pela transparência, equilíbrio e valor real entregue — sempre com abertura para negociação.
+            Os nossos honorários não são negociáveis, mas as formas de pagamento são. Prezamos pela transparência, equilíbrio e valor real entregue.
           </p>
         </div>
 

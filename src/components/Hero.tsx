@@ -17,7 +17,7 @@ export const Hero: React.FC = () => {
     <section
       id="inicio"
       className="relative min-h-[700px] h-screen max-h-[1100px] w-full flex flex-col justify-between overflow-hidden p-3 sm:p-5 lg:p-7 pt-24 sm:pt-28 lg:pt-32"
-      aria-label="Início - Corporate Law para Angola"
+      aria-label="Início - Corporate Law"
     >
       {/* Contentor com cantos arredondados, gradiente e brilhos discretos apenas nos cantos */}
       <div className="relative w-full h-full rounded-3xl bg-gradient-to-br from-[#1F120B] via-[#24150D] to-[#2E1B12] border border-white/10 shadow-2xl flex flex-col justify-between p-6 sm:p-10 lg:p-12 overflow-hidden">
@@ -40,22 +40,16 @@ export const Hero: React.FC = () => {
             {/* Distintivo em pílula com contorno fino */}
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#4A2C1B]/40 border border-[#3BB4F2]/30 backdrop-blur-md shadow-sm">
               <BadgeCheck className="w-4 h-4 text-[#3BB4F2]" strokeWidth={2.2} />
-              <span className="font-inter text-[11px] sm:text-xs font-semibold tracking-wider text-[#D9C3B0] uppercase">
-                ESCRITÓRIO DE ADVOCACIA · ANGOLA
-              </span>
             </div>
 
             {/* Título grande em Syne bold em 3 linhas */}
             <h1 className="font-syne font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-[68px] xl:text-[76px] leading-[1.03] tracking-tight">
-              <span className="block text-white">Corporate Law para</span>
-              <span className="block text-white">Angola</span>
+              <span className="block text-white">Corporate Law</span>
               <span className="block text-[#3BB4F2]">que cresce</span>
             </h1>
 
             {/* Linha de apoio abaixo, pequena e em tom castanho quente suave */}
-            <p className="font-inter text-xs sm:text-sm md:text-base text-[#D9C3B0] tracking-wide font-normal">
-              Sociedade de Advogados, RL · Luanda, Angola
-            </p>
+
           </div>
 
           {/* 2) LADO DIREITO: a meio da altura */}

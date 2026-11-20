@@ -16,7 +16,7 @@ export const Aliancas: React.FC = () => {
             ALIANÇAS INTERNACIONAIS
           </span>
           <h2 className="font-syne font-extrabold text-3xl sm:text-4xl md:text-5xl text-white tracking-tight">
-            Alianças em <span className="text-[#3BB4F2]">três continentes</span>
+            Alianças
           </h2>
           <p className="font-inter text-base sm:text-lg text-[#D9C3B0] leading-relaxed font-normal">
             A JPires mantém alianças com parceiros na Europa, em África e na América.
@@ -152,6 +152,29 @@ export const Aliancas: React.FC = () => {
                 <rect x="12" y="-14" width="70" height="24" rx="12" fill="#1F120B" stroke="#3BB4F2" strokeWidth="1.5" />
                 <text x="47" y="2" fill="#FFFFFF" fontSize="11" fontFamily="Syne" fontWeight="bold" textAnchor="middle">
                   Luanda
+                </text>
+              </g>
+
+              {/* Marcadores Alianças: Botswana, Gana, Congo */}
+              <g transform="translate(550, 380)">
+                <circle r="6" fill="#3BB4F2" fillOpacity="0.8" />
+                <rect x="-14" y="-14" width="60" height="22" rx="11" fill="#1F120B" stroke="#3BB4F2" strokeWidth="1.5" />
+                <text x="0" y="2" fill="#FFFFFF" fontSize="10" fontFamily="Syne" fontWeight="bold" textAnchor="middle">
+                  Botswana
+                </text>
+              </g>
+              <g transform="translate(450, 320)">
+                <circle r="6" fill="#3BB4F2" fillOpacity="0.8" />
+                <rect x="-14" y="-14" width="60" height="22" rx="11" fill="#1F120B" stroke="#3BB4F2" strokeWidth="1.5" />
+                <text x="0" y="2" fill="#FFFFFF" fontSize="10" fontFamily="Syne" fontWeight="bold" textAnchor="middle">
+                  Gana
+                </text>
+              </g>
+              <g transform="translate(560, 300)">
+                <circle r="6" fill="#3BB4F2" fillOpacity="0.8" />
+                <rect x="-14" y="-14" width="60" height="22" rx="11" fill="#1F120B" stroke="#3BB4F2" strokeWidth="1.5" />
+                <text x="0" y="2" fill="#FFFFFF" fontSize="10" fontFamily="Syne" fontWeight="bold" textAnchor="middle">
+                  Congo
                 </text>
               </g>
 

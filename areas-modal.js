@@ -60,7 +60,7 @@
     ['01','Conhecimento','Compreensão do objectivo do cliente.'],
     ['02','Verificação','Conflitos, enquadramento e documentos.'],
     ['03','Proposta','Âmbito, honorários, prazos e responsabilidades.'],
-    ['04','Execução','Plano de trabalho e actualizações.'],
+    ['04','Execução','Estratégia, plano de execução, plano de trabalho e actualizações.'],
     ['05','Conclusão','Entrega, prestação de contas e encerramento.']
   ];
 

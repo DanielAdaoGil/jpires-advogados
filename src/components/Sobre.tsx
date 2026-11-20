@@ -111,7 +111,7 @@ export const Sobre: React.FC = () => {
           {/* Cabeçalho das Áreas */}
           <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
             <span className="font-inter text-xs font-bold tracking-widest text-[#3BB4F2] uppercase block mb-3">
-              ÁREAS DE PRÁTICA
+              Áreas de Especialidade
             </span>
             <h2 className="font-syne font-extrabold text-3xl sm:text-4xl md:text-5xl text-white tracking-tight">
               O que <span className="text-[#3BB4F2]">fazemos</span>

@@ -25,7 +25,7 @@ export const Navbar: React.FC = () => {
 
   const navLinks = [
     { label: 'Sobre', href: '#sobre' },
-    { label: 'Áreas de Prática', href: '#areas' },
+    { label: 'Áreas de Especialidade', href: '#areas' },
     { label: 'Sectores', href: '#sectores' },
     { label: 'Equipa', href: '#equipa' },
     { label: 'Honorários', href: '#honorarios' },

@@ -24,7 +24,7 @@
 
     /* =================== NAVBAR =================== */
     'Sobre': ['About', 'À propos', 'Über uns', 'من نحن', 'О нас', 'Chi siamo', '关于我们'],
-    'Áreas de Prática': ['Practice Areas', 'Domaines d’expertise', 'Tätigkeitsbereiche', 'مجالات الممارسة', 'Направления', 'Aree di attività', '业务领域'],
+    'Áreas de Especialidade': ['Practice Areas', 'Domaines d’expertise', 'Tätigkeitsbereiche', 'مجالات الممارسة', 'Направления', 'Aree di attività', '业务领域'],
     'Sectores': ['Sectors', 'Secteurs', 'Branchen', 'القطاعات', 'Отрасли', 'Settori', '行业'],
     'Equipa': ['Team', 'Équipe', 'Team', 'الفريق', 'Команда', 'Team', '团队'],
     'Honorários': ['Fees', 'Honoraires', 'Honorare', 'الأتعاب', 'Гонорары', 'Onorari', '费用'],
@@ -73,7 +73,7 @@
     ],
     'Corporate': ['Corporate', 'Corporate', 'Corporate', 'الشركات', 'Корпоративное', 'Societario', '公司法'],
     'Especialização': ['Specialisation', 'Spécialisation', 'Spezialisierung', 'التخصص', 'Специализация', 'Specializzazione', '专业领域'],
-    'Áreas de prática': ['Practice areas', 'Domaines d’expertise', 'Tätigkeitsbereiche', 'مجالات الممارسة', 'Направления', 'Aree di attività', '业务领域'],
+    'Áreas de Especialidade': ['Practice areas', 'Domaines d’expertise', 'Tätigkeitsbereiche', 'مجالات الممارسة', 'Направления', 'Aree di attività', '业务领域'],
     'Mercado principal': ['Main market', 'Marché principal', 'Hauptmarkt', 'السوق الرئيسي', 'Основной рынок', 'Mercato principale', '主要市场'],
     'Escritório registado': ['Registered firm', 'Cabinet enregistré', 'Eingetragene Kanzlei', 'مكتب مسجّل', 'Зарегистрированная фирма', 'Studio registrato', '注册律所'],
 
@@ -142,7 +142,7 @@
     ],
 
     /* =================== ÁREAS DE PRÁTICA (cabeçalho secção) =================== */
-    'ÁREAS DE PRÁTICA E SERVIÇOS': [
+    'Áreas de Especialidade': [
       'PRACTICE AREAS AND SERVICES', 'DOMAINES D’EXPERTISE ET SERVICES', 'TÄTIGKEITSBEREICHE UND DIENSTLEISTUNGEN',
       'مجالات الممارسة والخدمات', 'НАПРАВЛЕНИЯ И УСЛУГИ', 'AREE DI ATTIVITÀ E SERVIZI', '业务领域与服务'
     ],
@@ -231,14 +231,14 @@
       'نماذج التعاون', 'МОДЕЛИ СОТРУДНИЧЕСТВА', 'MODELLI DI COLLABORAZIONE', '合作模式'
     ],
     'Transparentes': ['& Transparent', '& transparents', '& transparent', 'والشفافية', 'и прозрачные', 'e trasparenti', '与透明'],
-    'Os nossos honorários são definidos em função do perfil do cliente, da complexidade do mandato e das condições do mercado. Prezamos pela transparência, equilíbrio e valor real entregue — sempre com abertura para negociação.': [
-      'Our fees are defined according to the client profile, the complexity of the mandate and market conditions. We value transparency, balance and real value delivered — always open to negotiation.',
-      'Nos honoraires sont définis en fonction du profil du client, de la complexité du mandat et des conditions du marché. Nous privilégions la transparence, l’équilibre et la valeur réelle apportée — toujours ouverts à la négociation.',
-      'Unsere Honorare richten sich nach dem Profil des Mandanten, der Komplexität des Mandats und den Marktbedingungen. Wir legen Wert auf Transparenz, Ausgewogenheit und echten Mehrwert — stets verhandlungsbereit.',
-      'تُحدَّد أتعابنا بحسب ملف العميل وتعقيد التكليف وظروف السوق. نحرص على الشفافية والتوازن والقيمة الحقيقية المقدّمة — مع انفتاح دائم على التفاوض.',
-      'Наши гонорары определяются с учётом профиля клиента, сложности поручения и рыночных условий. Мы ценим прозрачность, баланс и реальную ценность — всегда открыты к переговорам.',
-      'I nostri onorari sono definiti in base al profilo del cliente, alla complessità del mandato e alle condizioni di mercato. Puntiamo su trasparenza, equilibrio e valore reale offerto — sempre aperti alla negoziazione.',
-      '我们的费用根据客户情况、委托复杂度和市场条件确定。我们注重透明、公平和所创造的实际价值——始终愿意协商。'
+    'Os nossos honorários não são negociáveis, mas as formas de pagamento são. Prezamos pela transparência, equilíbrio e valor real entregue.': [
+      'Our fees are not negotiable, but payment terms are. We value transparency, balance and real value delivered.',
+      'Nos honoraires ne sont pas négociables, mais les modalités de paiement le sont. Nous privilégions la transparence, l’équilibre et la valeur réelle apportée.',
+      'Unsere Honorare sind nicht verhandelbar, aber die Zahlungsbedingungen schon. Wir legen Wert auf Transparenz, Ausgewogenheit und echten Mehrwert.',
+      'أتعابنا غير قابلة للتفاوض، لكن شروط الدفع قابلة للتفاوض. نحرص على الشفافية والتوازن والقيمة الحقيقية المقدّمة.',
+      'Наши гонорары не подлежат переговорам, но условия оплаты — да. Мы ценим прозрачность, баланс и реальную ценность.',
+      'I nostri onorari non sono negoziabili, ma le modalità di pagamento lo sono. Puntiamo su trasparenza, equilibrio e valore reale offerto.',
+      '我们的费用不可协商，但付款条件可以协商。我们注重透明、公平和所创造的实际价值。'
     ],
     'AVENÇA MENSAL': ['MONTHLY RETAINER', 'FORFAIT MENSUEL', 'MONATLICHES MANDAT', 'اتفاقية شهرية', 'ЕЖЕМЕСЯЧНЫЙ АБОНЕМЕНТ', 'CANONE MENSILE', '月度委托'],
     '★ RECOMENDADO': ['★ RECOMMENDED', '★ RECOMMANDÉ', '★ EMPFOHLEN', '★ موصى به', '★ РЕКОМЕНДУЕМ', '★ CONSIGLIATO', '★ 推荐'],
@@ -356,7 +356,7 @@
       '安哥拉卢安达 Loanda Towers 11层04室'
     ],
     'Luanda, Angola': ['Luanda, Angola', 'Luanda, Angola', 'Luanda, Angola', 'لواندا، أنغولا', 'Луанда, Ангола', 'Luanda, Angola', '安哥拉卢安达'],
-    'TELEFONE': ['PHONE', 'TÉLÉPHONE', 'TELEFON', 'الهاتف', 'ТЕЛЕФОН', 'TELEFONO', '电话'],
+    'TELEFONE FIXO': ['FIXED PHONE', 'TÉLÉPHONE FIXE', 'FESTNETZ', 'الهاتف الثابت', 'СТАЦИОНАРНЫЙ ТЕЛЕФОН', 'TELEFONO FISSO', '固定电话'],
     'Atendimento Corporativo': [
       'Corporate Service', 'Service entreprises', 'Unternehmensservice',
       'خدمة الشركات', 'Обслуживание корпоративных клиентов', 'Servizio aziende', '企业客户服务'
@@ -379,7 +379,7 @@
     ],
 
     /* =================== MODAL: ETIQUETAS FIXAS =================== */
-    'JPires · Áreas de Prática': [
+    'JPires · Áreas de Especialidade': [
       'JPires · Practice Areas', 'JPires · Domaines d’expertise', 'JPires · Tätigkeitsbereiche',
       'JPires · مجالات الممارسة', 'JPires · Направления деятельности', 'JPires · Aree di attività', 'JPires · 业务领域'
     ],
@@ -874,7 +874,7 @@
   const origAttr = new WeakMap();
   const norm = (s) => s.replace(/\s+/g, ' ').trim();
   const SKIP = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'TEXTAREA']);
-  const EYEBROW_AREA = /^JPires · Áreas de Prática · (\d+)$/;
+  const EYEBROW_AREA = /^JPires · Áreas de Especialidade · (\d+)$/;
 
   function t(pt, lang) {
     lang = lang || current;
