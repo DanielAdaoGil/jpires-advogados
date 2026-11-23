@@ -1,0 +1,101 @@
+---
+/**
+ * Fundo animado do hero: uma fotografia por área de especialidade.
+ * As imagens são meramente decorativas — o texto continua legível por cima
+ * do véu escuro definido em tokens.css (--overlay-hero).
+ * Sem JavaScript: a animação é só CSS. Com prefers-reduced-motion:
+ * mantém-se a primeira foto, parada.
+ */
+export interface Props {
+  slides: Array<{ titulo: string; src: string }>;
+}
+
+const { slides } = Astro.props;
+
+// 5 s por fotografia; a duração total acompanha o número de slides.
+const passo = 5;
+const total = passo * slides.length;
+---
+
+<div
+  class="hero-slideshow"
+  aria-hidden="true"
+  data-no-translate
+  style={`--hero-passo: ${passo}s; --hero-total: ${total}s`}
+>
+  {
+    slides.map((slide, indice) => (
+      <img
+        class="hero-slideshow__slide"
+        src={slide.src}
+        alt=""
+        decoding="async"
+        loading="eager"
+        fetchpriority={indice === 0 ? 'high' : 'low'}
+        style={`--i: ${indice}`}
+        data-titulo={slide.titulo}
+      />
+    ))
+  }
+  <div class="hero-slideshow__veil"></div>
+</div>
+
+<style>
+  .hero-slideshow {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .hero-slideshow__slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0;
+    will-change: opacity;
+    animation: hero-slide-fade var(--hero-total) linear infinite;
+    animation-delay: calc(var(--i) * var(--hero-passo));
+    animation-fill-mode: backwards;
+  }
+
+  .hero-slideshow__veil {
+    position: absolute;
+    inset: 0;
+    background: var(--overlay-hero);
+  }
+
+  /* 7 fotografias → cada uma ocupa 1/7 do ciclo (14,2857%). */
+  @keyframes hero-slide-fade {
+    0% {
+      opacity: 0;
+    }
+    1.5% {
+      opacity: var(--hero-image-opacity);
+    }
+    12% {
+      opacity: var(--hero-image-opacity);
+    }
+    14.2857% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-slideshow__slide {
+      animation: none;
+      opacity: 0;
+    }
+
+    .hero-slideshow__slide:first-child {
+      opacity: var(--hero-image-opacity);
+    }
+  }
+</style>

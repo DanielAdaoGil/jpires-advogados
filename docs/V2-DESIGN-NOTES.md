@@ -506,3 +506,51 @@ Foram convertidas **204 declarações** em 20 ficheiros.
   `#140F0A`, botão `#C08030` com texto `#140F0A`, ícones do rodapé `#C08030`,
   overlay do modal `rgba(20,15,10,0.78)`, erros `#FF9F8A/#FFB4A2/#FFD7CF`.
 - Mapa, modal, formulário e seletor de idiomas continuam sem erros de consola.
+
+---
+
+## 17. Hero com fotografias, CTA final e rodapé (2026-11-23, 13:00)
+
+Pedido do cliente: realçar o botão **Contactar do fim da página inicial** (não o
+do hero), colocar fotografias das 7 áreas no fundo do hero e retirar a palavra
+"WhatsApp" do rodapé.
+
+### Botão Contactar (fundo da página)
+
+- Antes: `.section--cta` não tinha estilos; o botão ficava alinhado à esquerda.
+- Agora: `.section--cta { text-align: center; }` e o botão tem `cta-pulse`
+  (anel âmbar discreto de 3,4 s), mais a entrada `.reveal` já usada no site.
+- A animação usa apenas `--cta-glow-start` / `--cta-glow-end`, definidos em
+  `tokens.css`. Respeita `prefers-reduced-motion`.
+
+### Fotografias do hero
+
+- Origem escolhida pelo cliente: **stock online**. Foram descarregadas 7 fotos
+  da **Pexels** (licença Pexels, uso livre), uma por área, em 1600×900,
+  guardadas localmente em `v2/public/images/hero/`.
+- Créditos em `v2/public/images/hero/CREDITOS.md`.
+- `HeroSlideshow.astro` recebe a lista directamente de `getCollection('areas')` — a ordem
+  é a mesma das áreas (`ordem`), pelo que adicionar/remover uma área actualiza
+  o slideshow sem editar outro ficheiro.
+- Crossfade só com CSS: 5 s por foto, 35 s o ciclo completo. Cada foto aparece
+  a `--hero-image-opacity: 0.46` e por cima há o véu `--overlay-hero`
+  (gradiente `--ink` de 94% à esquerda, 64% à direita) — o texto continua
+  legível e as imagens continuam visíveis.
+- Sem JavaScript: as fotos estão no HTML. Com `prefers-reduced-motion`: fica
+  apenas a primeira, parada. Todas carregam com `loading="eager"` (as 6 seguintes
+  com `fetchpriority="low"`) para não haver slides vazios.
+
+### Rodapé
+
+- Removido o `<span class="footer-contacts__label">WhatsApp:</span>`.
+- Mantidos o ícone, o link `wa.me` e o número. Acessibilidade preservada com
+  `aria-label` (traduzido pelo motor de idiomas).
+
+### Validação
+
+- `npm run build` → 30 páginas, sem erros.
+- 7/7 fotos carregadas; animação `hero-slide-fade` a correr (35 s); CTA com
+  `cta-pulse`; botão alinhado ao centro em 1440, 768 e 390 px.
+- Sem overflow horizontal em 1440/768/390 px; sem "WhatsApp" visível no rodapé
+  em PT→FR→AR→ZH→PT; `dir="rtl"` no árabe; 0 erros de consola; 0 `⚠️ CONFIRMAR`.
+- Continuam 0 cores literais fora de `tokens.css` e 0 tokens sem definição.

@@ -4,6 +4,7 @@ import { getCollection } from 'astro:content';
 import AreaCard from '../components/AreaCard.astro';
 import SectorCard from '../components/SectorCard.astro';
 import PersonCard from '../components/PersonCard.astro';
+import HeroSlideshow from '../components/HeroSlideshow.astro';
 import { t } from '../i18n/index.ts';
 import { toSlug } from '../utils/slug.ts';
 
@@ -11,10 +12,16 @@ const areas = await getCollection('areas');
 const sectores = await getCollection('sectores');
 const equipa = await getCollection('equipa');
 const lang = 'pt';
+
+// Uma fotografia por área — a ordem segue a mesma das áreas de especialidade.
+const slides = areas
+  .sort((a, b) => a.data.ordem - b.data.ordem)
+  .map((a) => ({ titulo: a.data.titulo, src: `/images/hero/${toSlug(a.id)}.jpg` }));
 ---
 
 <BaseLayout title={t(lang, 'nav.home')} lang={lang} current="/">
   <section class="hero">
+    <HeroSlideshow slides={slides} />
     <div class="container">
       <p class="stub-eyebrow">{t(lang, 'common.legalSuffix')}</p>
       <h1>{t(lang, 'home.hero.title')}</h1>
@@ -78,7 +85,9 @@ const lang = 'pt';
 
   <section class="section section--cta">
     <div class="container">
-      <a href="/contactos/" class="btn btn-primary">{t(lang, 'home.hero.cta')}</a>
+      <div class="cta-emphasis reveal">
+        <a href="/contactos/" class="btn btn-primary cta-emphasis__btn">{t(lang, 'home.hero.cta')}</a>
+      </div>
     </div>
   </section>
 </BaseLayout>

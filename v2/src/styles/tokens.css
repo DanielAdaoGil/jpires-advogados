@@ -91,6 +91,13 @@
 
   /* Overlays e barras de deslocação */
   --overlay-modal: rgb(var(--rgb-ink) / 0.78);
+  --overlay-hero: linear-gradient(
+    90deg,
+    rgb(var(--rgb-ink) / 0.94) 0%,
+    rgb(var(--rgb-ink) / 0.82) 45%,
+    rgb(var(--rgb-ink) / 0.64) 100%
+  );
+  --hero-image-opacity: 0.46;
   --scrollbar-thumb: var(--brown-medium);
 
   /* Sombras */
@@ -105,4 +112,6 @@
     0 0 0 1px rgb(var(--rgb-paper) / 0.04);
   --shadow-marker: 0 0 0 4px rgb(var(--rgb-gold) / 0.25);
   --shadow-marker-active: 0 0 0 6px rgb(var(--rgb-gold-light) / 0.28);
+  --cta-glow-start: 0 0 0 0 rgb(var(--rgb-gold) / 0.5);
+  --cta-glow-end: 0 0 0 14px rgb(var(--rgb-gold) / 0);
 }

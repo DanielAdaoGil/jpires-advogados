@@ -270,10 +270,18 @@ p {
 
 /* Hero */
 .hero {
+  position: relative;
+  overflow: hidden;
   padding: clamp(4rem, 10vw, 8rem) 0 clamp(4rem, 9vw, 7rem);
   border-bottom: 4px solid var(--border-accent);
   background: var(--surface-dark);
   color: var(--text-on-dark);
+}
+
+/* O texto fica sempre acima das fotografias do fundo. */
+.hero > .container {
+  position: relative;
+  z-index: 1;
 }
 
 .hero h1 {
@@ -329,6 +337,25 @@ p {
 .btn-ghost {
   border-color: var(--border-subtle);
   color: var(--text-on-dark);
+}
+
+/* Botão "Contactar" do fim da página inicial: centralizado e com realce discreto. */
+.section--cta {
+  text-align: center;
+}
+
+.cta-emphasis__btn {
+  animation: cta-pulse 3.4s var(--ease) infinite;
+}
+
+@keyframes cta-pulse {
+  0% {
+    box-shadow: var(--cta-glow-start);
+  }
+  70%,
+  100% {
+    box-shadow: var(--cta-glow-end);
+  }
 }
 
 /* Conteúdo */
@@ -712,6 +739,10 @@ html.js .reveal.is-visible {
   .person-card:hover .person-avatar,
   .btn:hover {
     transform: none;
+  }
+
+  .cta-emphasis__btn {
+    animation: none;
   }
 
   .nav-panel,
