@@ -1,0 +1,262 @@
+---
+import { t, type Lang } from '../i18n/index.ts';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang = 'pt' } = Astro.props;
+---
+
+<form
+  class="contact-form"
+  novalidate
+  aria-label={t(lang, 'contactos.formulario.titulo')}
+>
+  <h2 class="contact-form__title">{t(lang, 'contactos.formulario.titulo')}</h2>
+
+  <div class="form-group">
+    <label for="nome">{t(lang, 'contactos.formulario.nome')}</label>
+    <input
+      id="nome"
+      name="nome"
+      type="text"
+      required
+      minlength="2"
+      aria-required="true"
+    />
+    <span class="form-error" aria-live="polite"></span>
+  </div>
+
+  <div class="form-group">
+    <label for="email">{t(lang, 'contactos.formulario.email')}</label>
+    <input
+      id="email"
+      name="email"
+      type="email"
+      required
+      aria-required="true"
+    />
+    <span class="form-error" aria-live="polite"></span>
+  </div>
+
+  <div class="form-group">
+    <label for="telefone">{t(lang, 'contactos.formulario.telefone')}</label>
+    <input
+      id="telefone"
+      name="telefone"
+      type="tel"
+      placeholder="+244 9xx xxx xxx"
+    />
+    <span class="form-error" aria-live="polite"></span>
+  </div>
+
+  <div class="form-group">
+    <label for="mensagem">{t(lang, 'contactos.formulario.mensagem')}</label>
+    <textarea
+      id="mensagem"
+      name="mensagem"
+      required
+      minlength="10"
+      rows="6"
+      aria-required="true"
+    ></textarea>
+    <span class="form-error" aria-live="polite"></span>
+  </div>
+
+  <div class="form-actions">
+    <button
+      type="submit"
+      class="btn btn-primary"
+      id="btn-enviar"
+    >
+      {t(lang, 'contactos.formulario.enviar')}
+    </button>
+  </div>
+
+  <div
+    id="form-mensagem"
+    role="status"
+    aria-live="polite"
+    class="form-message"
+  ></div>
+</form>
+
+<script>
+  const form = document.querySelector('.contact-form');
+  const btnEnviar = document.querySelector('#btn-enviar');
+  const mensagem = document.querySelector('#form-mensagem');
+  const lang = document.documentElement.lang || 'pt';
+
+  const msgs = {
+    pt: {
+      sucesso: 'Mensagem enviada com sucesso. Entraremos em contacto brevemente.',
+      erro: 'Erro ao enviar a mensagem. Tente novamente ou contacte-nos directamente.',
+      preenchimento: 'Por favor, preencha todos os campos obrigatórios correctamente.',
+    },
+    en: {
+      sucesso: 'Message sent successfully. We will contact you shortly.',
+      erro: 'Error sending message. Please try again or contact us directly.',
+      preenchimento: 'Please fill in all required fields correctly.',
+    },
+  };
+
+  function mostrar(mensagemTexto, tipo) {
+    if (!mensagem) return;
+    mensagem.textContent = mensagemTexto;
+    mensagem.className = 'form-message ' + tipo;
+    mensagem.setAttribute('aria-label', mensagemTexto);
+  }
+
+  form?.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    if (!form.checkValidity()) {
+      mostrar(lang === 'pt' ? msgs.pt.preenchimento : msgs.en.preenchimento, 'erro');
+      form.reportValidity();
+      return;
+    }
+
+    // NOTE: O envio real está intencionalmente desligado nesta fase.
+    // O cliente deve escolher entre mailto:, Formspree ou Netlify Forms.
+    // Nenhum endpoint nem chave de API é criado aqui.
+    mostrar(
+      lang === 'pt' ? msgs.pt.sucesso : msgs.en.sucesso,
+      'sucesso'
+    );
+
+    if (btnEnviar) btnEnviar.disabled = true;
+    form.reset();
+  });
+</script>
+
+<style>
+  .contact-form {
+    box-sizing: border-box;
+    width: 100%;
+    padding: clamp(1.5rem, 3vw, 2.75rem);
+    border: 1px solid var(--brown-medium);
+    border-radius: 8px;
+    background: var(--ink);
+    box-shadow: 0 18px 40px rgba(20, 15, 10, 0.22);
+  }
+
+  .contact-form__title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    color: var(--gold-light);
+    margin: 0 0 var(--space-4);
+  }
+
+  .form-group {
+    margin-bottom: var(--space-4);
+  }
+
+  .form-group label {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    color: var(--brown-soft);
+    margin-bottom: var(--space-2);
+  }
+
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 3.25rem;
+    padding: 0.9rem 1rem;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.5;
+    border: 1px solid rgba(217, 195, 176, 0.5);
+    border-radius: 6px;
+    background: rgba(250, 247, 242, 0.07);
+    color: var(--paper);
+  }
+
+  .form-group textarea {
+    min-height: 9rem;
+    resize: vertical;
+  }
+
+  .form-group input::placeholder,
+  .form-group textarea::placeholder {
+    color: rgba(217, 195, 176, 0.7);
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus {
+    outline: 3px solid var(--gold-light);
+    outline-offset: 2px;
+    border-color: var(--gold-light);
+    background: rgba(250, 247, 242, 0.12);
+  }
+
+  .form-group input:invalid:not(:placeholder-shown),
+  .form-group textarea:invalid:not(:placeholder-shown) {
+    border-color: #ff9f8a;
+  }
+
+  .form-error {
+    display: none;
+    font-size: 0.85rem;
+    color: #ffb4a2;
+    margin-top: 0.4rem;
+  }
+
+  .form-group input:invalid:not(:placeholder-shown) ~ .form-error,
+  .form-group textarea:invalid:not(:placeholder-shown) ~ .form-error {
+    display: block;
+  }
+
+  .form-actions {
+    display: flex;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+  }
+
+  .form-message {
+    margin-top: var(--space-4);
+    padding: 0.9rem 1rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    display: none;
+  }
+
+  .form-message.sucesso {
+    display: block;
+    background: var(--gold);
+    color: var(--ink);
+  }
+
+  .form-message.erro {
+    display: block;
+    background: rgba(150, 32, 32, 0.35);
+    border: 1px solid #ff9f8a;
+    color: #ffd7cf;
+  }
+
+  .btn-primary {
+    background: var(--gold);
+    color: var(--ink);
+    border: none;
+    padding: 0.85rem 1.75rem;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-primary:hover {
+    background: var(--gold-light);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+</style>

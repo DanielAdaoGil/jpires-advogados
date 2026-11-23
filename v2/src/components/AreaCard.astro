@@ -20,7 +20,8 @@ const { titulo, resumo, href } = Astro.props;
     border-radius: 6px;
     padding: var(--space-3);
     background: var(--paper);
-    transition: border-color 0.2s ease;
+    transition: border-color 0.35s var(--ease), transform 0.35s var(--ease),
+      box-shadow 0.35s var(--ease), opacity 1s var(--ease);
   }
   .area-card h3 {
     font-family: var(--font-heading);

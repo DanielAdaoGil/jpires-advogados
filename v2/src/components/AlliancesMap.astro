@@ -1,0 +1,256 @@
+---
+import { t, type Lang, type TranslationKey } from '../i18n/index.ts';
+import 'leaflet/dist/leaflet.css';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+type Alianca = {
+  nome: TranslationKey;
+  continente: TranslationKey;
+  coords: [number, number];
+  direccao: 'top' | 'right' | 'bottom' | 'left';
+};
+
+// Coordenadas das capitais, reaproveitadas do mapa do site legado.
+const aliancas: Alianca[] = [
+  { nome: 'sobre.aliancas.paises.portugal', continente: 'sobre.aliancas.continentes.europa', coords: [38.7223, -9.1393], direccao: 'left' },
+  { nome: 'sobre.aliancas.paises.reinoUnido', continente: 'sobre.aliancas.continentes.europa', coords: [51.5072, -0.1276], direccao: 'top' },
+  { nome: 'sobre.aliancas.paises.alemanha', continente: 'sobre.aliancas.continentes.europa', coords: [52.52, 13.405], direccao: 'right' },
+  { nome: 'sobre.aliancas.paises.botswana', continente: 'sobre.aliancas.continentes.africa', coords: [-24.6283, 25.9233], direccao: 'right' },
+  { nome: 'sobre.aliancas.paises.gana', continente: 'sobre.aliancas.continentes.africa', coords: [5.6037, -0.187], direccao: 'left' },
+  { nome: 'sobre.aliancas.paises.congo', continente: 'sobre.aliancas.continentes.africa', coords: [-4.2767, 15.2662], direccao: 'bottom' },
+  { nome: 'sobre.aliancas.paises.estadosUnidos', continente: 'sobre.aliancas.continentes.americaNorte', coords: [38.9072, -77.0369], direccao: 'left' },
+  { nome: 'sobre.aliancas.paises.brasil', continente: 'sobre.aliancas.continentes.americaSul', coords: [-15.7939, -47.8828], direccao: 'right' },
+  { nome: 'sobre.aliancas.paises.emirados', continente: 'sobre.aliancas.continentes.medioOriente', coords: [24.4539, 54.3773], direccao: 'right' },
+];
+
+const sede: [number, number] = [-8.8383, 13.2344];
+
+const continentes = [
+  'sobre.aliancas.continentes.europa',
+  'sobre.aliancas.continentes.africa',
+  'sobre.aliancas.continentes.americaNorte',
+  'sobre.aliancas.continentes.americaSul',
+  'sobre.aliancas.continentes.medioOriente',
+] as const;
+
+const dadosMapa = aliancas.map((a) => ({
+  nome: t(lang, a.nome),
+  coords: a.coords,
+  direccao: a.direccao,
+}));
+
+const dadosSede = { nome: t(lang, 'sobre.aliancas.sede'), coords: sede };
+---
+
+<div class="aliancas">
+  <div
+    id="mapa-aliancas"
+    class="aliancas__mapa"
+    role="region"
+    aria-label={t(lang, 'sobre.aliancas.mapa')}
+    data-aliancas={JSON.stringify(dadosMapa)}
+    data-sede={JSON.stringify(dadosSede)}
+  ></div>
+
+  <div class="aliancas__lista">
+    {
+      continentes.map((continente) => (
+        <div class="aliancas__grupo">
+          <h3>{t(lang, continente)}</h3>
+          <ul>
+            {aliancas
+              .filter((a) => a.continente === continente)
+              .map((a) => (
+                <li>{t(lang, a.nome)}</li>
+              ))}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  import L from 'leaflet';
+
+  const el = document.getElementById('mapa-aliancas');
+
+  if (el) {
+    const map = L.map(el, {
+      center: [12, 4],
+      zoom: 2,
+      minZoom: 2,
+      maxZoom: 6,
+      scrollWheelZoom: false,
+      worldCopyJump: true,
+    });
+
+    L.tileLayer(
+      'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+      { attribution: 'Mosaicos © Esri', maxZoom: 18 }
+    ).addTo(map);
+
+    const pontoAliado = L.divIcon({
+      className: 'aliancas-icon',
+      html: '<span class="aliancas-ponto"></span>',
+      iconSize: [14, 14],
+      iconAnchor: [7, 7],
+    });
+
+    const pointSede = L.divIcon({
+      className: 'aliancas-icon aliancas-icon--sede',
+      html: '<span class="aliancas-ponto aliancas-ponto--sede"></span>',
+      iconSize: [18, 18],
+      iconAnchor: [9, 9],
+    });
+
+    const aliancasMapa: Array<{
+      nome: string;
+      coords: [number, number];
+      direccao: 'top' | 'right' | 'bottom' | 'left';
+    }> = JSON.parse(el.dataset.aliancas ?? '[]');
+
+    aliancasMapa.forEach((alianca) => {
+      L.marker(alianca.coords, { icon: pontoAliado })
+        .addTo(map)
+        .bindTooltip(alianca.nome, {
+          permanent: true,
+          direction: alianca.direccao,
+          offset: [0, 0],
+          className: 'aliancas-tooltip',
+        });
+    });
+
+    const seda: { nome: string; coords: [number, number] } = JSON.parse(
+      el.dataset.sede ?? '{"nome":"","coords":[0,0]}'
+    );
+
+    L.marker(seda.coords, { icon: pointSede })
+      .addTo(map)
+      .bindTooltip(seda.nome, {
+        permanent: true,
+        direction: 'bottom',
+        offset: [0, 8],
+        className: 'aliancas-tooltip aliancas-tooltip--sede',
+      });
+
+    map.whenReady(() => map.invalidateSize());
+  }
+</script>
+
+<style>
+  .aliancas {
+    margin-top: var(--space-4);
+  }
+
+  .aliancas__mapa {
+    height: clamp(300px, 48vw, 460px);
+    border: 1px solid var(--brown-medium);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--ink);
+  }
+
+  .aliancas__lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+
+  .aliancas__grupo h3 {
+    margin: 0 0 var(--space-1);
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--brown-dark);
+  }
+
+  .aliancas__grupo ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--ink);
+    font-size: 0.95rem;
+  }
+
+  .aliancas__grupo li + li {
+    margin-top: 0.25rem;
+  }
+
+  :global(.aliancas__mapa .leaflet-container) {
+    background: var(--ink);
+    font-family: var(--font-body);
+  }
+
+  :global(.aliancas__mapa .aliancas-ponto) {
+    display: block;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--gold-light);
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 0 4px rgba(192, 128, 48, 0.25);
+  }
+
+  :global(.aliancas__mapa .aliancas-ponto--sede) {
+    width: 16px;
+    height: 16px;
+    border-color: var(--paper);
+    background: var(--gold-mid);
+    box-shadow: 0 0 0 6px rgba(248, 192, 80, 0.28);
+  }
+
+  :global(.aliancas__mapa .aliancas-tooltip) {
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    background: rgba(20, 15, 10, 0.9);
+    color: var(--paper);
+    font-size: 0.75rem;
+    box-shadow: none;
+  }
+
+  :global(.aliancas__mapa .aliancas-tooltip--sede) {
+    border-color: var(--gold-light);
+    color: var(--gold-light);
+    font-weight: 600;
+  }
+
+  :global(.aliancas__mapa .leaflet-tooltip-top::before) {
+    border-top-color: var(--gold);
+  }
+
+  :global(.aliancas__mapa .leaflet-tooltip-right::before) {
+    border-right-color: var(--gold);
+  }
+
+  :global(.aliancas__mapa .leaflet-tooltip-bottom::before) {
+    border-bottom-color: var(--gold);
+  }
+
+  :global(.aliancas__mapa .leaflet-tooltip-left::before) {
+    border-left-color: var(--gold);
+  }
+
+  :global(.aliancas__mapa .leaflet-control-attribution) {
+    background: rgba(20, 15, 10, 0.75);
+    color: var(--brown-soft);
+    font-size: 0.65rem;
+  }
+
+  :global(.aliancas__mapa .leaflet-control-attribution a) {
+    color: var(--gold-light);
+  }
+
+  :global(.aliancas__mapa .leaflet-bar a) {
+    background: var(--ink);
+    color: var(--gold-light);
+    border-bottom-color: var(--brown-medium);
+  }
+</style>

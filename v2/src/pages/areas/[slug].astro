@@ -27,6 +27,17 @@ const areaAdvogados = area.advogados
 <BaseLayout title={area.titulo} lang={lang} current="/areas/">
   <section class="section">
     <div class="container">
+      <div class="area-back">
+        <a
+          class="area-voltar"
+          href="/areas/"
+          aria-label={t(lang, 'area.voltar')}
+          title={t(lang, 'area.voltar')}
+        >
+          <span aria-hidden="true">←</span>
+        </a>
+      </div>
+
       <SectionHeading title={area.titulo} level={1} />
       <p class="entry-resumo">{area.resumo}</p>
       <Content />
@@ -47,8 +58,8 @@ const areaAdvogados = area.advogados
         </section>
       )}
 
-      <div class="area-cta" style="margin-top: var(--space-4);">
-        <a href="/contactos/" class="btn btn-ghost">{t(lang, 'common.contactar')}</a>
+      <div class="area-actions">
+        <a href="/contactos/" class="btn btn-primary">{t(lang, 'common.contactar')}</a>
       </div>
     </div>
   </section>
@@ -71,7 +82,38 @@ const areaAdvogados = area.advogados
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: var(--space-3);
   }
-  .area-cta a {
+  .area-back {
+    margin-bottom: var(--space-3);
+  }
+
+  .area-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+
+  .area-voltar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid var(--brown-medium);
+    border-radius: 50%;
+    color: var(--brown-dark);
+    font-size: 1.35rem;
+    line-height: 1;
     text-decoration: none;
+    transition: background-color 0.25s var(--ease), color 0.25s var(--ease),
+      border-color 0.25s var(--ease);
+  }
+
+  .area-voltar:hover,
+  .area-voltar:focus-visible {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--ink);
   }
 </style>

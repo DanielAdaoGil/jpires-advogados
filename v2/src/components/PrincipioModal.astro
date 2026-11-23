@@ -1,0 +1,354 @@
+---
+import { site } from '../data/site.ts';
+import { principios } from '../data/principios.ts';
+import { t, type Lang } from '../i18n/index.ts';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+// Um único diálogo reutilizado pelos 4 cartões, tal como no site legado.
+const dados = principios.map((p) => ({
+  id: p.id,
+  eyebrow: t(lang, 'sobre.principios.eyebrow'),
+  titulo: t(lang, p.titulo),
+  sub: t(lang, p.sub),
+  intro: t(lang, p.intro),
+  label: t(lang, 'sobre.principios.label'),
+  itens: p.itens.map((chave) => t(lang, chave)),
+  nota: t(lang, p.nota),
+  cta: t(lang, 'sobre.principios.cta'),
+  assunto: t(lang, p.assunto),
+}));
+---
+
+<div
+  class="principio-modal"
+  aria-hidden="true"
+  data-principios={JSON.stringify(dados)}
+  data-email={site.email}
+  data-fechar={t(lang, 'sobre.principios.fechar')}
+>
+  <div
+    class="principio-modal__dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="principio-modal-titulo"
+  >
+    <button type="button" class="principio-modal__close" aria-label={t(lang, 'sobre.principios.fechar')}>
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+    <div class="principio-modal__eyebrow"></div>
+    <h3 class="principio-modal__title" id="principio-modal-titulo"></h3>
+    <p class="principio-modal__subtitle"></p>
+    <p class="principio-modal__intro"></p>
+    <div class="principio-modal__divider"></div>
+    <div class="principio-modal__label"></div>
+    <ul class="principio-modal__list"></ul>
+    <div class="principio-modal__objective"></div>
+    <a class="principio-modal__cta" href="#">
+      <span></span><span aria-hidden="true">→</span>
+    </a>
+  </div>
+</div>
+
+<script>
+  type ModalData = {
+    id: string;
+    eyebrow: string;
+    titulo: string;
+    sub: string;
+    intro: string;
+    label: string;
+    itens: string[];
+    nota: string;
+    cta: string;
+    assunto: string;
+  };
+
+  const CHECK =
+    '<svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>';
+
+  const modal = document.querySelector<HTMLElement>('.principio-modal');
+
+  if (modal) {
+    const dialog = modal.querySelector<HTMLElement>('.principio-modal__dialog')!;
+    const closeBtn = modal.querySelector<HTMLButtonElement>('.principio-modal__close')!;
+    const eyebrow = modal.querySelector<HTMLElement>('.principio-modal__eyebrow')!;
+    const titulo = modal.querySelector<HTMLElement>('.principio-modal__title')!;
+    const subtitulo = modal.querySelector<HTMLElement>('.principio-modal__subtitle')!;
+    const intro = modal.querySelector<HTMLElement>('.principio-modal__intro')!;
+    const label = modal.querySelector<HTMLElement>('.principio-modal__label')!;
+    const lista = modal.querySelector<HTMLUListElement>('.principio-modal__list')!;
+    const objetivo = modal.querySelector<HTMLElement>('.principio-modal__objective')!;
+    const cta = modal.querySelector<HTMLAnchorElement>('.principio-modal__cta')!;
+
+    const dados: ModalData[] = JSON.parse(modal.dataset.principios ?? '[]');
+    const email = modal.dataset.email ?? '';
+    let lastFocused: HTMLElement | null = null;
+
+    function open(id?: string | null) {
+      const dado = dados.find((d) => d.id === id);
+      if (!dado) return;
+
+      eyebrow.textContent = dado.eyebrow;
+      titulo.textContent = dado.titulo;
+      subtitulo.textContent = dado.sub;
+      subtitulo.hidden = !dado.sub;
+      intro.textContent = dado.intro;
+      intro.hidden = !dado.intro;
+      label.textContent = dado.label;
+
+      lista.replaceChildren();
+      dado.itens.forEach((texto) => {
+        const li = document.createElement('li');
+        li.innerHTML = CHECK;
+        const span = document.createElement('span');
+        span.textContent = texto;
+        li.appendChild(span);
+        lista.appendChild(li);
+      });
+
+      objetivo.textContent = dado.nota;
+      objetivo.hidden = !dado.nota;
+      cta.querySelector('span')!.textContent = dado.cta;
+      cta.href = `mailto:${email}?subject=${encodeURIComponent(dado.assunto)}`;
+
+      dialog.scrollTop = 0;
+      lastFocused = document.activeElement as HTMLElement | null;
+      modal!.classList.add('is-open');
+      modal!.setAttribute('aria-hidden', 'false');
+      document.body.classList.add('modal-open');
+      // Forçar o cálculo do estilo antes de focar: sem isto o diálogo ainda
+      // tem visibility:hidden no momento do focus() e o foco fica no <body>.
+      void modal!.offsetWidth;
+      closeBtn.focus({ preventScroll: true });
+    }
+
+    function close() {
+      if (!modal!.classList.contains('is-open')) return;
+      modal!.classList.remove('is-open');
+      modal!.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('modal-open');
+      lastFocused?.focus({ preventScroll: true });
+    }
+
+    document.querySelectorAll<HTMLElement>('[data-principio]').forEach((card) => {
+      card.addEventListener('click', () => open(card.dataset.principio));
+    });
+    closeBtn.addEventListener('click', close);
+    modal.addEventListener('click', (event) => {
+      if (event.target === modal) close();
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && modal!.classList.contains('is-open')) close();
+    });
+  }
+</script>
+
+<style is:global>
+  body.modal-open {
+    overflow: hidden;
+  }
+
+  .principio-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    background: rgba(20, 15, 10, 0.78);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    opacity: 0;
+    visibility: hidden;
+    /* Ao fechar, espera o fade-out antes de esconder. */
+    transition: opacity 0.25s ease, visibility 0s linear 0.25s;
+  }
+
+  .principio-modal.is-open {
+    opacity: 1;
+    visibility: visible;
+    /* Ao abrir, fica visível de imediato para o focus() funcionar. */
+    transition: opacity 0.25s ease, visibility 0s;
+  }
+
+  .principio-modal__dialog {
+    position: relative;
+    width: 100%;
+    max-width: 680px;
+    max-height: 88vh;
+    overflow-y: auto;
+    border-radius: 24px;
+    background: rgba(20, 15, 10, 0.97);
+    border: 1px solid rgba(192, 128, 48, 0.45);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(250, 247, 242, 0.04);
+    padding: 40px 36px 32px;
+    transform: translateY(16px) scale(0.97);
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    scrollbar-width: thin;
+    scrollbar-color: var(--brown-medium) transparent;
+  }
+
+  .principio-modal.is-open .principio-modal__dialog {
+    transform: translateY(0) scale(1);
+  }
+
+  .principio-modal__close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(250, 247, 242, 0.07);
+    border: 1px solid rgba(217, 195, 176, 0.3);
+    color: var(--paper);
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .principio-modal__close:hover,
+  .principio-modal__close:focus-visible {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--ink);
+  }
+
+  .principio-modal__eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding-right: 48px;
+  }
+
+  .principio-modal__title {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    font-size: clamp(26px, 4vw, 34px);
+    line-height: 1.1;
+    color: var(--paper);
+    margin-top: 10px;
+    padding-right: 48px;
+  }
+
+  .principio-modal__subtitle {
+    font-size: 15px;
+    color: var(--gold-light);
+    margin-top: 8px;
+    font-weight: 500;
+  }
+
+  .principio-modal__intro {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--brown-soft);
+    margin: 14px 0 0;
+  }
+
+  .principio-modal__divider {
+    height: 1px;
+    background: rgba(250, 247, 242, 0.14);
+    margin: 22px 0;
+  }
+
+  .principio-modal__label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--brown-soft);
+    margin-bottom: 14px;
+  }
+
+  .principio-modal__list {
+    list-style: none;
+    display: grid;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .principio-modal__list li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--paper);
+  }
+
+  .principio-modal__list svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    margin-top: 3px;
+    color: var(--gold);
+  }
+
+  .principio-modal__objective {
+    margin-top: 24px;
+    padding: 16px 18px;
+    border-radius: 16px;
+    background: rgba(192, 128, 48, 0.1);
+    border-left: 3px solid var(--gold);
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--brown-soft);
+  }
+
+  .principio-modal__cta {
+    margin-top: 26px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 24px;
+    border-radius: 9999px;
+    background: var(--gold);
+    color: var(--ink);
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .principio-modal__cta:hover {
+    background: var(--gold-light);
+    transform: translateY(-1px);
+  }
+
+  .principio-modal [hidden] {
+    display: none !important;
+  }
+
+  @media (max-width: 640px) {
+    .principio-modal {
+      align-items: flex-end;
+      padding: 0;
+    }
+
+    .principio-modal__dialog {
+      max-height: 92vh;
+      border-radius: 24px 24px 0 0;
+      padding: 36px 22px 26px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .principio-modal,
+    .principio-modal__dialog {
+      transition: none;
+    }
+  }
+</style>

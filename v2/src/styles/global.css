@@ -192,15 +192,20 @@ p {
 }
 
 .nav-cta {
-  padding: 0.45rem 0.9rem;
+  padding: 0.55rem 1.1rem;
   border: 1px solid var(--gold);
-  color: var(--gold-light) !important;
+  border-radius: 4px;
+  color: var(--gold-light);
+  font-weight: 600;
   text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.25s var(--ease), color 0.25s var(--ease);
 }
 
-.nav-cta:hover {
+.nav-cta:hover,
+.nav-cta:focus-visible {
   background: var(--gold);
-  color: var(--ink) !important;
+  color: var(--ink);
 }
 
 .nav-toggle {
@@ -482,9 +487,6 @@ p {
   .nav-panel[data-open='true'] .nav-list > li:nth-child(7) {
     transition-delay: 0.32s;
   }
-  .nav-panel[data-open='true'] .nav-list > li:nth-child(8) {
-    transition-delay: 0.36s;
-  }
 
   .nav-cta {
     margin-top: 0.75rem;
@@ -535,35 +537,51 @@ p {
   animation-delay: 0.4s;
 }
 
-.js .reveal {
-  opacity: 0;
-  transform: translateY(1rem);
-  transition: opacity 1s var(--ease), transform 1s var(--ease);
-  transition-delay: var(--reveal-delay, 0ms);
+/* Entrada partilhada por Método de Trabalho, Áreas de Especialidade e Sectores.
+   Usa animação (não transition) para não roubar a transição do hover dos cartões. */
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(1.15rem) scale(0.99);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
-.js .reveal.is-visible {
+html.js .reveal {
+  opacity: 0;
+}
+
+html.js .reveal.is-visible {
   opacity: 1;
   transform: none;
+  animation: reveal-in 1s var(--ease) backwards;
+  animation-delay: var(--reveal-delay, 0ms);
 }
 
-/* Entrada escalonada — discreta, como nas firmas de referência */
+/* Entrada escalonada — mesma cadência nos 3 blocos pedidos pelo cliente */
 .area-grid > :nth-child(2),
 .sector-grid > :nth-child(2),
-.person-grid > :nth-child(2) {
+.person-grid > :nth-child(2),
+.metodo-grid > :nth-child(2) {
   --reveal-delay: 70ms;
 }
 .area-grid > :nth-child(3),
 .sector-grid > :nth-child(3),
-.person-grid > :nth-child(3) {
+.person-grid > :nth-child(3),
+.metodo-grid > :nth-child(3) {
   --reveal-delay: 140ms;
 }
 .area-grid > :nth-child(4),
-.sector-grid > :nth-child(4) {
+.sector-grid > :nth-child(4),
+.metodo-grid > :nth-child(4) {
   --reveal-delay: 210ms;
 }
 .area-grid > :nth-child(5),
-.sector-grid > :nth-child(5) {
+.sector-grid > :nth-child(5),
+.metodo-grid > :nth-child(5) {
   --reveal-delay: 280ms;
 }
 .area-grid > :nth-child(6),
@@ -660,7 +678,7 @@ p {
   .js .hero-subtitle,
   .js .hero-intro,
   .js .hero-actions,
-  .js .reveal {
+  html.js .reveal {
     animation: none;
     opacity: 1;
     transform: none;

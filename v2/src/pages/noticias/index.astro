@@ -1,5 +1,55 @@
 ---
-import StubPage from '../../components/StubPage.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import NoticiaCard from '../../components/NoticiaCard.astro';
+import { toSlug } from '../../utils/slug.ts';
+import { t } from '../../i18n/index.ts';
+
+const noticias = await getCollection('noticias');
+const lang = 'pt';
 ---
 
-<StubPage titleKey="nav.noticias" current="/noticias/" />
+<BaseLayout title={t(lang, 'nav.noticias')} lang={lang} current="/noticias/">
+  <section class="section">
+    <div class="container">
+      <h1 class="section-heading__title reveal">{t(lang, 'noticias.titulo')}</h1>
+
+      {noticias.length === 0 ? (
+        <p class="vazio">{t(lang, 'noticias.vazio')}</p>
+      ) : (
+        <div class="noticia-grid">
+          {noticias
+            .sort((a, b) => b.data.valueOf() - a.data.valueOf())
+            .map((entry) => {
+              const { data } = entry.data;
+              const dataStr = data.toISOString().split('T')[0];
+              return (
+                <NoticiaCard
+                  titulo={entry.data.titulo}
+                  data={dataStr}
+                  area={entry.data.area}
+                  resumo={entry.data.resumo}
+                  href={`/noticias/${toSlug(entry.id)}/`}
+                />
+              );
+            })}
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .noticia-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-3);
+    margin-top: var(--space-2);
+  }
+  .vazio {
+    text-align: center;
+    color: var(--brown-dark);
+    padding: var(--space-6);
+    font-size: 1.1rem;
+  }
+</style>

@@ -16,7 +16,6 @@ const links: Array<{ href: string; key: TranslationKey }> = [
   { href: '/equipa/', key: 'nav.equipa' },
   { href: '/insights/', key: 'nav.insights' },
   { href: '/noticias/', key: 'nav.noticias' },
-  { href: '/contactos/', key: 'nav.contactos' },
 ];
 
 const ariaLabel = lang === 'pt' ? 'Navegação principal' : 'Main navigation';
@@ -59,7 +58,7 @@ const brandLabel = `${site.nomeCurto} — ${t(lang, 'common.legalSuffix')}`;
           ))
         }
         <li>
-          <a class="nav-cta" href="/contactos/">{t(lang, 'common.contactar')}</a>
+          <a class="nav-cta" href="/contactos/">{t(lang, 'nav.faleConosco')}</a>
         </li>
       </ul>
     </nav>

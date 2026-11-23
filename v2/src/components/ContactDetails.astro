@@ -9,7 +9,7 @@ const { lang = 'pt' } = Astro.props;
 ---
 
 <section class="contact-details">
-  <h2 class="contact-details__title">{t(lang, 'contactos.titulo')}</h2>
+  <h1 class="contact-details__title">{t(lang, 'contactos.titulo')}</h1>
   <dl class="contact-details__list">
     <dt>{t(lang, 'contactos.endereco')}</dt>
     <dd>
@@ -36,8 +36,10 @@ const { lang = 'pt' } = Astro.props;
 
 <style>
   .contact-details {
+    box-sizing: border-box;
+    width: 100%;
     max-width: var(--container-max-width);
-    margin: 0 auto;
+    margin: 0;
     padding: var(--space-4);
   }
   .contact-details__title {

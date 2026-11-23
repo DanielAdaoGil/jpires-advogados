@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ContactDetails from '../../components/ContactDetails.astro';
+import ContactForm from '../../components/ContactForm.astro';
 import { t } from '../../i18n/index.ts';
 
 const lang = 'pt';
@@ -9,7 +10,30 @@ const lang = 'pt';
 <BaseLayout title={t(lang, 'nav.contactos')} lang={lang} current="/contactos/">
   <section class="section">
     <div class="container">
-      <ContactDetails lang={lang} />
+      <div class="contactos-layout">
+        <ContactDetails lang={lang} />
+        <ContactForm lang={lang} />
+      </div>
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  .contactos-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-3);
+    align-items: start;
+  }
+
+  .contactos-layout > * {
+    min-width: 0;
+  }
+
+  @media (min-width: 900px) {
+    .contactos-layout {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: var(--space-4);
+    }
+  }
+</style>

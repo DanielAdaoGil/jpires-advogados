@@ -125,6 +125,15 @@ Se uma correção tiver de se repetir em mais de um sítio, o Cline deve parar e
 | 2026-11-23 | 4 | Sectores | Secção autónoma e item de navbar | Sectores passam para dentro de Áreas de Especialidade | ✅ |
 | 2026-11-23 | 4 | Animações | Sidebar e restantes elementos entravam de forma abrupta | Transições mais longas, regra dourada animada e stagger suave | ✅ |
 | 2026-11-23 | 4 | Títulos de secção | A classe usada fora do componente perdia a tipografia | Base `.section-heading__title` movida para `global.css`; `/areas/` usa `h1` | ✅ |
+| 2026-11-23 | 5 | Contactos | Formulário e dados empilhados | Duas colunas a partir de 900 px; título "Envie-nos uma SMS" | ✅ |
+| 2026-11-23 | 5 | Navbar | "Contactos" e "Contactar" com o mesmo destino | Botão "Contactar" removido da navbar | ✅ |
+| 2026-11-23 | 5 | Detalhe de área | Botão branco ilegível e sem caminho de regresso | Botão âmbar + seta de regresso no topo | ✅ |
+| 2026-11-23 | 5 | Sobre | Faltavam Método de Trabalho e Alianças do legado | 5 passos literais + mapa Leaflet com 9 países (decisão: Sobre) | ✅ |
+| 2026-11-23 | 5 | Contactos | Formato 0,9/1,1 e campos apertados | 50/50, painel escuro, paleta clara e inputs maiores | ✅ |
+| 2026-11-23 | 5 | Navbar | Item "Contactos" pretendido como botão | Botão "Fale Conosco" para `/contactos/` | ✅ |
+| 2026-11-23 | 5 | Detalhe de área | Texto "Voltar" ocupava espaço | Seta circular com `aria-label`, no lugar do breadcrumb | ✅ |
+| 2026-11-23 | 5 | Animações | Cartões de áreas/sectores não animavam | `@keyframes reveal-in` com stagger partilhado | ✅ |
+| 2026-11-23 | 5 | Sobre | Cards dos princípios não abriam o conteúdo do legado | Modal único com os 4 ATRIBUTOS literais, na paleta âmbar | ✅ |
 
 ---
 
@@ -297,3 +306,119 @@ O termo visível continua **"Áreas de Especialidade"** (inglês: *Practice Area
 
 Validação: `npm run build` → **30 páginas**; sem links `.md`, sem `⚠️ CONFIRMAR`
 renderizado, sem "em Angola" e sem "Áreas de Prática".
+
+---
+
+## 11. Ajustes pedidos pelo cliente (2026-11-23, 11:00)
+
+### 11.1 Contactos — duas colunas
+
+- À esquerda: dados de contacto (`ContactDetails.astro`); à direita: título
+  **"Envie-nos uma SMS"** + campos do formulário (`ContactForm.astro`).
+- Grelha `.contactos-layout` a partir de **900 px** (`0,9fr / 1,1fr`); abaixo disso
+  os blocos empilham-se na mesma ordem. Sem perda de conteúdo.
+- O título da página passou a `h1` (antes era `h2`).
+- O envio do formulário continua desligado até o cliente escolher mailto:,
+  Formspree ou Netlify Forms (decisão pendente da Fase 5).
+
+### 11.2 Navbar sem duplicação
+
+- Removido o botão **"Contactar"** da navbar — apontava para `/contactos/`, o mesmo
+  destino do item "Contactos". Ficam 7 links no menu.
+- Botões "Contactar" do hero, do rodapé e das páginas de detalhe mantêm-se.
+
+### 11.3 Detalhe de área de especialidade
+
+- Botão de contacto passou de `.btn-ghost` (branco, ilegal sobre fundo claro)
+  para **`.btn-primary`** — âmbar com texto escuro.
+- No topo da página ficou apenas a **seta de regresso** (o breadcrumb textual
+  "Áreas de Especialidade / <área>" foi removido a pedido do cliente).
+
+### 11.4 Sobre — Método de trabalho e Alianças
+
+- **Método de trabalho** (do `areas-modal.js` e `index.html` legados): os 5 passos
+  literais — Conhecimento, Verificação, Proposta, Execução, Conclusão — com o
+  subtítulo "Do primeiro contacto ao encerramento" e "Um fluxo de trabalho claro
+  e acompanhado." Secção com fundo alternativo `#f3ede4`.
+- **Alianças internacionais** decididas para a secção **Sobre** (não Equipa), com
+  **mapa interativo Leaflet** (decisão do cliente) — 9 países do legado, mais
+  Luanda como sede. Todos os marcadores e rótulos usam a paleta âmbar; o azul-céu
+  do legado não foi trazido.
+- O mapa usa mosaicos externos do ArcGIS (Canvas Dark Gray), `scrollWheelZoom`
+  desligado e uma lista textual por continente como alternativa acessível e
+  para o caso de os mosaicos não carregarem.
+- Dependência `leaflet` + `@types/leaflet` instalada **dentro de `v2/`**.
+
+Validação após estes ajustes: `npm run build` → 30 páginas; breadcrumb, botão
+âmbar (`rgb(192, 128, 48)`), 5 passos, 9 países, mapa inicializado, sem erros de
+consola e sem `⚠️ CONFIRMAR` no HTML.
+
+---
+
+## 12. Segunda ronda de ajustes (2026-11-23, 11:40)
+
+- **Contactos 50/50:** as duas colunas passaram a `1fr / 1fr` a partir de 900 px
+  (460 px + 460 px em viewport de 1000 px). Corrigido o `margin: 0 auto` do
+  `ContactDetails.astro` que fazia a coluna esquerda ficar mais estreita.
+- **Quadro "Envie-nos uma SMS" escuro:** fundo `--ink` (mesmo da navbar), título
+  `--gold-light`, etiquetas `--brown-soft`, inputs com fundo translúcido claro,
+  texto `--paper`, foco `--gold-light` e mensagens de erro/sucesso adaptadas.
+- **Mais espaço:** inputs com altura mínima de 52 px, padding 14/16 px, 32 px
+  entre campos e textarea de 144 px.
+- **Navbar:** o item "Contactos" foi substituído pelo botão **"Fale Conosco"**
+  (chave `nav.faleConosco`), com o mesmo destino `/contactos/`. Continua a haver
+  apenas um link para contactos no menu.
+- **Voltar nas áreas:** o breadcrumb foi removido e a **seta circular** passou a
+  ocupar o espaço no topo da página, com `aria-label`/`title` "Voltar a Áreas de
+  Especialidade" (acessibilidade mantida). No fim ficou só o botão "Contactar".
+- **Animação unificada:** Método de Trabalho, Áreas de Especialidade e Sectores
+  usam agora a mesma entrada `reveal-in` (1 s, stagger de 70 ms). Causa raiz
+  corrigida: o `transition` scoped dos cartões sobrescrevia o `.reveal`; a entrada
+  passou a `@keyframes` para não roubar a transição do hover (0,35 s).
+
+Validação: `npm run build` → 30 páginas; colunas iguais, fundo `rgb(20,15,10)`,
+título `rgb(248,192,80)`, seta com aria-label, delays 0/70/140/210/280 ms nos
+passos e cartões, sem erros de consola.
+
+---
+
+## 13. Modal dos princípios no Sobre (2026-11-23, 12:05)
+
+### Dinâmica
+
+- Recriado o **modal único e reutilizável** do legado (`areas-modal.js`): um só
+  `role="dialog"` no fim da página, preenchido por `data-principio` de cada card.
+- Os 4 cartões passaram de `<div>` a `<button type="button">`, com `aria-haspopup="dialog"`
+  e o link "Saber mais →" que o legado inseria.
+- Abertura por clique; fecho por **botão Fechar**, **clique no fundo** e **Escape**.
+  O `body.modal-open` bloqueia o scroll; o foco entra no botão Fechar e regressa
+  ao card de origem ao fechar.
+
+### Correspondência dos conteúdos
+
+Feita pelo **subtítulo**, não pela posição dos cartões (a ordem no Sobre é diferente
+do array `ATRIBUTOS` do legado):
+
+| Card no Sobre | Atributo legado | Título no modal | Subtítulo |
+| --- | --- | --- | --- |
+| Rigor técnico | `ATRIBUTOS[0]` | Rigor | Rigor técnico |
+| Confidencialidade | `ATRIBUTOS[1]` | Confiança | Confidencialidade |
+| Proximidade | `ATRIBUTOS[3]` | Parceria | Proximidade |
+| Responsabilidade | `ATRIBUTOS[2]` | Pragmatismo | Responsabilidade e método |
+
+- Textos **literais** do legado: intro, lista de itens (com o ícone `✓`) e nota final.
+- Estrutura conservada: eyebrow → título → subtítulo → intro → divisória →
+  etiqueta "Como se traduz no nosso trabalho" → lista → nota → CTA "Falar com a JPires".
+- O CTA aponta para `mailto:` com assunto por princípio, como no legado.
+
+### Paleta e ficheiros
+
+- Fundo do diálogo `--ink`, borda âmbar, eyebrow `--gold`, título `--paper`,
+  subtítulo `--gold-light`, etc. Nenhum azul-céu do legado.
+- Mobile: folha inferior (bottom sheet) abaixo de 640 px, como no legado.
+- Novos ficheiros: `v2/src/components/PrincipioModal.astro` e
+  `v2/src/data/principios.ts`; chaves em `sobre.principios.*` em `pt.ts`/`en.ts`.
+
+Validação: `npm run build` → 30 páginas; 4 cards, 4/4/5/5 itens com `✓`, textos
+literais presentes no HTML, foco no botão Fechar, fecho pelas 3 vias com regresso
+do foco ao card, sem erros de consola e sem `⚠️ CONFIRMAR` renderizado.

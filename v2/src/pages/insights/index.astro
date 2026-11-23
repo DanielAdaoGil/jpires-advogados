@@ -1,5 +1,56 @@
 ---
-import StubPage from '../../components/StubPage.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import InsightCard from '../../components/InsightCard.astro';
+import { toSlug } from '../../utils/slug.ts';
+import { t } from '../../i18n/index.ts';
+
+const insights = await getCollection('insights');
+const lang = 'pt';
 ---
 
-<StubPage titleKey="nav.insights" current="/insights/" />
+<BaseLayout title={t(lang, 'nav.insights')} lang={lang} current="/insights/">
+  <section class="section">
+    <div class="container">
+      <h1 class="section-heading__title reveal">{t(lang, 'insights.titulo')}</h1>
+
+      {insights.length === 0 ? (
+        <p class="vazio">{t(lang, 'insights.vazio')}</p>
+      ) : (
+        <div class="insight-grid">
+          {insights
+            .sort((a, b) => b.data.valueOf() - a.data.valueOf())
+            .map((entry) => {
+              const { data } = entry.data;
+              const dataStr = data.toISOString().split('T')[0];
+              return (
+                <InsightCard
+                  titulo={entry.data.titulo}
+                  data={dataStr}
+                  autor={entry.data.autor}
+                  categoria={entry.data.categoria}
+                  resumo={entry.data.resumo}
+                  href={`/insights/${toSlug(entry.id)}/`}
+                />
+              );
+            })}
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .insight-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-3);
+    margin-top: var(--space-2);
+  }
+  .vazio {
+    text-align: center;
+    color: var(--brown-dark);
+    padding: var(--space-6);
+    font-size: 1.1rem;
+  }
+</style>
