@@ -1,6 +1,7 @@
 ---
 import { site } from '../data/site.ts';
 import { t, type Lang, type TranslationKey } from '../i18n/index.ts';
+import { withBase } from '../utils/url.ts';
 import LanguageSwitcher from './LanguageSwitcher.astro';
 
 export interface Props {
@@ -9,14 +10,15 @@ export interface Props {
 }
 
 const { lang = 'pt', current = '/' } = Astro.props;
+const currentPath = withBase(current);
 
 const links: Array<{ href: string; key: TranslationKey }> = [
-  { href: '/', key: 'nav.home' },
-  { href: '/sobre/', key: 'nav.sobre' },
-  { href: '/areas/', key: 'nav.areas' },
-  { href: '/equipa/', key: 'nav.equipa' },
-  { href: '/insights/', key: 'nav.insights' },
-  { href: '/noticias/', key: 'nav.noticias' },
+  { href: withBase('/'), key: 'nav.home' },
+  { href: withBase('/sobre/'), key: 'nav.sobre' },
+  { href: withBase('/areas/'), key: 'nav.areas' },
+  { href: withBase('/equipa/'), key: 'nav.equipa' },
+  { href: withBase('/insights/'), key: 'nav.insights' },
+  { href: withBase('/noticias/'), key: 'nav.noticias' },
 ];
 
 const ariaLabel = lang === 'pt' ? 'Navegação principal' : 'Main navigation';
@@ -25,8 +27,8 @@ const brandLabel = `${site.nomeCurto} — ${t(lang, 'common.legalSuffix')}`;
 
 <header class="site-header">
   <div class="container navbar">
-    <a class="brand" href="/" aria-label={brandLabel}>
-      <img src="/logo.png" alt={brandLabel} width="44" height="44" />
+    <a class="brand" href={withBase('/')} aria-label={brandLabel}>
+      <img src={withBase('/logo.png')} alt={brandLabel} width="44" height="44" />
       <span class="brand-text">
         <span class="brand-name">{site.nomeCurto}</span>
         <span class="brand-sub">{t(lang, 'common.legalSuffix')}</span>
@@ -54,14 +56,14 @@ const brandLabel = `${site.nomeCurto} — ${t(lang, 'common.legalSuffix')}`;
         {
           links.map(({ href, key }) => (
             <li>
-              <a class="nav-link" href={href} aria-current={current === href ? 'page' : undefined}>
+              <a class="nav-link" href={href} aria-current={currentPath === href ? 'page' : undefined}>
                 {t(lang, key)}
               </a>
             </li>
           ))
         }
         <li>
-          <a class="nav-cta" href="/contactos/">{t(lang, 'nav.faleConosco')}</a>
+          <a class="nav-cta" href={withBase('/contactos/')}>{t(lang, 'nav.faleConosco')}</a>
         </li>
       </ul>
     </nav>

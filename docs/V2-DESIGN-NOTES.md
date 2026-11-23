@@ -579,3 +579,30 @@ Validação final: build com 30 páginas; fundo `rgb(243,237,228)` no Método
 fundo transparente nas secções de Áreas, em `/sectores/` e nas páginas de
 detalhe; CTA final centrado; 0 erros de consola; 0 cores soltas e 0 tokens sem
 definição.
+
+---
+
+## 19. Preparação da publicação (2026-11-23, 18:10)
+
+Decisão do cliente: fazer o teste **substituindo o GitHub Pages actual** (`/jpires-advogados/`)
+e, só depois, publicar na Angoweb. Os ficheiros legados na raiz **não** são
+apagados nem deslocados — continuam no repositório e no histórico do Git.
+
+- `astro.config.mjs`: `base` configurável por `V2_BASE`, com valor por omissão
+  `/jpires-advogados/`. Para a Angoweb: `V2_BASE=/ npm run build`.
+- Criado `src/utils/url.ts` com `withBase()`. Todas as URLs internas (navbar,
+  rodapé, favicon, logótipo, cartões, fotos do hero e links legais) passam por
+  esta função. O Astro já prefixa sozinho os assets `_astro/`; o `.nojekyll`
+  em `public/` impede que o GitHub Pages ignore essa pasta.
+- Criado `.github/workflows/publicar-v2.yml`: faz build de `v2/` e publica
+  apenas `v2/dist` via `actions/deploy-pages`. Não mexe na raiz do repo.
+  O cliente escolheu "substituir o Pages actual", pelo que é necessário mudar
+  em Settings → Pages → Source para **GitHub Actions**.
+- Guia simples em `docs/V2-PUBLICACAO.md`.
+
+Validação: build com 30 páginas; 0 URLs internas sem prefixo nos 30 HTML;
+`.nojekyll` presente no `dist`; preview local em `/jpires-advogados/` com
+7/7 fotos, CSS carregado, links internos prefixados e 0 erros de consola.
+
+**Ainda por fazer:** commit/push (só com autorização), mudança do Source nas
+definições do GitHub, e recolha dos dados de acesso da Angoweb.

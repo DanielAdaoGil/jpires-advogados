@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import InsightCard from '../../components/InsightCard.astro';
 import { toSlug } from '../../utils/slug.ts';
+import { withBase } from '../../utils/url.ts';
 import { t } from '../../i18n/index.ts';
 
 const insights = await getCollection('insights');
@@ -30,7 +31,7 @@ const lang = 'pt';
                   autor={entry.data.autor}
                   categoria={entry.data.categoria}
                   resumo={entry.data.resumo}
-                  href={`/insights/${toSlug(entry.id)}/`}
+                  href={withBase(`/insights/${toSlug(entry.id)}/`)}
                 />
               );
             })}

@@ -3,6 +3,7 @@ import Footer from '../components/Footer.astro';
 import Navbar from '../components/Navbar.astro';
 import { site } from '../data/site.ts';
 import { t, type Lang } from '../i18n/index.ts';
+import { withBase } from '../utils/url.ts';
 import '../styles/global.css';
 
 export interface Props {
@@ -57,7 +58,7 @@ const pageTitle = title
     </script>
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
-    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href={withBase('/favicon.ico')} type="image/x-icon" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link

@@ -1,6 +1,7 @@
 ---
 import { site } from '../data/site.ts';
 import { t, type Lang, type TranslationKey } from '../i18n/index.ts';
+import { withBase } from '../utils/url.ts';
 
 export interface Props {
   lang?: Lang;
@@ -9,10 +10,10 @@ export interface Props {
 const { lang = 'pt' } = Astro.props;
 
 const legal: Array<{ href: string; key: TranslationKey }> = [
-  { href: '/privacidade/', key: 'footer.privacidade' },
-  { href: '/cookies/', key: 'footer.cookies' },
-  { href: '/aviso-legal/', key: 'footer.avisoLegal' },
-  { href: '/disclaimer/', key: 'footer.disclaimer' },
+  { href: withBase('/privacidade/'), key: 'footer.privacidade' },
+  { href: withBase('/cookies/'), key: 'footer.cookies' },
+  { href: withBase('/aviso-legal/'), key: 'footer.avisoLegal' },
+  { href: withBase('/disclaimer/'), key: 'footer.disclaimer' },
 ];
 
 const telefoneHref = `tel:${site.telefones[0].replace(/\s/g, '')}`;

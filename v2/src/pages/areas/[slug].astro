@@ -5,6 +5,7 @@ import PersonCard from '../../components/PersonCard.astro';
 import SectionHeading from '../../components/SectionHeading.astro';
 import { t, type Lang } from '../../i18n/index.ts';
 import { toSlug } from '../../utils/slug.ts';
+import { withBase } from '../../utils/url.ts';
 
 export async function getStaticPaths() {
   const areas = await getCollection('areas');
@@ -30,7 +31,7 @@ const areaAdvogados = area.advogados
       <div class="area-back">
         <a
           class="area-voltar"
-          href="/areas/"
+          href={withBase('/areas/')}
           aria-label={t(lang, 'area.voltar')}
           title={t(lang, 'area.voltar')}
         >
@@ -51,7 +52,7 @@ const areaAdvogados = area.advogados
                 nome={pessoa.data.nome}
                 cargo={pessoa.data.cargo}
                 iniciais={pessoa.data.iniciais}
-                href={`/equipa/${toSlug(pessoa.id)}/`}
+                href={withBase(`/equipa/${toSlug(pessoa.id)}/`)}
               />
             ))}
           </div>
@@ -59,7 +60,7 @@ const areaAdvogados = area.advogados
       )}
 
       <div class="area-actions">
-        <a href="/contactos/" class="btn btn-primary">{t(lang, 'common.contactar')}</a>
+        <a href={withBase('/contactos/')} class="btn btn-primary">{t(lang, 'common.contactar')}</a>
       </div>
     </div>
   </section>

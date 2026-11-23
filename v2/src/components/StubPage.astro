@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { t, type Lang, type TranslationKey } from '../i18n/index.ts';
+import { withBase } from '../utils/url.ts';
 
 export interface Props {
   titleKey: TranslationKey;
@@ -18,7 +19,7 @@ const title = t(lang, titleKey);
       <p class="stub-eyebrow">{t(lang, 'common.emConstrucao')}</p>
       <h1>{title}</h1>
       <p>{t(lang, 'common.conteudoPrevisto')}</p>
-      <p><a href="/">← {t(lang, 'nav.home')}</a></p>
+      <p><a href={withBase('/')}>← {t(lang, 'nav.home')}</a></p>
     </div>
   </section>
 </BaseLayout>

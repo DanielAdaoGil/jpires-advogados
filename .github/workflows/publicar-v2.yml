@@ -1,0 +1,62 @@
+name: Publicar v2 no GitHub Pages
+
+# Publica apenas o resultado do build (v2/dist).
+# Os ficheiros legados na raiz do repositório não são apagados nem movidos.
+#
+# Antes de funcionar, é preciso definir em:
+#   GitHub -> Settings -> Pages -> Build and deployment -> Source: GitHub Actions
+
+on:
+  push:
+    branches: [daniel, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descarregar o repositório
+        uses: actions/checkout@v4
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: v2/package-lock.json
+
+      - name: Instalar dependências
+        working-directory: v2
+        run: npm ci
+
+      - name: Gerar o site (v2/dist)
+        working-directory: v2
+        run: npm run build
+
+      - name: Preparar o GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Preparar o pacote para publicação
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: v2/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicar
+        id: deployment
+        uses: actions/deploy-pages@v4

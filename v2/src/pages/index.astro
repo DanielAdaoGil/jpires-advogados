@@ -7,6 +7,7 @@ import PersonCard from '../components/PersonCard.astro';
 import HeroSlideshow from '../components/HeroSlideshow.astro';
 import { t } from '../i18n/index.ts';
 import { toSlug } from '../utils/slug.ts';
+import { withBase } from '../utils/url.ts';
 
 const areas = await getCollection('areas');
 const sectores = await getCollection('sectores');
@@ -16,7 +17,10 @@ const lang = 'pt';
 // Uma fotografia por área — a ordem segue a mesma das áreas de especialidade.
 const slides = areas
   .sort((a, b) => a.data.ordem - b.data.ordem)
-  .map((a) => ({ titulo: a.data.titulo, src: `/images/hero/${toSlug(a.id)}.jpg` }));
+  .map((a) => ({
+    titulo: a.data.titulo,
+    src: withBase(`/images/hero/${toSlug(a.id)}.jpg`),
+  }));
 ---
 
 <BaseLayout title={t(lang, 'nav.home')} lang={lang} current="/">
@@ -28,8 +32,8 @@ const slides = areas
       <p class="hero-subtitle">{t(lang, 'home.hero.subtitle')}</p>
       <p class="hero-intro">{t(lang, 'home.hero.intro')}</p>
       <div class="hero-actions">
-        <a class="btn btn-primary" href="/contactos/">{t(lang, 'home.hero.cta')}</a>
-        <a class="btn btn-ghost" href="/areas/">{t(lang, 'nav.areas')}</a>
+        <a class="btn btn-primary" href={withBase('/contactos/')}>{t(lang, 'home.hero.cta')}</a>
+        <a class="btn btn-ghost" href={withBase('/areas/')}>{t(lang, 'nav.areas')}</a>
       </div>
     </div>
   </section>
@@ -45,7 +49,7 @@ const slides = areas
             <AreaCard
               titulo={a.data.titulo}
               resumo={a.data.resumo}
-              href={`/areas/${toSlug(a.id)}/`}
+              href={withBase(`/areas/${toSlug(a.id)}/`)}
             />
           ))}
       </div>
@@ -62,7 +66,7 @@ const slides = areas
             <SectorCard
               titulo={s.data.titulo}
               resumo={s.data.resumo}
-              href={`/sectores/${toSlug(s.id)}/`}
+              href={withBase(`/sectores/${toSlug(s.id)}/`)}
             />
           ))}
       </div>
@@ -80,7 +84,7 @@ const slides = areas
               nome={p.data.nome}
               cargo={p.data.cargo}
               iniciais={p.data.iniciais}
-              href={`/equipa/${toSlug(p.id)}/`}
+              href={withBase(`/equipa/${toSlug(p.id)}/`)}
             />
           ))}
       </div>
@@ -90,7 +94,7 @@ const slides = areas
   <section class="section section--cta">
     <div class="container">
       <div class="cta-emphasis reveal">
-        <a href="/contactos/" class="btn btn-primary cta-emphasis__btn">{t(lang, 'home.hero.cta')}</a>
+        <a href={withBase('/contactos/')} class="btn btn-primary cta-emphasis__btn">{t(lang, 'home.hero.cta')}</a>
       </div>
     </div>
   </section>
