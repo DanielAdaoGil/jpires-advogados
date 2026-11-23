@@ -45,7 +45,7 @@ O site publicado e o código local **não são iguais**. Não escolher uma vers�
 | Email geral | `geral@jpiresadvogados.com` | `jpires@jpires-advogados.ao` |
 | Equipa | 3 advogados (inclui Dr. Mauro Albuquerque) | 2 advogados |
 | Honorários | "não são negociáveis, mas as formas de pagamento são" | "definidos em função do perfil do cliente..." |
-| Navegação | "Áreas de Especialidade" (sem Sectores) | "Áreas de Prática" + "Sectores" |
+| Navegação | "Áreas de Especialidade" (sem Sectores) | "Áreas de Especialidade" + "Sectores" (v2) |
 | CTA | "Solicitar Proposta" | "Consultar Condições" |
 | Rodapé | "Directório de Sócios" | — |
 

@@ -1,7 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import AreaCard from '../components/AreaCard.astro';
+import SectorCard from '../components/SectorCard.astro';
+import PersonCard from '../components/PersonCard.astro';
 import { t } from '../i18n/index.ts';
+import { toSlug } from '../utils/slug.ts';
 
+const areas = await getCollection('areas');
+const sectores = await getCollection('sectores');
+const equipa = await getCollection('equipa');
 const lang = 'pt';
 ---
 
@@ -20,10 +28,57 @@ const lang = 'pt';
   </section>
 
   <section class="section">
-    <div class="container stub">
-      <p class="stub-eyebrow">{t(lang, 'common.emConstrucao')}</p>
-      <h2>{t(lang, 'nav.sobre')} · {t(lang, 'nav.areas')} · {t(lang, 'nav.equipa')}</h2>
-      <p>{t(lang, 'common.conteudoPrevisto')}</p>
+    <div class="container">
+      <h2 class="section-heading__title reveal">{t(lang, 'home.areas.title')}</h2>
+      <p class="section-lead reveal">{t(lang, 'areas.intro')}</p>
+      <div class="area-grid">
+        {areas
+          .sort((a, b) => a.data.ordem - b.data.ordem)
+          .map((a) => (
+            <AreaCard
+              titulo={a.data.titulo}
+              resumo={a.data.resumo}
+              href={`/areas/${toSlug(a.id)}/`}
+            />
+          ))}
+      </div>
+
+      <h3 id="sectores" class="subsection-title reveal">{t(lang, 'home.sectores.title')}</h3>
+      <div class="sector-grid">
+        {sectores
+          .sort((a, b) => a.data.ordem - b.data.ordem)
+          .map((s) => (
+            <SectorCard
+              titulo={s.data.titulo}
+              resumo={s.data.resumo}
+              href={`/sectores/${toSlug(s.id)}/`}
+            />
+          ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="section-heading__title reveal">{t(lang, 'home.equipa.title')}</h2>
+      <div class="person-grid">
+        {equipa
+          .sort((a, b) => a.data.ordem - b.data.ordem)
+          .map((p) => (
+            <PersonCard
+              nome={p.data.nome}
+              cargo={p.data.cargo}
+              iniciais={p.data.iniciais}
+              href={`/equipa/${toSlug(p.id)}/`}
+            />
+          ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--cta">
+    <div class="container">
+      <a href="/contactos/" class="btn btn-primary">{t(lang, 'home.hero.cta')}</a>
     </div>
   </section>
 </BaseLayout>

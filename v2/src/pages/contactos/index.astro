@@ -1,5 +1,15 @@
 ---
-import StubPage from '../../components/StubPage.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ContactDetails from '../../components/ContactDetails.astro';
+import { t } from '../../i18n/index.ts';
+
+const lang = 'pt';
 ---
 
-<StubPage titleKey="nav.contactos" current="/contactos/" />
+<BaseLayout title={t(lang, 'nav.contactos')} lang={lang} current="/contactos/">
+  <section class="section">
+    <div class="container">
+      <ContactDetails lang={lang} />
+    </div>
+  </section>
+</BaseLayout>

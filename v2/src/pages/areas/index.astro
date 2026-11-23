@@ -1,5 +1,49 @@
 ---
-import StubPage from '../../components/StubPage.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import AreaCard from '../../components/AreaCard.astro';
+import SectorCard from '../../components/SectorCard.astro';
+import { t } from '../../i18n/index.ts';
+import { toSlug } from '../../utils/slug.ts';
+
+const areas = await getCollection('areas');
+const sectores = await getCollection('sectores');
+const lang = 'pt';
 ---
 
-<StubPage titleKey="nav.areas" current="/areas/" />
+<BaseLayout title={t(lang, 'nav.areas')} lang={lang} current="/areas/">
+  <section class="section">
+    <div class="container">
+      <h1 class="section-heading__title reveal">{t(lang, 'areas.titulo')}</h1>
+      <p class="section-lead reveal">{t(lang, 'areas.intro')}</p>
+      <div class="area-grid">
+        {areas
+          .sort((a, b) => a.data.ordem - b.data.ordem)
+          .map((a) => (
+            <AreaCard
+              titulo={a.data.titulo}
+              resumo={a.data.resumo}
+              href={`/areas/${toSlug(a.id)}/`}
+            />
+          ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="sectores">
+    <div class="container">
+      <h2 class="section-heading__title reveal">{t(lang, 'sectores.titulo')}</h2>
+      <div class="sector-grid">
+        {sectores
+          .sort((a, b) => a.data.ordem - b.data.ordem)
+          .map((s) => (
+            <SectorCard
+              titulo={s.data.titulo}
+              resumo={s.data.resumo}
+              href={`/sectores/${toSlug(s.id)}/`}
+            />
+          ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

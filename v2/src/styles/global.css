@@ -12,6 +12,19 @@
   --font-title: 'Source Serif 4', Georgia, 'Times New Roman', serif;
   --font-body: 'Source Sans 3', 'Segoe UI', system-ui, sans-serif;
   --container: 1180px;
+
+  /* Aliases usados pelos componentes da Fase 4 (antes sem definição) */
+  --font-heading: var(--font-title);
+  --container-max-width: var(--container);
+  --space-1: 0.35rem;
+  --space-2: 0.75rem;
+  --space-3: 1.25rem;
+  --space-4: 2rem;
+  --space-5: 3rem;
+  --space-6: 4rem;
+  --radius: 6px;
+  --shadow-card: 0 12px 32px rgba(20, 15, 10, 0.1);
+  --ease: cubic-bezier(0.22, 0.7, 0.24, 1);
 }
 
 *,
@@ -99,8 +112,15 @@ p {
 /* Header / navegação */
 .site-header {
   position: relative;
+  z-index: 20;
   background: var(--ink);
   color: var(--paper);
+  transition: box-shadow 0.3s var(--ease);
+}
+
+/* Adaptado do legado (script.js: onScroll): só uma sombra, sem frames */
+.site-header.is-scrolled {
+  box-shadow: 0 10px 30px rgba(20, 15, 10, 0.32);
 }
 
 .site-header a {
@@ -163,6 +183,7 @@ p {
 .nav-link {
   padding: 0.35rem 0;
   text-decoration: none;
+  transition: color 0.25s var(--ease);
 }
 
 .nav-link:hover,
@@ -260,6 +281,13 @@ p {
   border: 1px solid transparent;
   font-weight: 600;
   text-decoration: none;
+  transition: background-color 0.25s var(--ease), color 0.25s var(--ease),
+    transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(20, 15, 10, 0.18);
 }
 
 .btn-primary {
@@ -292,6 +320,41 @@ p {
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
+}
+
+/* Grelhas partilhadas pelas listagens */
+.area-grid,
+.sector-grid,
+.person-grid {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.area-grid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.sector-grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.person-grid {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.section-lead {
+  max-width: 66ch;
+  margin: -0.25rem 0 var(--space-4);
+  color: var(--brown-dark);
+  font-size: 1.05rem;
+}
+
+.subsection-title {
+  margin: var(--space-6) 0 var(--space-2);
+  font-family: var(--font-title);
+  font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+  color: var(--brown-dark);
 }
 
 /* Rodapé */
@@ -351,24 +414,76 @@ p {
   }
 
   .nav-panel {
-    display: none;
+    display: grid;
+    grid-template-rows: 0fr;
     position: absolute;
     top: 100%;
     right: 0;
     left: 0;
-    border-top: 1px solid var(--brown-medium);
     background: var(--ink);
+    box-shadow: 0 18px 32px rgba(20, 15, 10, 0.3);
+    opacity: 0;
+    transform: translateY(-0.5rem);
+    pointer-events: none;
+    visibility: hidden;
+    transition: grid-template-rows 0.55s var(--ease), opacity 0.45s var(--ease),
+      transform 0.45s var(--ease), visibility 0s linear 0.55s;
   }
 
   .nav-panel[data-open='true'] {
-    display: block;
+    grid-template-rows: 1fr;
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+    visibility: visible;
+    transition: grid-template-rows 0.55s var(--ease), opacity 0.45s var(--ease),
+      transform 0.45s var(--ease), visibility 0s;
   }
 
   .nav-list {
+    min-height: 0;
+    overflow: hidden;
+    border-top: 1px solid var(--brown-medium);
     flex-direction: column;
     align-items: stretch;
     gap: 0.25rem;
     padding: 1rem 1.25rem 1.5rem;
+  }
+
+  .nav-list > li {
+    opacity: 0;
+    transform: translateY(-0.4rem);
+    transition: opacity 0.45s var(--ease), transform 0.45s var(--ease);
+  }
+
+  .nav-panel[data-open='true'] .nav-list > li {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .nav-panel[data-open='true'] .nav-list > li:nth-child(1) {
+    transition-delay: 0.08s;
+  }
+  .nav-panel[data-open='true'] .nav-list > li:nth-child(2) {
+    transition-delay: 0.12s;
+  }
+  .nav-panel[data-open='true'] .nav-list > li:nth-child(3) {
+    transition-delay: 0.16s;
+  }
+  .nav-panel[data-open='true'] .nav-list > li:nth-child(4) {
+    transition-delay: 0.2s;
+  }
+  .nav-panel[data-open='true'] .nav-list > li:nth-child(5) {
+    transition-delay: 0.24s;
+  }
+  .nav-panel[data-open='true'] .nav-list > li:nth-child(6) {
+    transition-delay: 0.28s;
+  }
+  .nav-panel[data-open='true'] .nav-list > li:nth-child(7) {
+    transition-delay: 0.32s;
+  }
+  .nav-panel[data-open='true'] .nav-list > li:nth-child(8) {
+    transition-delay: 0.36s;
   }
 
   .nav-cta {
@@ -378,5 +493,195 @@ p {
 
   .footer-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* ============================================================
+   Animações institucionais leves
+   Adaptadas do legado (script.js: scroll progress + LERP), mas sem
+   os 600 frames/neon: apenas entrada gradual e realce discreto.
+   Sem JavaScript o conteúdo continua visível (classe `.js`).
+   ============================================================ */
+
+@keyframes hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.js .hero .stub-eyebrow,
+.js .hero h1,
+.js .hero-subtitle,
+.js .hero-intro,
+.js .hero-actions {
+  animation: hero-in 1.05s var(--ease) both;
+}
+
+.js .hero h1 {
+  animation-delay: 0.1s;
+}
+.js .hero-subtitle {
+  animation-delay: 0.2s;
+}
+.js .hero-intro {
+  animation-delay: 0.3s;
+}
+.js .hero-actions {
+  animation-delay: 0.4s;
+}
+
+.js .reveal {
+  opacity: 0;
+  transform: translateY(1rem);
+  transition: opacity 1s var(--ease), transform 1s var(--ease);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Entrada escalonada — discreta, como nas firmas de referência */
+.area-grid > :nth-child(2),
+.sector-grid > :nth-child(2),
+.person-grid > :nth-child(2) {
+  --reveal-delay: 70ms;
+}
+.area-grid > :nth-child(3),
+.sector-grid > :nth-child(3),
+.person-grid > :nth-child(3) {
+  --reveal-delay: 140ms;
+}
+.area-grid > :nth-child(4),
+.sector-grid > :nth-child(4) {
+  --reveal-delay: 210ms;
+}
+.area-grid > :nth-child(5),
+.sector-grid > :nth-child(5) {
+  --reveal-delay: 280ms;
+}
+.area-grid > :nth-child(6),
+.sector-grid > :nth-child(6) {
+  --reveal-delay: 350ms;
+}
+.area-grid > :nth-child(7) {
+  --reveal-delay: 420ms;
+}
+.sector-grid > :nth-child(7) {
+  --reveal-delay: 420ms;
+}
+.sector-grid > :nth-child(8) {
+  --reveal-delay: 490ms;
+}
+
+/* Cartões: realce discreto ao passar o rato — padrão dos firmas de referência */
+.area-card,
+.sector-card {
+  border-radius: var(--radius);
+  border-top: 2px solid transparent;
+  transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease),
+    border-color 0.35s var(--ease);
+}
+
+.area-card:hover,
+.sector-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card);
+  border-top-color: var(--gold);
+}
+
+.person-card {
+  border-radius: var(--radius);
+  transition: transform 0.35s var(--ease);
+}
+
+.person-card:hover {
+  transform: translateY(-4px);
+}
+
+.person-avatar {
+  transition: background-color 0.35s var(--ease), transform 0.35s var(--ease);
+}
+
+.person-card:hover .person-avatar {
+  background: var(--brown-dark);
+  transform: scale(1.04);
+}
+
+/* Resumo das páginas de detalhe (vem do frontmatter, não do corpo Markdown) */
+.entry-resumo {
+  max-width: 62ch;
+  margin: 0 0 var(--space-4);
+  font-size: 1.1rem;
+  color: var(--brown-dark);
+}
+
+/* Título de secção — base partilhada pelo componente SectionHeading e pelas páginas */
+.section-heading__title {
+  font-family: var(--font-heading);
+  font-size: 1.75rem;
+  color: var(--ink);
+  margin-bottom: var(--space-1);
+}
+
+/* Régua dourada por baixo dos títulos de secção */
+.section-heading__title::after {
+  content: '';
+  display: block;
+  width: 3rem;
+  height: 3px;
+  margin-top: var(--space-2);
+  background: var(--gold);
+}
+
+/* A régua cresce suavemente quando o título entra no ecrã */
+.js .section-heading__title::after {
+  width: 0;
+  transition: width 0.9s var(--ease) 0.2s;
+}
+
+.js .section-heading__title.is-visible::after {
+  width: 3rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .js .hero .stub-eyebrow,
+  .js .hero h1,
+  .js .hero-subtitle,
+  .js .hero-intro,
+  .js .hero-actions,
+  .js .reveal {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .area-card:hover,
+  .sector-card:hover,
+  .person-card:hover,
+  .person-card:hover .person-avatar,
+  .btn:hover {
+    transform: none;
+  }
+
+  .nav-panel,
+  .nav-panel .nav-list > li {
+    transition: none;
+  }
+
+  .js .section-heading__title::after {
+    width: 3rem;
+    transition: none;
   }
 }

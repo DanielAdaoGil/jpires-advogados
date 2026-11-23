@@ -1,0 +1,77 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+import PersonCard from '../../components/PersonCard.astro';
+import SectionHeading from '../../components/SectionHeading.astro';
+import { t, type Lang } from '../../i18n/index.ts';
+import { toSlug } from '../../utils/slug.ts';
+
+export async function getStaticPaths() {
+  const areas = await getCollection('areas');
+  return areas.map((entry) => ({
+    params: { slug: toSlug(entry.id) },
+    props: { entry, lang: 'pt' as Lang },
+  }));
+}
+
+const { entry, lang } = Astro.props;
+const { Content } = await render(entry);
+const area = entry.data;
+
+const equipaCollection = await getCollection('equipa');
+const areaAdvogados = area.advogados
+  .map((id) => equipaCollection.find((e) => toSlug(e.id) === toSlug(id)))
+  .filter(Boolean);
+---
+
+<BaseLayout title={area.titulo} lang={lang} current="/areas/">
+  <section class="section">
+    <div class="container">
+      <SectionHeading title={area.titulo} level={1} />
+      <p class="entry-resumo">{area.resumo}</p>
+      <Content />
+
+      {areaAdvogados.length > 0 && (
+        <section class="area-equipa">
+          <h2>{t(lang, 'area.equipa')}</h2>
+          <div class="person-grid">
+            {areaAdvogados.map((pessoa) => (
+              <PersonCard
+                nome={pessoa.data.nome}
+                cargo={pessoa.data.cargo}
+                iniciais={pessoa.data.iniciais}
+                href={`/equipa/${toSlug(pessoa.id)}/`}
+              />
+            ))}
+          </div>
+        </section>
+      )}
+
+      <div class="area-cta" style="margin-top: var(--space-4);">
+        <a href="/contactos/" class="btn btn-ghost">{t(lang, 'common.contactar')}</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .area-equipa {
+    margin-top: var(--space-6);
+    border-top: 1px solid var(--brown-medium);
+    padding-top: var(--space-4);
+  }
+  .area-equipa h2 {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    color: var(--ink);
+    margin-bottom: var(--space-2);
+  }
+  .person-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-3);
+  }
+  .area-cta a {
+    text-decoration: none;
+  }
+</style>

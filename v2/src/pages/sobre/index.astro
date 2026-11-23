@@ -1,5 +1,63 @@
 ---
-import StubPage from '../../components/StubPage.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { t } from '../../i18n/index.ts';
+import SectionHeading from '../../components/SectionHeading.astro';
+
+const lang = 'pt';
 ---
 
-<StubPage titleKey="nav.sobre" current="/sobre/" />
+<BaseLayout title={t(lang, 'nav.sobre')} lang={lang} current="/sobre/">
+  <section class="section">
+    <div class="container">
+      <SectionHeading title={t(lang, 'nav.sobre')} description={t(lang, 'sobre.missao')} level={1} />
+
+      <SectionHeading title={t(lang, 'sobre.valores.titulo')} level={2} />
+      <div class="valores-grid">
+        <div class="valor-card">
+          <h3>{t(lang, 'sobre.valores.rigor.nome')}</h3>
+          <p>{t(lang, 'sobre.valores.rigor.descricao')}</p>
+        </div>
+        <div class="valor-card">
+          <h3>{t(lang, 'sobre.valores.confianca.nome')}</h3>
+          <p>{t(lang, 'sobre.valores.confianca.descricao')}</p>
+        </div>
+        <div class="valor-card">
+          <h3>{t(lang, 'sobre.valores.pragmatismo.nome')}</h3>
+          <p>{t(lang, 'sobre.valores.pragmatismo.descricao')}</p>
+        </div>
+        <div class="valor-card">
+          <h3>{t(lang, 'sobre.valores.parceria.nome')}</h3>
+          <p>{t(lang, 'sobre.valores.parceria.descricao')}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .valores-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+  .valor-card {
+    border: 1px solid var(--brown-medium);
+    border-radius: 6px;
+    padding: var(--space-3);
+    background: var(--paper);
+  }
+  .valor-card h3 {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+    margin: 0 0 var(--space-1) 0;
+  }
+  .valor-card p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--brown-dark);
+  }
+</style>

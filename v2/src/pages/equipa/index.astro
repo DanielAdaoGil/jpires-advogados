@@ -1,5 +1,39 @@
 ---
-import StubPage from '../../components/StubPage.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import PersonCard from '../../components/PersonCard.astro';
+import { t } from '../../i18n/index.ts';
+import { toSlug } from '../../utils/slug.ts';
+
+const equipa = await getCollection('equipa');
+const lang = 'pt';
 ---
 
-<StubPage titleKey="nav.equipa" current="/equipa/" />
+<BaseLayout title={t(lang, 'nav.equipa')} lang={lang} current="/equipa/">
+  <section class="section">
+    <div class="container">
+      <h2 class="section-heading__title">{t(lang, 'equipa.titulo')}</h2>
+      <div class="person-grid">
+        {equipa
+          .sort((a, b) => a.data.ordem - b.data.ordem)
+          .map((p) => (
+            <PersonCard
+              nome={p.data.nome}
+              cargo={p.data.cargo}
+              iniciais={p.data.iniciais}
+              href={`/equipa/${toSlug(p.id)}/`}
+            />
+          ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .person-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-3);
+    margin-top: var(--space-2);
+  }
+</style>

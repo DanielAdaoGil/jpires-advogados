@@ -46,7 +46,7 @@ t('home.hero.title')
 t('fees.disclaimer')
 
 // ❌ proibido
-t('Áreas de Prática')
+t('Áreas de Especialidade')
 t('Onde o direito serve o negócio.')
 ```
 
@@ -73,7 +73,7 @@ export const site = {
 };
 ```
 
-### `areas/*.md` — 6 áreas de prática
+### `areas/*.md` — 6 áreas de especialidade
 
 ```yaml
 ---
@@ -192,7 +192,7 @@ Posicionamento sugerido para o hero (factual, não slogan de marketing):
 | 1 | Email geral | `geral@jpiresadvogados.com` | `jpires@jpires-advogados.ao` | Dr. Pires |
 | 2 | Equipa | 3 advogados | 2 advogados | Dr. Pires (usar 3) |
 | 3 | Honorários | "não negociáveis; formas de pagamento sim" | "definidos em função do perfil..." | Dr. Pires |
-| 4 | Navegação | "Áreas de Especialidade" | "Áreas de Prática" + Sectores | Daniel Gil |
+| 4 | Navegação | "Áreas de Especialidade" | "Áreas de Especialidade" + Sectores (v2) | Daniel Gil |
 | 5 | CTA | "Solicitar Proposta" | "Consultar Condições" | Definido: "Contactar" na v2 |
 | 6 | Telefones | `+244 222 740 715` | `+244 933 364 301` / `+244 923 514 369` | Dr. Pires |
 | 7 | WhatsApp | `+244 931 092 703` | `+244 931 092 703` | ✅ Consistente |

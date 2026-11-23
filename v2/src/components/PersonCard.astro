@@ -1,0 +1,57 @@
+---
+interface Props {
+  nome: string;
+  cargo: string;
+  iniciais: string;
+  href: string;
+}
+const { nome, cargo, iniciais, href } = Astro.props;
+---
+
+<article class="person-card reveal" aria-label={nome}>
+  <a href={href}>
+    <div class="person-avatar">
+      {iniciais}
+    </div>
+    <h3>{nome}</h3>
+    <p class="person-cargo">{cargo}</p>
+  </a>
+</article>
+
+<style>
+  .person-card {
+    text-align: center;
+    padding: var(--space-3);
+  }
+  .person-card a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .person-avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: var(--brown-medium);
+    color: var(--paper);
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--space-2) auto;
+  }
+  .person-card h3 {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    margin: 0 0 var(--space-1) 0;
+    color: var(--ink);
+  }
+  .person-cargo {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--brown-dark);
+    font-weight: 500;
+  }
+</style>

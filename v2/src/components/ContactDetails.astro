@@ -1,0 +1,71 @@
+---
+import { site } from '../data/site.ts';
+import { t } from '../i18n/index.ts';
+
+interface Props {
+  lang: string;
+}
+const { lang = 'pt' } = Astro.props;
+---
+
+<section class="contact-details">
+  <h2 class="contact-details__title">{t(lang, 'contactos.titulo')}</h2>
+  <dl class="contact-details__list">
+    <dt>{t(lang, 'contactos.endereco')}</dt>
+    <dd>
+      <a href={site.mapsUrl} target="_blank" rel="noopener">
+        {site.endereco}
+      </a>
+    </dd>
+    <dt>{t(lang, 'contactos.email')}</dt>
+    <dd>
+      {site.email.includes('CONFIRMAR') ? '' : <a href={`mailto:${site.email}`}>{site.email}</a>}
+    </dd>
+    <dt>{t(lang, 'contactos.telefone')}</dt>
+    <dd>
+      {site.telefones[0].includes('CONFIRMAR') ? '' : site.telefones[0]}
+    </dd>
+    <dt>{t(lang, 'contactos.whatsapp')}</dt>
+    <dd>
+      <a href={`https://wa.me/${site.whatsapp.replace('+', '')}`} target="_blank" rel="noopener">
+        {site.whatsapp}
+      </a>
+    </dd>
+  </dl>
+</section>
+
+<style>
+  .contact-details {
+    max-width: var(--container-max-width);
+    margin: 0 auto;
+    padding: var(--space-4);
+  }
+  .contact-details__title {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    color: var(--ink);
+    margin-bottom: var(--space-3);
+  }
+  .contact-details__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .contact-details__list dt {
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    color: var(--brown-dark);
+    margin-bottom: var(--space-1);
+  }
+  .contact-details__list dd {
+    margin: 0 0 var(--space-3) 0;
+    color: var(--ink);
+  }
+  .contact-details__list a {
+    color: var(--gold);
+    text-decoration: none;
+  }
+  .contact-details__list a:hover {
+    text-decoration: underline;
+  }
+</style>

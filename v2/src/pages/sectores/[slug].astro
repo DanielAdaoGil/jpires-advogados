@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+import { t, type Lang } from '../../i18n/index.ts';
+import SectionHeading from '../../components/SectionHeading.astro';
+import { toSlug } from '../../utils/slug.ts';
+
+export async function getStaticPaths() {
+  const sectores = await getCollection('sectores');
+  return sectores.map((entry) => ({
+    params: { slug: toSlug(entry.id) },
+    props: { entry, lang: 'pt' as Lang },
+  }));
+}
+
+const { entry, lang } = Astro.props;
+const { Content } = await render(entry);
+const sector = entry.data;
+---
+
+<BaseLayout title={sector.titulo} lang={lang} current="/sectores/">
+  <section class="section">
+    <div class="container">
+      <SectionHeading title={sector.titulo} level={1} />
+      <p class="entry-resumo">{sector.resumo}</p>
+      <Content />
+    </div>
+  </section>
+</BaseLayout>
