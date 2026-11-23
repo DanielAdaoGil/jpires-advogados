@@ -57,6 +57,8 @@ const dados = principios.map((p) => ({
 </div>
 
 <script>
+  import { aplicar, obterIdioma } from '../i18n/runtime.ts';
+
   type ModalData = {
     id: string;
     eyebrow: string;
@@ -90,10 +92,14 @@ const dados = principios.map((p) => ({
     const dados: ModalData[] = JSON.parse(modal.dataset.principios ?? '[]');
     const email = modal.dataset.email ?? '';
     let lastFocused: HTMLElement | null = null;
+    let idAtual: string | null = null;
 
-    function open(id?: string | null) {
+    // Os dados vieram do servidor em português; aplicar() traduz o conteúdo
+    // para o idioma activo. Chamado de novo a cada mudança de idioma.
+    function render(id?: string | null): boolean {
       const dado = dados.find((d) => d.id === id);
-      if (!dado) return;
+      if (!dado) return false;
+      idAtual = dado.id;
 
       eyebrow.textContent = dado.eyebrow;
       titulo.textContent = dado.titulo;
@@ -117,6 +123,13 @@ const dados = principios.map((p) => ({
       objetivo.hidden = !dado.nota;
       cta.querySelector('span')!.textContent = dado.cta;
       cta.href = `mailto:${email}?subject=${encodeURIComponent(dado.assunto)}`;
+
+      aplicar(dialog, obterIdioma());
+      return true;
+    }
+
+    function open(id?: string | null) {
+      if (!render(id)) return;
 
       dialog.scrollTop = 0;
       lastFocused = document.activeElement as HTMLElement | null;
@@ -146,6 +159,10 @@ const dados = principios.map((p) => ({
     });
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && modal!.classList.contains('is-open')) close();
+    });
+
+    document.addEventListener('jp:lang', () => {
+      if (modal!.classList.contains('is-open') && idAtual) render(idAtual);
     });
   }
 </script>

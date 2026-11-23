@@ -1,6 +1,7 @@
 ---
 import { site } from '../data/site.ts';
 import { t, type Lang, type TranslationKey } from '../i18n/index.ts';
+import LanguageSwitcher from './LanguageSwitcher.astro';
 
 export interface Props {
   lang?: Lang;
@@ -31,6 +32,8 @@ const brandLabel = `${site.nomeCurto} — ${t(lang, 'common.legalSuffix')}`;
         <span class="brand-sub">{t(lang, 'common.legalSuffix')}</span>
       </span>
     </a>
+
+    <LanguageSwitcher />
 
     <button
       class="nav-toggle"
@@ -66,16 +69,14 @@ const brandLabel = `${site.nomeCurto} — ${t(lang, 'common.legalSuffix')}`;
 </header>
 
 <script>
+  import { traduzir } from '../i18n/runtime.ts';
+
   const button = document.querySelector<HTMLButtonElement>('.nav-toggle');
   const panel = document.querySelector<HTMLElement>('#nav-panel');
-  const labels =
-    document.documentElement.lang === 'pt'
-      ? { open: 'Abrir menu', close: 'Fechar menu' }
-      : { open: 'Open menu', close: 'Close menu' };
 
   const setOpen = (open: boolean) => {
     button?.setAttribute('aria-expanded', String(open));
-    button?.setAttribute('aria-label', open ? labels.close : labels.open);
+    button?.setAttribute('aria-label', traduzir(open ? 'Fechar menu' : 'Abrir menu'));
     if (panel) panel.dataset.open = String(open);
   };
 

@@ -14,6 +14,9 @@ const legal: Array<{ href: string; key: TranslationKey }> = [
   { href: '/aviso-legal/', key: 'footer.avisoLegal' },
   { href: '/disclaimer/', key: 'footer.disclaimer' },
 ];
+
+const telefoneHref = `tel:${site.telefones[0].replace(/\s/g, '')}`;
+const whatsappHref = `https://wa.me/${site.whatsapp.replace(/[^\d]/g, '')}`;
 ---
 
 <footer class="site-footer">
@@ -21,21 +24,43 @@ const legal: Array<{ href: string; key: TranslationKey }> = [
     <div class="footer-grid">
       <div>
         <p class="footer-title">{site.nome}</p>
-        <p>{site.endereco}</p>
-        <p>
-          <a href={`mailto:${site.email}`}>{site.email}</a>
-          {' · '}
-          <a href={`tel:${site.telefones[0].replace(/\s/g, '')}`}>{site.telefones[0]}</a>
-        </p>
-        <p>
-          <a
-            href={`https://wa.me/${site.whatsapp.replace(/[^\d]/g, '')}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {t(lang, 'footer.whatsapp')}: {site.whatsapp}
-          </a>
-        </p>
+
+        <ul class="footer-contacts">
+          <li>
+            <a href={whatsappHref} target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12.04 2C6.5 2 2.1 6.4 2.1 11.94c0 1.75.46 3.46 1.33 4.96L2 22l5.24-1.37a9.9 9.9 0 0 0 4.8 1.23h.01c5.54 0 10.04-4.5 10.04-10.04C22.09 6.4 17.59 2 12.04 2Zm0 18.1h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.1.81.83-3.02-.2-.31a8.16 8.16 0 0 1-1.26-4.36c0-4.51 3.67-8.18 8.19-8.18 2.19 0 4.25.85 5.8 2.39a8.14 8.14 0 0 1 2.4 5.8c0 4.52-3.67 8.2-8.17 8.2Zm4.5-6.14c-.24-.12-1.44-.71-1.66-.79-.22-.08-.39-.12-.55.12-.17.24-.63.79-.78.95-.14.17-.29.19-.53.06-.24-.12-1.02-.37-1.94-1.2-.72-.64-1.2-1.42-1.34-1.66-.14-.24-.02-.37.1-.49.11-.11.24-.29.36-.43.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.55-1.33-.75-1.82-.2-.48-.4-.42-.55-.42h-.47c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.32.98 2.48c.12.16 1.7 2.59 4.12 3.63.58.25 1.03.4 1.38.51.58.19 1.11.16 1.53.1.47-.07 1.44-.59 1.64-1.16.2-.57.2-1.06.14-1.16-.06-.1-.22-.16-.46-.28Z" />
+              </svg>
+              <span><span class="footer-contacts__label">{t(lang, 'footer.whatsapp')}:</span> {site.whatsapp}</span>
+            </a>
+          </li>
+          <li>
+            <a href={telefoneHref}>
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.24c1.1.37 2.28.57 3.5.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.5 21 3 13.5 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.22.2 2.4.57 3.5a1 1 0 0 1-.24 1L6.6 10.8Z" />
+              </svg>
+              <span>{site.telefones[0]}</span>
+            </a>
+          </li>
+          <li>
+            <a href={`mailto:${site.email}`}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                <rect x="2.5" y="4.5" width="19" height="15" rx="2" />
+                <path d="m3 6 9 7 9-7" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+              <span>{site.email}</span>
+            </a>
+          </li>
+          <li>
+            <a href={site.mapsUrl} target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" stroke-linejoin="round" />
+                <circle cx="12" cy="10" r="2.7" />
+              </svg>
+              <span>{site.endereco}</span>
+            </a>
+          </li>
+        </ul>
       </div>
       <div>
         <p class="footer-title">{lang === 'pt' ? 'Informação legal' : 'Legal information'}</p>
@@ -56,3 +81,40 @@ const legal: Array<{ href: string; key: TranslationKey }> = [
     </div>
   </div>
 </footer>
+
+<style>
+  .footer-contacts {
+    display: grid;
+    gap: 0.85rem;
+    margin: 1.25rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.92rem;
+  }
+
+  .footer-contacts a {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    color: var(--brown-soft);
+    text-decoration: none;
+    transition: color 0.2s var(--ease);
+  }
+
+  .footer-contacts a:hover,
+  .footer-contacts a:focus-visible {
+    color: var(--gold-light);
+  }
+
+  .footer-contacts svg {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+    margin-top: 1px;
+    color: var(--gold);
+  }
+
+  .footer-contacts__label {
+    color: var(--paper);
+  }
+</style>

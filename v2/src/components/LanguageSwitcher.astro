@@ -1,0 +1,253 @@
+---
+import { IDIOMAS } from '../i18n/runtime.ts';
+---
+
+<div class="lang-switcher" data-no-translate>
+  <button
+    type="button"
+    class="lang-switcher__btn"
+    id="lang-btn"
+    aria-haspopup="listbox"
+    aria-expanded="false"
+    aria-controls="lang-menu"
+    aria-label="Idioma / Language"
+  >
+    <img
+      id="lang-current-flag"
+      src="https://flagcdn.com/w40/ao.png"
+      srcset="https://flagcdn.com/w80/ao.png 2x"
+      alt=""
+      width="24"
+      height="16"
+    />
+    <span class="lang-switcher__current" id="lang-current-name">Português</span>
+    <svg class="lang-switcher__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" />
+    </svg>
+  </button>
+
+  <ul class="lang-switcher__menu" id="lang-menu" role="listbox" aria-label="Idioma / Language" hidden>
+    {
+      IDIOMAS.map(({ codigo, nome, bandeira }) => (
+        <li role="presentation">
+          <button
+            type="button"
+            class="lang-switcher__option"
+            role="option"
+            data-lang={codigo}
+            aria-selected={codigo === 'pt'}
+          >
+            <img
+              src={`https://flagcdn.com/w40/${bandeira}.png`}
+              srcset={`https://flagcdn.com/w80/${bandeira}.png 2x`}
+              alt=""
+              width="24"
+              height="16"
+              loading="lazy"
+            />
+            <span>{nome}</span>
+            <svg class="lang-switcher__check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          </button>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<script>
+  import {
+    IDIOMAS,
+    definirIdioma,
+    obterIdioma,
+    iniciarIdioma,
+    type LangSite,
+  } from '../i18n/runtime.ts';
+
+  const btn = document.getElementById('lang-btn') as HTMLButtonElement | null;
+  const menu = document.getElementById('lang-menu') as HTMLUListElement | null;
+  const flag = document.getElementById('lang-current-flag') as HTMLImageElement | null;
+  const nome = document.getElementById('lang-current-name') as HTMLElement | null;
+
+  function atualizarUI(lang: LangSite) {
+    const info = IDIOMAS.find((i) => i.codigo === lang) ?? IDIOMAS[0];
+    if (flag) {
+      flag.src = `https://flagcdn.com/w40/${info.bandeira}.png`;
+      flag.srcset = `https://flagcdn.com/w80/${info.bandeira}.png 2x`;
+    }
+    if (nome) nome.textContent = info.nome;
+    menu?.querySelectorAll<HTMLElement>('[data-lang]').forEach((opcao) => {
+      opcao.setAttribute('aria-selected', String(opcao.dataset.lang === lang));
+    });
+  }
+
+  function alternar(aberto: boolean) {
+    if (!menu || !btn) return;
+    menu.hidden = !aberto;
+    btn.setAttribute('aria-expanded', String(aberto));
+  }
+
+  btn?.addEventListener('click', (event) => {
+    event.stopPropagation();
+    alternar(menu?.hidden ?? true);
+  });
+
+  menu?.addEventListener('click', (event) => {
+    const alvo = event.target as Element;
+    const opcao = alvo.closest<HTMLElement>('[data-lang]');
+    const codigo = opcao?.dataset.lang as LangSite | undefined;
+    if (!codigo) return;
+    definirIdioma(codigo);
+    alternar(false);
+    btn?.focus({ preventScroll: true });
+  });
+
+  menu?.addEventListener('keydown', (event) => {
+    if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+    const opcoes = [...(menu?.querySelectorAll<HTMLElement>('[data-lang]') ?? [])];
+    const indice = opcoes.indexOf(document.activeElement as HTMLElement);
+    if (indice < 0) return;
+    event.preventDefault();
+    const passo = event.key === 'ArrowDown' ? 1 : -1;
+    opcoes[(indice + passo + opcoes.length) % opcoes.length]?.focus();
+  });
+
+  document.addEventListener('click', (event) => {
+    const alvo = event.target as Node;
+    if (menu && btn && !menu.contains(alvo) && !btn.contains(alvo)) alternar(false);
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') alternar(false);
+  });
+
+  document.addEventListener('jp:lang', () => atualizarUI(obterIdioma()));
+
+  iniciarIdioma();
+  atualizarUI(obterIdioma());
+</script>
+
+<style>
+  .lang-switcher {
+    position: relative;
+    flex: 0 0 auto;
+  }
+
+  .lang-switcher__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 2.5rem;
+    padding: 0 0.7rem;
+    border: 1px solid var(--brown-soft);
+    border-radius: 4px;
+    background: transparent;
+    color: var(--paper);
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: border-color 0.2s var(--ease), color 0.2s var(--ease);
+  }
+
+  .lang-switcher__btn:hover,
+  .lang-switcher__btn:focus-visible,
+  .lang-switcher__btn[aria-expanded='true'] {
+    border-color: var(--gold);
+    color: var(--gold-light);
+  }
+
+  .lang-switcher__btn img {
+    width: 24px;
+    height: 16px;
+    object-fit: cover;
+    border-radius: 2px;
+  }
+
+  .lang-switcher__chev {
+    width: 14px;
+    height: 14px;
+    opacity: 0.75;
+  }
+
+  .lang-switcher__menu {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    inset-inline-end: 0;
+    z-index: 60;
+    width: 232px;
+    max-height: min(70vh, 400px);
+    overflow-y: auto;
+    margin: 0;
+    padding: 0.4rem;
+    list-style: none;
+    border: 1px solid var(--brown-medium);
+    border-radius: 8px;
+    background: var(--ink);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+  }
+
+  .lang-switcher__menu[hidden] {
+    display: none;
+  }
+
+  .lang-switcher__option {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    width: 100%;
+    padding: 0.55rem 0.6rem;
+    border: 0;
+    border-radius: 5px;
+    background: transparent;
+    color: var(--paper);
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    text-align: start;
+    cursor: pointer;
+  }
+
+  .lang-switcher__option:hover,
+  .lang-switcher__option:focus-visible {
+    background: rgba(192, 128, 48, 0.16);
+    outline: none;
+  }
+
+  .lang-switcher__option[aria-selected='true'] {
+    background: rgba(192, 128, 48, 0.12);
+    color: var(--gold-light);
+  }
+
+  .lang-switcher__option img {
+    width: 24px;
+    height: 16px;
+    object-fit: cover;
+    border-radius: 2px;
+  }
+
+  .lang-switcher__check {
+    width: 15px;
+    height: 15px;
+    margin-inline-start: auto;
+    color: var(--gold);
+    opacity: 0;
+  }
+
+  .lang-switcher__option[aria-selected='true'] .lang-switcher__check {
+    opacity: 1;
+  }
+
+  @media (max-width: 560px) {
+    .lang-switcher__current {
+      display: none;
+    }
+
+    .lang-switcher__btn {
+      padding: 0 0.55rem;
+    }
+
+    .lang-switcher__menu {
+      width: 220px;
+    }
+  }
+</style>

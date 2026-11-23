@@ -83,23 +83,11 @@ const { lang = 'pt' } = Astro.props;
 </form>
 
 <script>
+  import { traduzir } from '../i18n/runtime.ts';
+
   const form = document.querySelector('.contact-form');
   const btnEnviar = document.querySelector('#btn-enviar');
   const mensagem = document.querySelector('#form-mensagem');
-  const lang = document.documentElement.lang || 'pt';
-
-  const msgs = {
-    pt: {
-      sucesso: 'Mensagem enviada com sucesso. Entraremos em contacto brevemente.',
-      erro: 'Erro ao enviar a mensagem. Tente novamente ou contacte-nos directamente.',
-      preenchimento: 'Por favor, preencha todos os campos obrigatórios correctamente.',
-    },
-    en: {
-      sucesso: 'Message sent successfully. We will contact you shortly.',
-      erro: 'Error sending message. Please try again or contact us directly.',
-      preenchimento: 'Please fill in all required fields correctly.',
-    },
-  };
 
   function mostrar(mensagemTexto, tipo) {
     if (!mensagem) return;
@@ -112,7 +100,10 @@ const { lang = 'pt' } = Astro.props;
     event.preventDefault();
 
     if (!form.checkValidity()) {
-      mostrar(lang === 'pt' ? msgs.pt.preenchimento : msgs.en.preenchimento, 'erro');
+      mostrar(
+        traduzir('Por favor, preencha todos os campos obrigatórios correctamente.'),
+        'erro'
+      );
       form.reportValidity();
       return;
     }
@@ -121,7 +112,7 @@ const { lang = 'pt' } = Astro.props;
     // O cliente deve escolher entre mailto:, Formspree ou Netlify Forms.
     // Nenhum endpoint nem chave de API é criado aqui.
     mostrar(
-      lang === 'pt' ? msgs.pt.sucesso : msgs.en.sucesso,
+      traduzir('Mensagem enviada com sucesso. Entraremos em contacto brevemente.'),
       'sucesso'
     );
 

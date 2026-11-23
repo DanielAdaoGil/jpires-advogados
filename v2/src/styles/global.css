@@ -136,6 +136,36 @@ p {
   min-height: 5rem;
 }
 
+/* Ordem estável: marca → navegação → idiomas → botão do menu (mobile). */
+.navbar .brand {
+  order: 1;
+}
+
+.navbar .nav-panel {
+  order: 2;
+}
+
+.navbar .lang-switcher {
+  order: 3;
+}
+
+.navbar .nav-toggle {
+  order: 4;
+}
+
+@media (max-width: 1200px) {
+  .navbar .lang-switcher {
+    margin-inline-start: auto;
+  }
+}
+
+/* Em ecrãs pequenos a bandeira e o botão do menu partilham a mesma linha. */
+@media (max-width: 560px) {
+  .navbar {
+    gap: 0.5rem;
+  }
+}
+
 .brand {
   display: flex;
   align-items: center;

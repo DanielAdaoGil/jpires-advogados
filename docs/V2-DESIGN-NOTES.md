@@ -422,3 +422,46 @@ do array `ATRIBUTOS` do legado):
 Validação: `npm run build` → 30 páginas; 4 cards, 4/4/5/5 itens com `✓`, textos
 literais presentes no HTML, foco no botão Fechar, fecho pelas 3 vias com regresso
 do foco ao card, sem erros de consola e sem `⚠️ CONFIRMAR` renderizado.
+
+---
+
+## 14. Ícones de contacto no rodapé (2026-11-23, 12:12)
+
+- `Footer.astro` passou a apresentar uma lista com ícone âmbar em cada contacto:
+  **WhatsApp**, **telefone**, **email** e **localização (GPS)**.
+- Os links mantêm-se os mesmos (`wa.me`, `tel:`, `mailto:` e Google Maps); os
+  ícones são SVG inline, sem dependências externas e com `aria-hidden="true"`.
+- Validação: build com 30 páginas, 4 ícones presentes, cor `rgb(192,128,48)`,
+  sem erros de consola.
+
+---
+
+## 15. Seletor de 8 idiomas (2026-11-23, 12:25)
+
+Decisão do cliente: manter o comportamento do site antigo — **8 idiomas,
+escolhidos no próprio ecrã**, sem criar uma URL por idioma.
+
+- Idiomas/códigos: `pt/ao`, `en/gb`, `fr/fr`, `de/de`, `ar/ae`, `ru/ru`,
+  `it/it`, `zh/cn`. Bandeiras do flagcdn, como no legado.
+- Árabe é RTL: `definirIdioma()` actualiza `<html lang>` e `<html dir="rtl">`.
+- Preferência guardada em `localStorage['jpires-lang']` e aplicada ao carregar
+  qualquer página; o `<title>` também é traduzido.
+- O motor `v2/src/i18n/runtime.ts` reaproveita as **207 entradas** copiadas de
+  `i18n.js` (`traducoes-legado.ts`) e acrescenta **80 entradas**
+  (`traducoes-extra.ts`) para textos novos do PDF. Cobertura: 142/142 textos da
+  interface e 75/75 textos de conteúdo.
+- `aplicar()` usa `WeakMap` para guardar os originais, percorre nós de texto e
+  os atributos `aria-label`, `placeholder` e `title`, e ignora
+  `script, style, svg, textarea, [data-no-translate]`.
+- Evento `jp:lang` avisa o modal dos princípios (que se renderiza de novo se
+  estiver aberto), o formulário de contacto e o botão do menu móvel.
+- `LanguageSwitcher.astro` fica na navbar (desktop e móvel), com
+  `aria-haspopup="listbox"`, `aria-selected`, fecho por clique fora/Escape e
+  navegação pelas setas do teclado.
+- `Notícias` e `Insights` mantêm-se separadas: Notícias = novidades da firma;
+  Insights = artigos técnicos e opiniões dos advogados. Não foi criado ficheiro
+  de exemplo, a pedido do cliente.
+
+Validação: build com 30 páginas; PT→FR→AR→ZH→PT sem erros de consola; `dir="rtl"`
+no árabe; `localStorage` persistente entre páginas; modal e mensagens do
+formulário traduzidos a quente; 0 páginas com `⚠️ CONFIRMAR` ou links `.md`.
