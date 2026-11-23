@@ -1,0 +1,44 @@
+---
+import Footer from '../components/Footer.astro';
+import Navbar from '../components/Navbar.astro';
+import { site } from '../data/site.ts';
+import { t, type Lang } from '../i18n/index.ts';
+import '../styles/global.css';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  lang?: Lang;
+  current?: string;
+}
+
+const { title, description = site.slogan, lang = 'pt', current = '/' } = Astro.props;
+const pageTitle = title
+  ? `${title} — ${site.nomeCurto}`
+  : `${site.nomeCurto} — ${t(lang, 'common.legalSuffix')}`;
+---
+
+<!DOCTYPE html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700&family=Source+Serif+4:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">{t(lang, 'common.skipLink')}</a>
+    <Navbar lang={lang} current={current} />
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+  </body>
+</html>

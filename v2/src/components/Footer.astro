@@ -1,0 +1,58 @@
+---
+import { site } from '../data/site.ts';
+import { t, type Lang, type TranslationKey } from '../i18n/index.ts';
+
+export interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'pt' } = Astro.props;
+
+const legal: Array<{ href: string; key: TranslationKey }> = [
+  { href: '/privacidade/', key: 'footer.privacidade' },
+  { href: '/cookies/', key: 'footer.cookies' },
+  { href: '/aviso-legal/', key: 'footer.avisoLegal' },
+  { href: '/disclaimer/', key: 'footer.disclaimer' },
+];
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <p class="footer-title">{site.nome}</p>
+        <p>{site.endereco}</p>
+        <p>
+          <a href={`mailto:${site.email}`}>{site.email}</a>
+          {' · '}
+          <a href={`tel:${site.telefones[0].replace(/\s/g, '')}`}>{site.telefones[0]}</a>
+        </p>
+        <p>
+          <a
+            href={`https://wa.me/${site.whatsapp.replace(/[^\d]/g, '')}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {t(lang, 'footer.whatsapp')}: {site.whatsapp}
+          </a>
+        </p>
+      </div>
+      <div>
+        <p class="footer-title">{lang === 'pt' ? 'Informação legal' : 'Legal information'}</p>
+        <ul class="footer-list">
+          {
+            legal.map(({ href, key }) => (
+              <li>
+                <a href={href}>{t(lang, key)}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>{t(lang, 'common.copyright')}</span>
+      <span>{site.nomeCurto} · {t(lang, 'common.legalSuffix')}</span>
+    </div>
+  </div>
+</footer>

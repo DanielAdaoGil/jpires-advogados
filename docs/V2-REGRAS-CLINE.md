@@ -7,7 +7,8 @@
 
 ## 1. Antes de qualquer alteração
 
-1. Ler `docs/V2-LEIA-ME.md`, `docs/V2-ESTRATEGIA.md` e `docs/V2-CONTEUDO.md`.
+1. Ler `docs/V2-LEIA-ME.md`, `docs/V2-ESTRATEGIA.md`, `docs/V2-CONTEUDO.md` e
+   `docs/V2-DESIGN-NOTES.md` (este último é o canal de feedback visual do cliente).
 2. Confirmar a fase atual com o utilizador. **Trabalhar apenas uma fase de cada vez.**
 3. Verificar `git status --short` no início: nenhum ficheiro da zona sagrada pode estar modificado.
 

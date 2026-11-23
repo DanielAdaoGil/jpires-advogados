@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { t, type Lang, type TranslationKey } from '../i18n/index.ts';
+
+export interface Props {
+  titleKey: TranslationKey;
+  lang?: Lang;
+  current?: string;
+}
+
+const { titleKey, lang = 'pt', current } = Astro.props;
+const title = t(lang, titleKey);
+---
+
+<BaseLayout title={title} lang={lang} current={current}>
+  <section class="section">
+    <div class="container stub">
+      <p class="stub-eyebrow">{t(lang, 'common.emConstrucao')}</p>
+      <h1>{title}</h1>
+      <p>{t(lang, 'common.conteudoPrevisto')}</p>
+      <p><a href="/">← {t(lang, 'nav.home')}</a></p>
+    </div>
+  </section>
+</BaseLayout>

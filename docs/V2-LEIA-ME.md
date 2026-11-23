@@ -78,9 +78,9 @@ por React SPA nem por HTML puro sem aprovação.
 
 | Fase | Nome | Entrega | Estado |
 |---|---|---|---|
-| **1** | Fundação documental | Este conjunto de 4 documentos | ✅ Concluída |
-| **2** | Setup técnico | `v2/` com Astro, build a correr, nada publicado | ⬜ Por fazer |
-| **3** | Design system | Layout, tokens visuais, navegação, rodapé legal | ⬜ |
+| **1** | Fundação documental | Este conjunto de 5 documentos | ✅ Concluída |
+| **2** | Setup técnico | `v2/` com Astro, build a correr, 12 rotas visíveis em `localhost:4321` | ✅ Concluída (reconstruída em 2026-11-23) |
+| **3** | Design system | Tokens âmbar da logo, Navbar com `logo.png`, favicon `.ico`, Footer legal — **revisão visual do cliente** | ✅ Aplicada · ⬜ aguarda aceitação |
 | **4** | Páginas estruturais | Home, Sobre, 6 áreas, 8 sectores, Equipa, Contactos | ⬜ |
 | **5** | Motor de conteúdo | `/insights/`, `/noticias/`, casos anonimizados, formulário | ⬜ |
 | **6** | Credibilidade e SEO | Reconhecimentos, pro bono, carreiras, metadados, JSON-LD, i18n, privacidade | ⬜ |
@@ -107,3 +107,4 @@ O Cline deve trabalhar **uma fase por vez** e entregar um relatório no fim de c
 - `docs/V2-ESTRATEGIA.md` — o que copiar dos 15 top firms, o que não copiar, sitemap alvo
 - `docs/V2-CONTEUDO.md` — modelos de dados e conteúdo canónico da JPires
 - `docs/V2-REGRAS-CLINE.md` — regras operacionais e checklist por tarefa
+- `docs/V2-DESIGN-NOTES.md` — **ficheiro do cliente**: onde ver o site, como dar feedback e log de correções visual

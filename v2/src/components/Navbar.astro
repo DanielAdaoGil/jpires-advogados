@@ -1,0 +1,95 @@
+---
+import { site } from '../data/site.ts';
+import { t, type Lang, type TranslationKey } from '../i18n/index.ts';
+
+export interface Props {
+  lang?: Lang;
+  current?: string;
+}
+
+const { lang = 'pt', current = '/' } = Astro.props;
+
+const links: Array<{ href: string; key: TranslationKey }> = [
+  { href: '/', key: 'nav.home' },
+  { href: '/sobre/', key: 'nav.sobre' },
+  { href: '/areas/', key: 'nav.areas' },
+  { href: '/sectores/', key: 'nav.sectores' },
+  { href: '/equipa/', key: 'nav.equipa' },
+  { href: '/insights/', key: 'nav.insights' },
+  { href: '/noticias/', key: 'nav.noticias' },
+  { href: '/contactos/', key: 'nav.contactos' },
+];
+
+const ariaLabel = lang === 'pt' ? 'Navegação principal' : 'Main navigation';
+const brandLabel = `${site.nomeCurto} — ${t(lang, 'common.legalSuffix')}`;
+---
+
+<header class="site-header">
+  <div class="container navbar">
+    <a class="brand" href="/" aria-label={brandLabel}>
+      <img src="/logo.png" alt={brandLabel} width="44" height="44" />
+      <span class="brand-text">
+        <span class="brand-name">{site.nomeCurto}</span>
+        <span class="brand-sub">{t(lang, 'common.legalSuffix')}</span>
+      </span>
+    </a>
+
+    <button
+      class="nav-toggle"
+      type="button"
+      aria-expanded="false"
+      aria-controls="nav-panel"
+      aria-label={t(lang, 'common.menu')}
+    >
+      <span class="hamburger" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+    </button>
+
+    <nav id="nav-panel" class="nav-panel" aria-label={ariaLabel}>
+      <ul class="nav-list">
+        {
+          links.map(({ href, key }) => (
+            <li>
+              <a class="nav-link" href={href} aria-current={current === href ? 'page' : undefined}>
+                {t(lang, key)}
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <a class="nav-cta" href="/contactos/">{t(lang, 'common.contactar')}</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const button = document.querySelector<HTMLButtonElement>('.nav-toggle');
+  const panel = document.querySelector<HTMLElement>('#nav-panel');
+  const labels =
+    document.documentElement.lang === 'pt'
+      ? { open: 'Abrir menu', close: 'Fechar menu' }
+      : { open: 'Open menu', close: 'Close menu' };
+
+  const setOpen = (open: boolean) => {
+    button?.setAttribute('aria-expanded', String(open));
+    button?.setAttribute('aria-label', open ? labels.close : labels.open);
+    if (panel) panel.dataset.open = String(open);
+  };
+
+  button?.addEventListener('click', () => {
+    setOpen(button.getAttribute('aria-expanded') !== 'true');
+  });
+
+  panel?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => setOpen(false));
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') setOpen(false);
+  });
+</script>

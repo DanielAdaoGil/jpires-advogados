@@ -174,7 +174,14 @@ Missão (texto publicado, reutilizável):
 > negócios sustentáveis e instituições mais fortes.
 
 Posicionamento sugerido para o hero (factual, não slogan de marketing):
-> Assessoria jurídica corporativa em Angola para grupos empresariais e investidores internacionais.
+> Título: Assessoria jurídica corporativa
+
+> Nota (Nov 2026): "em Angola" foi removido — a JPires tem parcerias globais
+> e não se limita ao mercado angolano.
+> Subtítulo: Sociedade de Advogados, RL
+
+> ⚠️ A frase "Para grupos empresariais e investidores internacionais." foi removida
+> por decisão do cliente (Nov 2026). Não a reintroduzir em `pt.ts`, `en.ts` nem nas páginas.
 
 ---
 
@@ -182,12 +189,12 @@ Posicionamento sugerido para o hero (factual, não slogan de marketing):
 
 | # | Campo | Publicado | Repo local | Dono da decisão |
 |---|---|---|---|---|
-| 1 | Email geral | `geral@jpiresadvogados.com`| Dr. Pires |
-| 2 | Equipa | 3 advogados |  Dr. Pires (usar 3) |
-| 3 | Honorários | "não negociáveis; formas de pagamento sim" | Dr. Pires |
-| 4 | Navegação | "Áreas de Especialidade" |  Daniel Gil
-| 5 | CTA | "Solicitar Proposta" Definido: "Contactar" na v2 |
-| 6 | Telefones | `+244 222 740 715` | `+244 933 364 301` | Dr. Pires |
+| 1 | Email geral | `geral@jpiresadvogados.com` | `jpires@jpires-advogados.ao` | Dr. Pires |
+| 2 | Equipa | 3 advogados | 2 advogados | Dr. Pires (usar 3) |
+| 3 | Honorários | "não negociáveis; formas de pagamento sim" | "definidos em função do perfil..." | Dr. Pires |
+| 4 | Navegação | "Áreas de Especialidade" | "Áreas de Prática" + Sectores | Daniel Gil |
+| 5 | CTA | "Solicitar Proposta" | "Consultar Condições" | Definido: "Contactar" na v2 |
+| 6 | Telefones | `+244 222 740 715` | `+244 933 364 301` / `+244 923 514 369` | Dr. Pires |
 | 7 | WhatsApp | `+244 931 092 703` | `+244 931 092 703` | ✅ Consistente |
 
 Enquanto não resolvidos, o Cline deve manter `⚠️ CONFIRMAR` no código e reportar a pendência.

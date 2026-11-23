@@ -120,8 +120,12 @@ Modelo de página de área (seguindo Cravath/M&A):
 
 ## 6. Princípios visuais
 
-- Tipografia editorial: Syne para títulos, Inter para corpo (herdadas do legado).
-- Paleta institucional herdada: `#1F120B`, `#2E1B12`, `#4A2C1B`, `#D9C3B0`, `#3BB4F2` (uso pontual), `#EAF6FD`.
+- Tipografia editorial: **Source Serif 4** nos títulos e **Source Sans 3** no corpo.
+  Substituíram Syne/Inter na revisão de Nov 2026: serif clássica é o padrão
+  dos firmas de referência; Syne parecia estúdio criativo.
+- Paleta institucional **definida pela logo** (âmbar/marrom), não pelo legado azul:
+  `#C08030`, `#E0A040`, `#F8C050`, `#140F0A`, `#583000`, `#704010`, `#FAF7F2`, `#D9C3B0`.
+  Detalhes e contrastes em `V2-DESIGN-NOTES.md` §6–7.
 - Muito espaço em branco; nada de `backdrop-blur` generalizado.
 - Fotografia: arquitetura, cidade, ambiente de trabalho. Sem stock photos genéricas de "advogado de terno".
 - Acessibilidade WCAG 2.2 AA e Core Web Vitals verdes em telemóvel são requisitos, não extras.

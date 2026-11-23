@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { t } from '../i18n/index.ts';
+
+const lang = 'pt';
+---
+
+<BaseLayout title={t(lang, 'nav.home')} lang={lang} current="/">
+  <section class="hero">
+    <div class="container">
+      <p class="stub-eyebrow">{t(lang, 'common.legalSuffix')}</p>
+      <h1>{t(lang, 'home.hero.title')}</h1>
+      <p class="hero-subtitle">{t(lang, 'home.hero.subtitle')}</p>
+      <p class="hero-intro">{t(lang, 'home.hero.intro')}</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="/contactos/">{t(lang, 'home.hero.cta')}</a>
+        <a class="btn btn-ghost" href="/areas/">{t(lang, 'nav.areas')}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container stub">
+      <p class="stub-eyebrow">{t(lang, 'common.emConstrucao')}</p>
+      <h2>{t(lang, 'nav.sobre')} · {t(lang, 'nav.areas')} · {t(lang, 'nav.equipa')}</h2>
+      <p>{t(lang, 'common.conteudoPrevisto')}</p>
+    </div>
+  </section>
+</BaseLayout>
