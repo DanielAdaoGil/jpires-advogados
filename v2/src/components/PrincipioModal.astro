@@ -180,7 +180,7 @@ const dados = principios.map((p) => ({
     align-items: center;
     justify-content: center;
     padding: 16px;
-    background: rgba(20, 15, 10, 0.78);
+    background: var(--overlay-modal);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
     opacity: 0;
@@ -203,14 +203,14 @@ const dados = principios.map((p) => ({
     max-height: 88vh;
     overflow-y: auto;
     border-radius: 24px;
-    background: rgba(20, 15, 10, 0.97);
-    border: 1px solid rgba(192, 128, 48, 0.45);
-    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(250, 247, 242, 0.04);
+    background: var(--surface-dark-elevated);
+    border: 1px solid var(--border-accent-soft);
+    box-shadow: var(--shadow-modal);
     padding: 40px 36px 32px;
     transform: translateY(16px) scale(0.97);
     transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
     scrollbar-width: thin;
-    scrollbar-color: var(--brown-medium) transparent;
+    scrollbar-color: var(--scrollbar-thumb) transparent;
   }
 
   .principio-modal.is-open .principio-modal__dialog {
@@ -227,18 +227,18 @@ const dados = principios.map((p) => ({
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(250, 247, 242, 0.07);
-    border: 1px solid rgba(217, 195, 176, 0.3);
-    color: var(--paper);
+    background: var(--surface-glass);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-on-dark);
     cursor: pointer;
     transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   }
 
   .principio-modal__close:hover,
   .principio-modal__close:focus-visible {
-    background: var(--gold);
-    border-color: var(--gold);
-    color: var(--ink);
+    background: var(--surface-accent);
+    border-color: var(--border-accent);
+    color: var(--text-on-accent);
   }
 
   .principio-modal__eyebrow {
@@ -246,7 +246,7 @@ const dados = principios.map((p) => ({
     font-weight: 700;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--gold);
+    color: var(--text-accent);
     padding-right: 48px;
   }
 
@@ -255,14 +255,14 @@ const dados = principios.map((p) => ({
     font-weight: 800;
     font-size: clamp(26px, 4vw, 34px);
     line-height: 1.1;
-    color: var(--paper);
+    color: var(--text-on-dark);
     margin-top: 10px;
     padding-right: 48px;
   }
 
   .principio-modal__subtitle {
     font-size: 15px;
-    color: var(--gold-light);
+    color: var(--text-accent-on-dark);
     margin-top: 8px;
     font-weight: 500;
   }
@@ -270,13 +270,13 @@ const dados = principios.map((p) => ({
   .principio-modal__intro {
     font-size: 15px;
     line-height: 1.6;
-    color: var(--brown-soft);
+    color: var(--text-secondary-on-dark);
     margin: 14px 0 0;
   }
 
   .principio-modal__divider {
     height: 1px;
-    background: rgba(250, 247, 242, 0.14);
+    background: var(--surface-divider);
     margin: 22px 0;
   }
 
@@ -285,7 +285,7 @@ const dados = principios.map((p) => ({
     font-weight: 700;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--brown-soft);
+    color: var(--text-secondary-on-dark);
     margin-bottom: 14px;
   }
 
@@ -303,7 +303,7 @@ const dados = principios.map((p) => ({
     align-items: flex-start;
     font-size: 14.5px;
     line-height: 1.55;
-    color: var(--paper);
+    color: var(--text-on-dark);
   }
 
   .principio-modal__list svg {
@@ -311,18 +311,18 @@ const dados = principios.map((p) => ({
     height: 18px;
     flex-shrink: 0;
     margin-top: 3px;
-    color: var(--gold);
+    color: var(--text-accent);
   }
 
   .principio-modal__objective {
     margin-top: 24px;
     padding: 16px 18px;
     border-radius: 16px;
-    background: rgba(192, 128, 48, 0.1);
-    border-left: 3px solid var(--gold);
+    background: var(--surface-accent-soft);
+    border-left: 3px solid var(--border-accent);
     font-size: 14px;
     line-height: 1.6;
-    color: var(--brown-soft);
+    color: var(--text-secondary-on-dark);
   }
 
   .principio-modal__cta {
@@ -332,8 +332,8 @@ const dados = principios.map((p) => ({
     gap: 10px;
     padding: 13px 24px;
     border-radius: 9999px;
-    background: var(--gold);
-    color: var(--ink);
+    background: var(--surface-accent);
+    color: var(--text-on-accent);
     font-weight: 700;
     font-size: 14px;
     text-decoration: none;
@@ -341,7 +341,7 @@ const dados = principios.map((p) => ({
   }
 
   .principio-modal__cta:hover {
-    background: var(--gold-light);
+    background: var(--surface-accent-light);
     transform: translateY(-1px);
   }
 

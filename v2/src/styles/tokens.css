@@ -1,0 +1,108 @@
+/* ==========================================================================
+   JPIRES — SISTEMA DE CORES (2026-11-23)
+
+   Fonte: varredura de logo.png (1254x1254) cruzada com todas as cores
+   efectivamente usadas no v2. As duas cores dominantes do logótipo são
+   #E0A040 (8,0%) e #C08030 (7,7%), seguidas de #D09040, #F0B050 e #F0C050.
+
+   Regra de ouro: nenhum componente escreve valores hexadecimais, rgba() ou
+   nomes de cor.
+   Tudo passa pelos tokens semânticos da CAMADA 3.
+
+   CAMADA 1 — primitivas (valores da marca, origem: logo.png)
+   CAMADA 2 — canais RGB (para transparências consistentes)
+   CAMADA 3 — tokens semânticos (os únicos a usar nos componentes)
+   ========================================================================== */
+
+:root {
+  /* ---- CAMADA 1: PRIMITIVAS ------------------------------------------- */
+  --gold: #C08030;
+  --gold-mid: #E0A040;
+  --gold-light: #F8C050;
+  --ink: #140F0A;
+  --brown-dark: #583000;
+  --brown-medium: #704010;
+  --paper: #FAF7F2;
+  --brown-soft: #D9C3B0;
+  --paper-alt: #F3EDE4;
+
+  /* Feedback (já usado no formulário; agrupado aqui para não ficar solto) */
+  --danger-border: #FF9F8A;
+  --danger-text: #FFB4A2;
+  --danger-text-strong: #FFD7CF;
+  --danger-surface: rgb(150 32 32 / 0.35);
+
+  /* ---- CAMADA 2: CANAIS RGB ------------------------------------------- */
+  --rgb-gold: 192 128 48;
+  --rgb-gold-light: 248 192 80;
+  --rgb-ink: 20 15 10;
+  --rgb-paper: 250 247 242;
+  --rgb-brown-soft: 217 195 176;
+  --rgb-black: 0 0 0;
+
+  /* ---- CAMADA 3: TOKENS SEMÂNTICOS ------------------------------------ */
+
+  /* Superfícies */
+  --surface-page: var(--paper);
+  --surface-alt: var(--paper-alt);
+  --surface-dark: var(--ink);
+  --surface-dark-elevated: rgb(var(--rgb-ink) / 0.97);
+  --surface-dark-translucent: rgb(var(--rgb-ink) / 0.9);
+  --surface-dark-soft: rgb(var(--rgb-ink) / 0.75);
+  --surface-glass: rgb(var(--rgb-paper) / 0.07);
+  --surface-glass-strong: rgb(var(--rgb-paper) / 0.12);
+  --surface-divider: rgb(var(--rgb-paper) / 0.14);
+  --surface-accent: var(--gold);
+  --surface-accent-mid: var(--gold-mid);
+  --surface-accent-light: var(--gold-light);
+  --surface-avatar: var(--brown-medium);
+  --surface-avatar-hover: var(--brown-dark);
+  --surface-accent-soft: rgb(var(--rgb-gold) / 0.1);
+  --surface-accent-hover: rgb(var(--rgb-gold) / 0.16);
+  --surface-accent-selected: rgb(var(--rgb-gold) / 0.12);
+  --surface-danger: var(--danger-surface);
+
+  /* Texto */
+  --text-primary: var(--ink);
+  --text-on-dark: var(--paper);
+  --text-on-accent: var(--ink);
+  --text-secondary: var(--brown-dark);
+  --text-muted: var(--brown-medium);
+  --text-secondary-on-dark: var(--brown-soft);
+  --text-accent: var(--gold);
+  --text-accent-on-dark: var(--gold-light);
+  --text-danger: var(--danger-text);
+  --text-danger-strong: var(--danger-text-strong);
+  --text-field-placeholder: rgb(var(--rgb-brown-soft) / 0.7);
+
+  /* Bordas */
+  --border-default: var(--brown-medium);
+  --border-subtle: rgb(var(--rgb-brown-soft) / 0.3);
+  --border-field: rgb(var(--rgb-brown-soft) / 0.5);
+  --border-accent: var(--gold);
+  --border-accent-light: var(--gold-light);
+  --border-accent-soft: rgb(var(--rgb-gold) / 0.45);
+  --border-emphasis: var(--paper);
+  --border-danger: var(--danger-border);
+
+  /* Foco de teclado */
+  --focus-ring: var(--gold);
+  --focus-ring-on-dark: var(--gold-light);
+
+  /* Overlays e barras de deslocação */
+  --overlay-modal: rgb(var(--rgb-ink) / 0.78);
+  --scrollbar-thumb: var(--brown-medium);
+
+  /* Sombras */
+  --shadow-card: 0 12px 32px rgb(var(--rgb-ink) / 0.1);
+  --shadow-card-soft: 0 12px 26px rgb(var(--rgb-ink) / 0.12);
+  --shadow-soft: 0 8px 20px rgb(var(--rgb-ink) / 0.18);
+  --shadow-header: 0 10px 30px rgb(var(--rgb-ink) / 0.32);
+  --shadow-nav: 0 18px 32px rgb(var(--rgb-ink) / 0.3);
+  --shadow-form: 0 18px 40px rgb(var(--rgb-ink) / 0.22);
+  --shadow-dropdown: 0 18px 40px rgb(var(--rgb-black) / 0.45);
+  --shadow-modal: 0 30px 80px rgb(var(--rgb-black) / 0.6),
+    0 0 0 1px rgb(var(--rgb-paper) / 0.04);
+  --shadow-marker: 0 0 0 4px rgb(var(--rgb-gold) / 0.25);
+  --shadow-marker-active: 0 0 0 6px rgb(var(--rgb-gold-light) / 0.28);
+}

@@ -16,10 +16,10 @@ const { titulo, resumo, href } = Astro.props;
 
 <style>
   .area-card {
-    border: 1px solid var(--brown-medium);
+    border: 1px solid var(--border-default);
     border-radius: 6px;
     padding: var(--space-3);
-    background: var(--paper);
+    background: var(--surface-page);
     transition: border-color 0.35s var(--ease), transform 0.35s var(--ease),
       box-shadow 0.35s var(--ease), opacity 1s var(--ease);
   }
@@ -27,12 +27,12 @@ const { titulo, resumo, href } = Astro.props;
     font-family: var(--font-heading);
     font-size: 1.25rem;
     margin: 0 0 var(--space-1) 0;
-    color: var(--ink);
+    color: var(--text-primary);
   }
   .area-card p {
     margin: 0;
     font-size: 0.95rem;
-    color: var(--brown-dark);
+    color: var(--text-secondary);
   }
   .area-card a {
     display: block;
@@ -40,6 +40,6 @@ const { titulo, resumo, href } = Astro.props;
     color: inherit;
   }
   .area-card:hover {
-    border-color: var(--gold);
+    border-color: var(--border-accent);
   }
 </style>

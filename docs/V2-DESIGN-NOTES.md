@@ -465,3 +465,44 @@ escolhidos no próprio ecrã**, sem criar uma URL por idioma.
 Validação: build com 30 páginas; PT→FR→AR→ZH→PT sem erros de consola; `dir="rtl"`
 no árabe; `localStorage` persistente entre páginas; modal e mensagens do
 formulário traduzidos a quente; 0 páginas com `⚠️ CONFIRMAR` ou links `.md`.
+
+---
+
+## 16. Sistema de cores unificado (2026-11-23, 12:37)
+
+Pedido do cliente: varredura das cores usadas e criação de um padrão único para
+botões, texto e todos os elementos, evitando problemas de identidade visual.
+
+### Varredura
+
+- `logo.png` (1254×1254, fundo transparente) tem como cores dominantes
+  `#E0A040` (8,0%), `#C08030` (7,7%), `#D09040`, `#F0B050` e `#F0C050` —
+  confirmam as primitivas já definidas em §6.
+- Inventário de 43 ficheiros do v2 encontrou **33 cores literais dispersas**
+  (hex e `rgba`) em 20 componentes/páginas, além das 8 primitivas. Exemplos:
+  `#f3ede4` em Sobre, `#ff9f8a/#ffb4a2/#ffd7cf` no formulário, e 25 variantes
+  de `rgba()` para sombras, overlays e transparências.
+
+### Padrão criado
+
+Novo ficheiro `v2/src/styles/tokens.css`, importado por `global.css`, com 3 camadas:
+
+1. **Primitivas** — as 8 cores da marca + `--paper-alt` + 4 cores de erro.
+2. **Canais RGB** — `--rgb-gold`, `--rgb-ink`, `--rgb-paper`, etc., para
+   transparências escritas sempre como `rgb(var(--rgb-…) / 0,16)`.
+3. **Semânticos** — `84 tokens` agrupados em `--surface-*`, `--text-*`,
+   `--border-*`, `--focus-ring*`, `--overlay-*`, `--shadow-*` e `--scrollbar-thumb`.
+
+**Regra de ouro:** nenhum componente escreve hex/rgba — só tokens semânticos.
+Foram convertidas **204 declarações** em 20 ficheiros.
+
+### Validação
+
+- `npm run build` → 30 páginas, sem erros.
+- 0 cores literais fora de `tokens.css` (restam apenas `currentColor`,
+  `inherit`, `none`, `transparent`).
+- 0 tokens usados sem definição; 0 primitivas usadas directamente nos componentes.
+- Cores calculadas no browser idênticas às anteriores: fundo `#FAF7F2`, texto
+  `#140F0A`, botão `#C08030` com texto `#140F0A`, ícones do rodapé `#C08030`,
+  overlay do modal `rgba(20,15,10,0.78)`, erros `#FF9F8A/#FFB4A2/#FFD7CF`.
+- Mapa, modal, formulário e seletor de idiomas continuam sem erros de consola.

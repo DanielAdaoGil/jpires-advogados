@@ -22,22 +22,22 @@ const { titulo, data, area, resumo, href } = Astro.props;
 
 <style>
   .noticia-card {
-    border: 1px solid var(--brown-medium);
+    border: 1px solid var(--border-default);
     border-radius: 6px;
     padding: var(--space-3);
-    background: var(--paper);
+    background: var(--surface-page);
     transition: border-color 0.2s ease;
   }
   .noticia-card h3 {
     font-family: var(--font-heading);
     font-size: 1.25rem;
     margin: var(--space-1) 0 var(--space-2) 0;
-    color: var(--ink);
+    color: var(--text-primary);
   }
   .noticia-card p {
     margin: 0;
     font-size: 0.95rem;
-    color: var(--brown-dark);
+    color: var(--text-secondary);
   }
   .noticia-card a {
     display: block;
@@ -45,18 +45,18 @@ const { titulo, data, area, resumo, href } = Astro.props;
     color: inherit;
   }
   .noticia-card:hover {
-    border-color: var(--gold);
+    border-color: var(--border-accent);
   }
   .noticia-meta {
     display: flex;
     gap: var(--space-2);
     font-size: 0.85rem;
-    color: var(--brown-dark);
+    color: var(--text-secondary);
     margin-bottom: var(--space-1);
     flex-wrap: wrap;
   }
   .noticia-area {
-    border: 1px solid var(--brown-medium);
+    border: 1px solid var(--border-default);
     border-radius: 3px;
     padding: 0.1rem 0.4rem;
     font-size: 0.75rem;

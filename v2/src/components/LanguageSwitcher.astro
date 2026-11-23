@@ -140,10 +140,10 @@ import { IDIOMAS } from '../i18n/runtime.ts';
     gap: 0.5rem;
     height: 2.5rem;
     padding: 0 0.7rem;
-    border: 1px solid var(--brown-soft);
+    border: 1px solid var(--border-subtle);
     border-radius: 4px;
     background: transparent;
-    color: var(--paper);
+    color: var(--text-on-dark);
     font-family: var(--font-body);
     font-size: 0.85rem;
     cursor: pointer;
@@ -153,8 +153,8 @@ import { IDIOMAS } from '../i18n/runtime.ts';
   .lang-switcher__btn:hover,
   .lang-switcher__btn:focus-visible,
   .lang-switcher__btn[aria-expanded='true'] {
-    border-color: var(--gold);
-    color: var(--gold-light);
+    border-color: var(--border-accent);
+    color: var(--text-accent-on-dark);
   }
 
   .lang-switcher__btn img {
@@ -181,10 +181,10 @@ import { IDIOMAS } from '../i18n/runtime.ts';
     margin: 0;
     padding: 0.4rem;
     list-style: none;
-    border: 1px solid var(--brown-medium);
+    border: 1px solid var(--border-default);
     border-radius: 8px;
-    background: var(--ink);
-    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+    background: var(--surface-dark);
+    box-shadow: var(--shadow-dropdown);
   }
 
   .lang-switcher__menu[hidden] {
@@ -200,7 +200,7 @@ import { IDIOMAS } from '../i18n/runtime.ts';
     border: 0;
     border-radius: 5px;
     background: transparent;
-    color: var(--paper);
+    color: var(--text-on-dark);
     font-family: var(--font-body);
     font-size: 0.88rem;
     text-align: start;
@@ -209,13 +209,13 @@ import { IDIOMAS } from '../i18n/runtime.ts';
 
   .lang-switcher__option:hover,
   .lang-switcher__option:focus-visible {
-    background: rgba(192, 128, 48, 0.16);
+    background: var(--surface-accent-hover);
     outline: none;
   }
 
   .lang-switcher__option[aria-selected='true'] {
-    background: rgba(192, 128, 48, 0.12);
-    color: var(--gold-light);
+    background: var(--surface-accent-selected);
+    color: var(--text-accent-on-dark);
   }
 
   .lang-switcher__option img {
@@ -229,7 +229,7 @@ import { IDIOMAS } from '../i18n/runtime.ts';
     width: 15px;
     height: 15px;
     margin-inline-start: auto;
-    color: var(--gold);
+    color: var(--text-accent);
     opacity: 0;
   }
 

@@ -150,10 +150,10 @@ const dadosSede = { nome: t(lang, 'sobre.aliancas.sede'), coords: sede };
 
   .aliancas__mapa {
     height: clamp(300px, 48vw, 460px);
-    border: 1px solid var(--brown-medium);
+    border: 1px solid var(--border-default);
     border-radius: 8px;
     overflow: hidden;
-    background: var(--ink);
+    background: var(--surface-dark);
   }
 
   .aliancas__lista {
@@ -169,14 +169,14 @@ const dadosSede = { nome: t(lang, 'sobre.aliancas.sede'), coords: sede };
     font-size: 0.95rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--brown-dark);
+    color: var(--text-secondary);
   }
 
   .aliancas__grupo ul {
     margin: 0;
     padding: 0;
     list-style: none;
-    color: var(--ink);
+    color: var(--text-primary);
     font-size: 0.95rem;
   }
 
@@ -185,7 +185,7 @@ const dadosSede = { nome: t(lang, 'sobre.aliancas.sede'), coords: sede };
   }
 
   :global(.aliancas__mapa .leaflet-container) {
-    background: var(--ink);
+    background: var(--surface-dark);
     font-family: var(--font-body);
   }
 
@@ -193,64 +193,64 @@ const dadosSede = { nome: t(lang, 'sobre.aliancas.sede'), coords: sede };
     display: block;
     width: 12px;
     height: 12px;
-    border: 2px solid var(--gold-light);
+    border: 2px solid var(--border-accent-light);
     border-radius: 50%;
-    background: var(--gold);
-    box-shadow: 0 0 0 4px rgba(192, 128, 48, 0.25);
+    background: var(--surface-accent);
+    box-shadow: var(--shadow-marker);
   }
 
   :global(.aliancas__mapa .aliancas-ponto--sede) {
     width: 16px;
     height: 16px;
-    border-color: var(--paper);
-    background: var(--gold-mid);
-    box-shadow: 0 0 0 6px rgba(248, 192, 80, 0.28);
+    border-color: var(--border-emphasis);
+    background: var(--surface-accent-mid);
+    box-shadow: var(--shadow-marker-active);
   }
 
   :global(.aliancas__mapa .aliancas-tooltip) {
-    border: 1px solid var(--gold);
+    border: 1px solid var(--border-accent);
     border-radius: 4px;
-    background: rgba(20, 15, 10, 0.9);
-    color: var(--paper);
+    background: var(--surface-dark-translucent);
+    color: var(--text-on-dark);
     font-size: 0.75rem;
     box-shadow: none;
   }
 
   :global(.aliancas__mapa .aliancas-tooltip--sede) {
-    border-color: var(--gold-light);
-    color: var(--gold-light);
+    border-color: var(--border-accent-light);
+    color: var(--text-accent-on-dark);
     font-weight: 600;
   }
 
   :global(.aliancas__mapa .leaflet-tooltip-top::before) {
-    border-top-color: var(--gold);
+    border-top-color: var(--border-accent);
   }
 
   :global(.aliancas__mapa .leaflet-tooltip-right::before) {
-    border-right-color: var(--gold);
+    border-right-color: var(--border-accent);
   }
 
   :global(.aliancas__mapa .leaflet-tooltip-bottom::before) {
-    border-bottom-color: var(--gold);
+    border-bottom-color: var(--border-accent);
   }
 
   :global(.aliancas__mapa .leaflet-tooltip-left::before) {
-    border-left-color: var(--gold);
+    border-left-color: var(--border-accent);
   }
 
   :global(.aliancas__mapa .leaflet-control-attribution) {
-    background: rgba(20, 15, 10, 0.75);
-    color: var(--brown-soft);
+    background: var(--surface-dark-soft);
+    color: var(--text-secondary-on-dark);
     font-size: 0.65rem;
   }
 
   :global(.aliancas__mapa .leaflet-control-attribution a) {
-    color: var(--gold-light);
+    color: var(--text-accent-on-dark);
   }
 
   :global(.aliancas__mapa .leaflet-bar a) {
-    background: var(--ink);
-    color: var(--gold-light);
-    border-bottom-color: var(--brown-medium);
+    background: var(--surface-dark);
+    color: var(--text-accent-on-dark);
+    border-bottom-color: var(--border-default);
   }
 </style>

@@ -110,7 +110,7 @@ const passos: Array<{ numero: string; titulo: TranslationKey; descricao: Transla
 
 <style>
   .section--alt {
-    background: #f3ede4;
+    background: var(--surface-alt);
   }
 
   .valores-grid {
@@ -127,10 +127,10 @@ const passos: Array<{ numero: string; titulo: TranslationKey; descricao: Transla
     flex-direction: column;
     align-items: flex-start;
     gap: 0;
-    border: 1px solid var(--brown-medium);
+    border: 1px solid var(--border-default);
     border-radius: 6px;
     padding: var(--space-3);
-    background: var(--paper);
+    background: var(--surface-page);
     font: inherit;
     text-align: left;
     cursor: pointer;
@@ -140,9 +140,9 @@ const passos: Array<{ numero: string; titulo: TranslationKey; descricao: Transla
 
   .valor-card:hover,
   .valor-card:focus-visible {
-    border-color: var(--gold);
+    border-color: var(--border-accent);
     transform: translateY(-3px);
-    box-shadow: 0 12px 26px rgba(20, 15, 10, 0.12);
+    box-shadow: var(--shadow-card-soft);
   }
 
   .valor-card__mais {
@@ -152,17 +152,17 @@ const passos: Array<{ numero: string; titulo: TranslationKey; descricao: Transla
     font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--brown-medium);
+    color: var(--text-muted);
   }
 
   .valor-card__mais span {
     margin-left: 0.35rem;
-    color: var(--gold);
+    color: var(--text-accent);
   }
 
   .valor-card:hover .valor-card__mais,
   .valor-card:focus-visible .valor-card__mais {
-    color: var(--ink);
+    color: var(--text-primary);
   }
 
   .valor-card h3 {
@@ -170,14 +170,14 @@ const passos: Array<{ numero: string; titulo: TranslationKey; descricao: Transla
     font-size: 1rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--ink);
+    color: var(--text-primary);
     margin: 0 0 var(--space-1) 0;
   }
 
   .valor-card p {
     margin: 0;
     font-size: 0.9rem;
-    color: var(--brown-dark);
+    color: var(--text-secondary);
   }
 
   .metodo-eyebrow {
@@ -186,7 +186,7 @@ const passos: Array<{ numero: string; titulo: TranslationKey; descricao: Transla
     font-weight: 700;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--brown-medium);
+    color: var(--text-muted);
   }
 
   .metodo-grid {
@@ -200,7 +200,7 @@ const passos: Array<{ numero: string; titulo: TranslationKey; descricao: Transla
   }
 
   .metodo-passo {
-    border-top: 2px solid var(--gold);
+    border-top: 2px solid var(--border-accent);
     padding-top: var(--space-2);
   }
 
@@ -209,7 +209,7 @@ const passos: Array<{ numero: string; titulo: TranslationKey; descricao: Transla
     font-family: var(--font-heading);
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--gold);
+    color: var(--text-accent);
     line-height: 1;
   }
 
@@ -217,12 +217,12 @@ const passos: Array<{ numero: string; titulo: TranslationKey; descricao: Transla
     margin: var(--space-2) 0 var(--space-1);
     font-family: var(--font-heading);
     font-size: 1.05rem;
-    color: var(--ink);
+    color: var(--text-primary);
   }
 
   .metodo-passo p {
     margin: 0;
     font-size: 0.9rem;
-    color: var(--brown-dark);
+    color: var(--text-secondary);
   }
 </style>
