@@ -22,6 +22,10 @@ nas definições do GitHub (ver §4).
 4. Em **Build and deployment** → **Source**, escolhe **GitHub Actions**
 5. Guarda (nem todos os ecrãs pedem para guardar; a escolha fica gravada)
 
+**Não é preciso mexer nas regras do ambiente.** O workflow usa um ambiente
+chamado `github-pages-v2`, criado automaticamente, porque o ambiente
+`github-pages` que vem por defeito só permite publicar a branch `main`.
+
 ### Passo B — enviar as alterações para o GitHub
 
 Está preparado um ficheiro automático em `.github/workflows/publicar-v2.yml`.
