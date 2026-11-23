@@ -554,3 +554,28 @@ do hero), colocar fotografias das 7 áreas no fundo do hero e retirar a palavra
 - Sem overflow horizontal em 1440/768/390 px; sem "WhatsApp" visível no rodapé
   em PT→FR→AR→ZH→PT; `dir="rtl"` no árabe; 0 erros de consola; 0 `⚠️ CONFIRMAR`.
 - Continuam 0 cores literais fora de `tokens.css` e 0 tokens sem definição.
+
+---
+
+## 18. Fundo do Método de Trabalho — aplicação final (2026-11-23, 16:32)
+
+Pedido do cliente: usar o mesmo fundo do "Método de Trabalho" **apenas na secção
+Sectores da página Áreas**.
+
+- A regra `.section--alt { background: var(--surface-alt); }` estava isolada no
+  `<style>` de `pages/sobre/index.astro`. Foi movida para `global.css` para ser
+  reutilizável, sem alterar a cor (`#F3EDE4`).
+- Aplicação final: secção `#sectores` em `pages/areas/index.astro` (8 cartões)
+  e secção `#sectores` em `pages/index.astro` (8 cartões). As secções de Áreas
+  mantêm o fundo normal, tal como a listagem `/sectores/` e as páginas de detalhe.
+- Na inicial os sectores têm secção própria (`id="sectores"`); `.sectores-title`
+  anula a margem superior extra.
+
+Durante o trabalho foram testadas aplicações mais amplas (inicial e `/sectores/`),
+mas o cliente pediu explicitamente para as anular — ficou só o local acima.
+
+Validação final: build com 30 páginas; fundo `rgb(243,237,228)` no Método
+(5 passos), em `/ #sectores` (8 cartões) e em `/areas/ #sectores` (8 cartões);
+fundo transparente nas secções de Áreas, em `/sectores/` e nas páginas de
+detalhe; CTA final centrado; 0 erros de consola; 0 cores soltas e 0 tokens sem
+definição.

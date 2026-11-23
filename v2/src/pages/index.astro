@@ -49,8 +49,12 @@ const slides = areas
             />
           ))}
       </div>
+    </div>
+  </section>
 
-      <h3 id="sectores" class="subsection-title reveal">{t(lang, 'home.sectores.title')}</h3>
+  <section class="section section--alt" id="sectores">
+    <div class="container">
+      <h3 class="subsection-title sectores-title reveal">{t(lang, 'home.sectores.title')}</h3>
       <div class="sector-grid">
         {sectores
           .sort((a, b) => a.data.ordem - b.data.ordem)
