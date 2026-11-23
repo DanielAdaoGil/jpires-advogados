@@ -626,3 +626,31 @@ Validação: build com 30 páginas; 0 URLs internas sem prefixo nos 30 HTML;
 
 **Fase seguinte:** Angoweb, depois de receber método de upload, domínio e pasta
 pública. Nessa fase o build será gerado com `V2_BASE=/`.
+
+---
+
+## 21. Formulário de contacto com envio real (2026-11-23)
+
+- Cliente escolheu **Formsubmit.co** e confirmou o destinatário
+  `geral@jpiresadvogados.com`.
+- `ContactForm.astro` envia por `fetch` com `FormData` para
+  `https://formsubmit.co/ajax/<email>`. O `action` POST normal foi mantido
+  como alternativa se o JavaScript não correr. Campos ocultos: `_subject`,
+  `_template=table`, `_url` (preenchido por JS) e o honeypot `_honey`.
+  Não se desactivou o reCAPTCHA.
+- Estados truthful: «A enviar mensagem...» com botão desactivado; sucesso só
+  quando a resposta HTTP é ok **e** `success: "true"` (o serviço pode devolver
+  200 com `success: "false"`); erro com o botão reactivado. As mensagens são
+  textos PT do dicionário runtime e actualizam-se no evento `jp:lang`.
+- `privacidade/index.astro` deixou de ser `StubPage`: agora explica que dados
+  são recolhidos, para quê, que passam pelo Formsubmit.co (30 dias de retenção,
+  reCAPTCHA) e como pedir acesso/correcção/eliminação. Novas chaves em
+  `traducoes-extra.ts`, incluindo os quatro títulos de secção.
+- Nenhuma cor literal nova: todos os estilos usam `tokens.css`.
+- Validação: build com 30 páginas; `fetch` interceptado no browser para testar
+  sucesso, recusa com `success:"false"`, campos obrigatórios e mudança PT→FR;
+  0 erros de consola; medição em iframes de 1440/768/390 px sem deslocação
+  horizontal (contactos: 2 colunas em 1440, 1 coluna em 768 e 390).
+- **Não foi feito nenhum envio real**: falta a activação pelo destinatário
+  (ver `docs/V2-PUBLICACAO.md`, §5).
+- Sem commit/push — é necessária autorização explícita.

@@ -1,4 +1,5 @@
 ---
+import { site } from '../data/site.ts';
 import { t, type Lang } from '../i18n/index.ts';
 
 interface Props {
@@ -6,14 +7,31 @@ interface Props {
 }
 
 const { lang = 'pt' } = Astro.props;
+const endpoint = `https://formsubmit.co/ajax/${site.email}`;
 ---
 
 <form
   class="contact-form"
+  method="POST"
+  action={`https://formsubmit.co/${site.email}`}
+  data-endpoint={endpoint}
   novalidate
   aria-label={t(lang, 'contactos.formulario.titulo')}
 >
   <h2 class="contact-form__title">{t(lang, 'contactos.formulario.titulo')}</h2>
+
+  <!-- Configuração do Formsubmit.co: não é visível para o visitante. -->
+  <input type="hidden" name="_subject" value="Contacto através do site — JPires" />
+  <input type="hidden" name="_template" value="table" />
+  <input type="hidden" name="_url" value="" />
+  <input
+    class="form-honey"
+    type="text"
+    name="_honey"
+    tabindex="-1"
+    autocomplete="off"
+    aria-hidden="true"
+  />
 
   <div class="form-group">
     <label for="nome">{t(lang, 'contactos.formulario.nome')}</label>
@@ -79,45 +97,101 @@ const { lang = 'pt' } = Astro.props;
     role="status"
     aria-live="polite"
     class="form-message"
+    data-no-translate
   ></div>
 </form>
 
 <script>
-  import { traduzir } from '../i18n/runtime.ts';
+  import { obterIdioma, traduzir } from '../i18n/runtime.ts';
 
   const form = document.querySelector('.contact-form');
   const btnEnviar = document.querySelector('#btn-enviar');
   const mensagem = document.querySelector('#form-mensagem');
+  const urlOculta = form?.querySelector('input[name="_url"]');
 
-  function mostrar(mensagemTexto, tipo) {
+  // Textos originais em PT; o motor de idiomas traduz consoante a escolha do visitante.
+  const TEXTO_OBRIGATORIO = 'Por favor, preencha todos os campos obrigatórios correctamente.';
+  const TEXTO_ENVIANDO = 'A enviar mensagem...';
+  const TEXTO_SUCESSO = 'Mensagem enviada com sucesso. Entraremos em contacto brevemente.';
+  const TEXTO_ERRO =
+    'Erro ao enviar a mensagem. Tente novamente ou contacte-nos directamente.';
+
+  let estado = null;
+
+  function mostrar(textoOriginal, tipo) {
+    estado = { textoOriginal, tipo };
     if (!mensagem) return;
-    mensagem.textContent = mensagemTexto;
+    const texto = traduzir(textoOriginal, obterIdioma());
+    mensagem.textContent = texto;
     mensagem.className = 'form-message ' + tipo;
-    mensagem.setAttribute('aria-label', mensagemTexto);
+    mensagem.setAttribute('aria-label', texto);
   }
 
-  form?.addEventListener('submit', (event) => {
+  function limpar() {
+    estado = null;
+    if (!mensagem) return;
+    mensagem.textContent = '';
+    mensagem.className = 'form-message';
+    mensagem.removeAttribute('aria-label');
+  }
+
+  // Se o visitante mudar de idioma com a mensagem ainda no ecrã, actualiza-a.
+  document.addEventListener('jp:lang', () => {
+    if (estado) mostrar(estado.textoOriginal, estado.tipo);
+  });
+
+  // O Formsubmit usa este campo para identificar a página de origem.
+  if (urlOculta) {
+    const url = window.location.href;
+    urlOculta.setAttribute('value', url);
+    urlOculta.value = url;
+  }
+
+  form?.addEventListener('submit', async (event) => {
     event.preventDefault();
+    limpar();
 
     if (!form.checkValidity()) {
-      mostrar(
-        traduzir('Por favor, preencha todos os campos obrigatórios correctamente.'),
-        'erro'
-      );
+      mostrar(TEXTO_OBRIGATORIO, 'erro');
       form.reportValidity();
       return;
     }
 
-    // NOTE: O envio real está intencionalmente desligado nesta fase.
-    // O cliente deve escolher entre mailto:, Formspree ou Netlify Forms.
-    // Nenhum endpoint nem chave de API é criado aqui.
-    mostrar(
-      traduzir('Mensagem enviada com sucesso. Entraremos em contacto brevemente.'),
-      'sucesso'
-    );
-
     if (btnEnviar) btnEnviar.disabled = true;
-    form.reset();
+    mostrar(TEXTO_ENVIANDO, 'enviando');
+
+    try {
+      const resposta = await fetch(form.dataset.endpoint, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { Accept: 'application/json' },
+      });
+
+      let dados = null;
+      try {
+        dados = await resposta.json();
+      } catch {
+        // Algumas respostas de erro não vêm em JSON; o código HTTP decide.
+      }
+
+      // O Formsubmit pode responder 200 com success: "false" (ex.: formulário
+      // ainda não activado). Só dizemos "enviado" quando ele confirma.
+      const confirmado =
+        resposta.ok && (!dados || String(dados.success).toLowerCase() === 'true');
+
+      if (!confirmado) throw new Error('Envio recusado pelo Formsubmit');
+
+      form.reset();
+      if (urlOculta) {
+        const url = window.location.href;
+        urlOculta.value = url;
+      }
+      mostrar(TEXTO_SUCESSO, 'sucesso');
+    } catch {
+      mostrar(TEXTO_ERRO, 'erro');
+    } finally {
+      if (btnEnviar) btnEnviar.disabled = false;
+    }
   });
 </script>
 
@@ -226,6 +300,17 @@ const { lang = 'pt' } = Astro.props;
     background: var(--surface-danger);
     border: 1px solid var(--border-danger);
     color: var(--text-danger-strong);
+  }
+
+  .form-message.enviando {
+    display: block;
+    background: var(--surface-glass-strong);
+    border: 1px solid var(--border-accent-soft);
+    color: var(--text-secondary-on-dark);
+  }
+
+  .form-honey {
+    display: none;
   }
 
   .btn-primary {

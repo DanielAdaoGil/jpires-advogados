@@ -92,7 +92,20 @@ aparecer, porque os ficheiros dele nunca foram apagados.
 
 ## 5. Formulário de contacto
 
-O envio real continua **desligado** até escolheres uma destas opções:
-- `mailto:` (abre o programa de email — o mais simples);
-- Formspree (serviço externo, precisa de conta);
-- Netlify Forms (só se o site estiver na Netlify).
+O envio usa o **Formsubmit.co**: é gratuito, não pede conta e funciona tanto
+no GitHub Pages como na Angoweb. As mensagens vão para
+`geral@jpiresadvogados.com`.
+
+### Primeira activação (importante)
+
+1. Publica o site (ou abre `npm run preview` no computador).
+2. Preenche o formulário **uma vez** com um pedido de teste.
+3. O destinatário recebe um email do Formsubmit a pedir a confirmação do
+   formulário — basta clicar no link.
+4. A partir daí, as mensagens chegam normalmente. As mensagens enviadas antes
+   da activação ficam guardadas pelo serviço até 30 dias.
+
+Se o email de confirmação não aparecer, verifica também a pasta de spam.
+
+A página «Privacidade» explica que os dados passam pelo Formsubmit.co e tem
+uma ligação para a política de privacidade do serviço.

@@ -1,5 +1,75 @@
 ---
-import StubPage from '../../components/StubPage.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { t } from '../../i18n/index.ts';
+import { site } from '../../data/site.ts';
+
+const lang = 'pt';
+// Uma só cadeia de texto para o motor de idiomas reconhecer a frase inteira.
+const direitos = `Para pedir acesso, correcção ou eliminação dos seus dados, escreva para ${site.email}.`;
 ---
 
-<StubPage titleKey="footer.privacidade" current="/privacidade/" />
+<BaseLayout title={t(lang, 'footer.privacidade')} lang={lang} current="/privacidade/">
+  <section class="section">
+    <div class="container">
+      <article class="legal-content">
+        <h1>{t(lang, 'footer.privacidade')}</h1>
+
+        <h2>Dados recolhidos</h2>
+        <p>
+          Ao utilizar o formulário de contacto, fornece-nos o seu nome, endereço de email,
+          telefone (se o indicar) e o texto da mensagem.
+        </p>
+
+        <h2>Finalidade</h2>
+        <p>
+          Utilizamos estes dados apenas para responder ao seu pedido e gerir o contacto com a
+          JPires.
+        </p>
+
+        <h2>Envio da mensagem</h2>
+        <p>
+          A entrega da mensagem é feita através do serviço Formsubmit.co, da Devro LABS, que
+          recebe e encaminha os dados para o nosso email.
+        </p>
+        <p>
+          O Formsubmit.co conserva os envios durante 30 dias e utiliza mecanismos de
+          protecção contra spam, incluindo reCAPTCHA.
+        </p>
+        <p>
+          <a
+            href="https://formsubmit.co/privacy.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Política de privacidade do Formsubmit.co
+          </a>
+        </p>
+
+        <h2>Os seus direitos</h2>
+        <p>{direitos}</p>
+      </article>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal-content {
+    max-width: 48rem;
+  }
+
+  .legal-content h2 {
+    font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+    margin-top: var(--space-4);
+  }
+
+  .legal-content p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .legal-content a {
+    color: var(--text-accent);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+</style>
