@@ -8,6 +8,7 @@ A pasta `v2/` é o **estúdio** (código). O que vai para o ar é o `v2/dist/`
 ## 1. Fase de teste — GitHub Pages
 
 Endereço do teste: **https://danieladaogil.github.io/jpires-advogados/**
+(**já publicado e verificado em 23-11-2026**.)
 
 Ao publicar, este endereço passa a mostrar a v2. Os ficheiros do site antigo
 (`index.html`, `style.css`, `script.js`, `i18n.js`, `frames/`, ...) continuam

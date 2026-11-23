@@ -604,5 +604,25 @@ Validação: build com 30 páginas; 0 URLs internas sem prefixo nos 30 HTML;
 `.nojekyll` presente no `dist`; preview local em `/jpires-advogados/` com
 7/7 fotos, CSS carregado, links internos prefixados e 0 erros de consola.
 
-**Ainda por fazer:** commit/push (só com autorização), mudança do Source nas
-definições do GitHub, e recolha dos dados de acesso da Angoweb.
+**Ainda por fazer:** recolha dos dados de acesso da Angoweb.
+
+---
+
+## 20. Publicação concluída no GitHub Pages (2026-11-23, 17:30 UTC)
+
+- Cliente autorizou commit e push. Commits `0c3dfa0` (preparação) e `1644f2e`
+  (correcção do ambiente de deploy).
+- O primeiro deploy falhou: o ambiente `github-pages` criado por defeito só
+  permite publicar a branch `main`, e o trabalho está na branch `daniel`.
+  Solução: usar o ambiente `github-pages-v2`, sem essa regra. Não foi preciso
+  mexer nas definições do GitHub além de escolher Source = GitHub Actions.
+- Execução final: build e deploy com sucesso
+  (https://github.com/DanielAdaoGil/jpires-advogados/actions/runs/45227936348).
+- Site publicado verificado em https://danieladaogil.github.io/jpires-advogados/:
+  título «Início — JPires», H1 «Assessoria jurídica corporativa», 7/7 fotos do
+  hero, links internos com prefixo `/jpires-advogados/`, 0 erros de consola.
+  Páginas `/areas/`, `/contactos/`, `/sobre/` e detalhe de área também abrem
+  corretamente.
+
+**Fase seguinte:** Angoweb, depois de receber método de upload, domínio e pasta
+pública. Nessa fase o build será gerado com `V2_BASE=/`.
