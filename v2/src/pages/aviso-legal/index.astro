@@ -1,5 +1,46 @@
 ---
-import StubPage from '../../components/StubPage.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { t } from '../../i18n/index.ts';
+import { site } from '../../data/site.ts';
+import { withBase } from '../../utils/url.ts';
+
+const lang = 'pt';
+// Frases inteiras: o motor de idiomas traduz texto completo, não pedaços.
+const identificacao = `${site.nome}, com sede em ${site.endereco}.`;
+const contacto = `Para questões sobre este site ou para solicitar dados de identificação e registo da sociedade, escreva para ${site.email}.`;
 ---
 
-<StubPage titleKey="footer.avisoLegal" current="/aviso-legal/" />
+<BaseLayout title={t(lang, 'footer.avisoLegal')} lang={lang} current="/aviso-legal/">
+  <section class="section">
+    <div class="container">
+      <article class="legal-content">
+        <h1>{t(lang, 'footer.avisoLegal')}</h1>
+
+        <h2>Identificação</h2>
+        <p>{identificacao}</p>
+        <p>{contacto}</p>
+
+        <h2>Âmbito do site</h2>
+        <p>
+          Este site apresenta a JPires, as suas áreas de especialidade, sectores de actuação,
+          equipa e meios de contacto.
+        </p>
+
+        <h2>Propriedade intelectual</h2>
+        <p>
+          Os textos, o logótipo e os elementos de identidade visual da JPires estão protegidos
+          por direitos de autor e não podem ser reproduzidos sem autorização.
+        </p>
+        <p>
+          Fotografias de bancos de imagens são utilizadas ao abrigo das licenças aplicáveis.
+        </p>
+
+        <p>
+          <a href={withBase('/privacidade/')}>{t(lang, 'footer.privacidade')}</a>
+          ·
+          <a href={withBase('/cookies/')}>{t(lang, 'footer.cookies')}</a>
+        </p>
+      </article>
+    </div>
+  </section>
+</BaseLayout>

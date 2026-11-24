@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection, render } from 'astro:content';
 import PersonCard from '../../components/PersonCard.astro';
 import SectionHeading from '../../components/SectionHeading.astro';
+import BackLink from '../../components/BackLink.astro';
 import { t, type Lang } from '../../i18n/index.ts';
 import { toSlug } from '../../utils/slug.ts';
 import { withBase } from '../../utils/url.ts';
@@ -28,16 +29,7 @@ const areaAdvogados = area.advogados
 <BaseLayout title={area.titulo} lang={lang} current="/areas/">
   <section class="section">
     <div class="container">
-      <div class="area-back">
-        <a
-          class="area-voltar"
-          href={withBase('/areas/')}
-          aria-label={t(lang, 'area.voltar')}
-          title={t(lang, 'area.voltar')}
-        >
-          <span aria-hidden="true">←</span>
-        </a>
-      </div>
+      <BackLink href={withBase('/areas/')} lang={lang} />
 
       <SectionHeading title={area.titulo} level={1} />
       <p class="entry-resumo">{area.resumo}</p>
@@ -83,38 +75,11 @@ const areaAdvogados = area.advogados
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: var(--space-3);
   }
-  .area-back {
-    margin-bottom: var(--space-3);
-  }
-
   .area-actions {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: var(--space-3);
     margin-top: var(--space-4);
-  }
-
-  .area-voltar {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    border: 1px solid var(--border-default);
-    border-radius: 50%;
-    color: var(--text-secondary);
-    font-size: 1.35rem;
-    line-height: 1;
-    text-decoration: none;
-    transition: background-color 0.25s var(--ease), color 0.25s var(--ease),
-      border-color 0.25s var(--ease);
-  }
-
-  .area-voltar:hover,
-  .area-voltar:focus-visible {
-    background: var(--surface-accent);
-    border-color: var(--border-accent);
-    color: var(--text-on-accent);
   }
 </style>

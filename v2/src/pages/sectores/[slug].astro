@@ -3,7 +3,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection, render } from 'astro:content';
 import { t, type Lang } from '../../i18n/index.ts';
 import SectionHeading from '../../components/SectionHeading.astro';
+import BackLink from '../../components/BackLink.astro';
 import { toSlug } from '../../utils/slug.ts';
+import { withBase } from '../../utils/url.ts';
 
 export async function getStaticPaths() {
   const sectores = await getCollection('sectores');
@@ -21,6 +23,7 @@ const sector = entry.data;
 <BaseLayout title={sector.titulo} lang={lang} current="/sectores/">
   <section class="section">
     <div class="container">
+      <BackLink href={withBase('/sectores/')} lang={lang} />
       <SectionHeading title={sector.titulo} level={1} />
       <p class="entry-resumo">{sector.resumo}</p>
       <Content />

@@ -165,6 +165,8 @@ const endpoint = `https://formsubmit.co/ajax/${site.email}`;
         method: 'POST',
         body: new FormData(form),
         headers: { Accept: 'application/json' },
+        // Envia a URL completa como referência; alguns servidores exigem-na.
+        referrerPolicy: 'no-referrer-when-downgrade',
       });
 
       let dados = null;
@@ -179,7 +181,14 @@ const endpoint = `https://formsubmit.co/ajax/${site.email}`;
       const confirmado =
         resposta.ok && (!dados || String(dados.success).toLowerCase() === 'true');
 
-      if (!confirmado) throw new Error('Envio recusado pelo Formsubmit');
+      if (!confirmado) {
+        // Diagnóstico discreto para o administrador (não aparece na página).
+        console.warn(
+          '[JPires] Formsubmit recusou o envio:',
+          dados?.message ?? `HTTP ${resposta.status}`
+        );
+        throw new Error('Envio recusado pelo Formsubmit');
+      }
 
       form.reset();
       if (urlOculta) {

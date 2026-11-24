@@ -1,5 +1,51 @@
 ---
-import StubPage from '../../components/StubPage.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { t } from '../../i18n/index.ts';
+import { withBase } from '../../utils/url.ts';
+
+const lang = 'pt';
 ---
 
-<StubPage titleKey="footer.cookies" current="/cookies/" />
+<BaseLayout title={t(lang, 'footer.cookies')} lang={lang} current="/cookies/">
+  <section class="section">
+    <div class="container">
+      <article class="legal-content">
+        <h1>{t(lang, 'footer.cookies')}</h1>
+
+        <h2>Cookies utilizados</h2>
+        <p>
+          Este site não utiliza cookies próprios de publicidade ou de análise de audiência.
+        </p>
+
+        <h2>Preferência de idioma</h2>
+        <p>
+          Guardamos a sua preferência de idioma no armazenamento local do navegador, na chave
+          jpires-lang. Não é um cookie e pode ser removida nas definições do navegador.
+        </p>
+
+        <h2>Recursos externos</h2>
+        <p>
+          O formulário de contacto utiliza o serviço Formsubmit.co, que pode recorrer ao
+          reCAPTCHA do Google e, nesse caso, definir cookies no seu navegador.
+        </p>
+        <p>
+          Carregamos tipos de letra do Google Fonts e mosaicos do serviço Esri para o mapa da
+          página Sobre. Estes fornecedores podem receber dados técnicos de ligação, como o
+          endereço IP.
+        </p>
+
+        <h2>Gestão de preferências</h2>
+        <p>
+          Pode limitar ou eliminar cookies e dados locais nas definições do seu navegador. O
+          site continua a funcionar e a preferência de idioma volta ao valor inicial.
+        </p>
+
+        <p>
+          <a href={withBase('/privacidade/')}>{t(lang, 'footer.privacidade')}</a>
+          ·
+          <a href={withBase('/aviso-legal/')}>{t(lang, 'footer.avisoLegal')}</a>
+        </p>
+      </article>
+    </div>
+  </section>
+</BaseLayout>

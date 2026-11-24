@@ -1,0 +1,79 @@
+---
+import { t, type Lang } from '../i18n/index.ts';
+
+interface Props {
+  /** Página para onde ir se não houver histórico (ex.: entrada directa pelo URL). */
+  href: string;
+  lang?: Lang;
+}
+
+const { href, lang = 'pt' } = Astro.props;
+const rotulo = t(lang, 'common.voltar');
+---
+
+<div class="back-link-wrap">
+  <a
+    class="back-link"
+    href={href}
+    aria-label={rotulo}
+    title={rotulo}
+    data-voltar
+  >
+    <span aria-hidden="true">←</span>
+  </a>
+</div>
+
+<script>
+  // Volta à página anterior quando ela pertence a este site.
+  // Se o visitante chegou directamente ao URL (sem histórico), o link normal
+  // continua a levar à página de índice respectiva.
+  const ligacao = document.querySelector<HTMLAnchorElement>('[data-voltar]');
+
+  ligacao?.addEventListener('click', (evento) => {
+    if (!document.referrer || window.history.length <= 1) return;
+
+    try {
+      const anterior = new URL(document.referrer, window.location.href);
+      const atual = window.location;
+
+      if (anterior.origin !== atual.origin) return;
+      if (anterior.pathname === atual.pathname && anterior.search === atual.search) return;
+
+      evento.preventDefault();
+      window.history.back();
+    } catch {
+      // Referrer inválido: deixa o link funcionar como link simples.
+    }
+  });
+</script>
+
+<style>
+  .back-link-wrap {
+    margin-bottom: var(--space-3);
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid var(--border-default);
+    border-radius: 50%;
+    color: var(--text-secondary);
+    font-size: 1.35rem;
+    line-height: 1;
+    text-decoration: none;
+    transition:
+      background-color 0.25s var(--ease),
+      color 0.25s var(--ease),
+      border-color 0.25s var(--ease);
+  }
+
+  .back-link:hover,
+  .back-link:focus-visible {
+    background: var(--surface-accent);
+    border-color: var(--border-accent);
+    color: var(--text-on-accent);
+  }
+</style>

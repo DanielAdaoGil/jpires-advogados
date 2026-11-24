@@ -19,6 +19,7 @@ export const pt = {
     fecharMenu: 'Fechar menu',
     emConstrucao: 'Página em construção',
     conteudoPrevisto: 'O conteúdo desta página está previsto para as fases seguintes.',
+    voltar: 'Voltar',
   },
   home: {
     hero: {

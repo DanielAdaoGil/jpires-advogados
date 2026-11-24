@@ -21,6 +21,7 @@ export const en: typeof pt = {
     fecharMenu: 'Close menu',
     emConstrucao: 'Page under construction',
     conteudoPrevisto: 'Content for this page is planned for the next phases.',
+    voltar: 'Back',
   },
   home: {
     hero: {

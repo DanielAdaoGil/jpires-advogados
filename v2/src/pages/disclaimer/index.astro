@@ -1,5 +1,46 @@
 ---
-import StubPage from '../../components/StubPage.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { t } from '../../i18n/index.ts';
+import { site } from '../../data/site.ts';
+import { withBase } from '../../utils/url.ts';
+
+const lang = 'pt';
+// A frase inteira é uma só cadeia para o motor de idiomas a reconhecer.
+const confirmar = `Para decidir com base em qualquer informação aqui publicada, contacte-nos primeiro através de ${site.email}.`;
 ---
 
-<StubPage titleKey="footer.disclaimer" current="/disclaimer/" />
+<BaseLayout title={t(lang, 'footer.disclaimer')} lang={lang} current="/disclaimer/">
+  <section class="section">
+    <div class="container">
+      <article class="legal-content">
+        <h1>{t(lang, 'footer.disclaimer')}</h1>
+
+        <h2>Informação geral</h2>
+        <p>
+          As informações neste site são gerais e não substituem aconselhamento jurídico
+          adaptado ao seu caso.
+        </p>
+        <p>A leitura das páginas não estabelece uma relação de cliente com a JPires.</p>
+
+        <h2>Exactidão e actualização</h2>
+        <p>
+          A JPires procura manter o conteúdo actualizado, mas não garante que ele esteja livre
+          de erros ou desactualizações.
+        </p>
+        <p>{confirmar}</p>
+
+        <h2>Ligações externas</h2>
+        <p>
+          As ligações para sites de terceiros são fornecidas por conveniência e não implicam
+          endosso do seu conteúdo.
+        </p>
+
+        <p>
+          <a href={withBase('/aviso-legal/')}>{t(lang, 'footer.avisoLegal')}</a>
+          ·
+          <a href={withBase('/privacidade/')}>{t(lang, 'footer.privacidade')}</a>
+        </p>
+      </article>
+    </div>
+  </section>
+</BaseLayout>

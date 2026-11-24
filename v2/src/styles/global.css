@@ -380,6 +380,27 @@ p {
   text-transform: uppercase;
 }
 
+/* Texto longo das páginas legais (Privacidade, Cookies, Aviso legal, Disclaimer). */
+.legal-content {
+  max-width: 48rem;
+}
+
+.legal-content h2 {
+  font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+  margin-top: var(--space-4);
+}
+
+.legal-content p {
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.legal-content a {
+  color: var(--text-accent);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
 /* Grelhas partilhadas pelas listagens */
 .area-grid,
 .sector-grid,

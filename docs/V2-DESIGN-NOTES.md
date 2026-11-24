@@ -651,6 +651,40 @@ pública. Nessa fase o build será gerado com `V2_BASE=/`.
   sucesso, recusa com `success:"false"`, campos obrigatórios e mudança PT→FR;
   0 erros de consola; medição em iframes de 1440/768/390 px sem deslocação
   horizontal (contactos: 2 colunas em 1440, 1 coluna em 768 e 390).
-- **Não foi feito nenhum envio real**: falta a activação pelo destinatário
-  (ver `docs/V2-PUBLICACAO.md`, §5).
+- Teste real autorizado pelo cliente (19-11-2026): o Formsubmit devolveu
+  HTTP 200 com `success:"false"` e a mensagem
+  `This form needs Activation. We've sent you an email containing an 'Activate Form' link`.
+  O código já escreve essa frase no console (`[JPires] Formsubmit recusou o envio:`).
+  Cada tentativa gera um novo email de activação para `geral@jpiresadvogados.com`.
+- O envio só funciona depois de clicar nesse link. Depois da activação, testar
+  também no domínio publicado (alguns relatos indicam activação por página).
+- Sem commit/push — é necessária autorização explícita.
+
+---
+
+## 22. Páginas legais: Disclaimer, Aviso legal e Cookies (2026-11-24)
+
+- As três páginas deixaram de ser `StubPage` e passaram a usar `BaseLayout`
+  com texto real, no mesmo padrão da página de Privacidade.
+- O estilo `.legal-content` foi movido de `privacidade/index.astro` para
+  `global.css`; as quatro páginas legais partilham agora o mesmo limite de
+  largura, títulos, parágrafos e links.
+- **Aviso legal:** usa apenas dados confirmados em `site.ts` (nome da sociedade,
+  morada e email). Inclui ligações para Privacidade e Cookies. Não inventámos
+  NIF, número de registo comercial, inscrição na Ordem dos Advogados,
+  responsável pelo site nem entidade de alojamento — estes dados devem ser
+  fornecidos pelo cliente antes de a página estar completa.
+- **Disclaimer:** informação geral, inexistência de relação de cliente só pela
+  leitura, possibilidade de desactualização e ligações externas.
+- **Cookies:** declara a ausência de cookies próprios de publicidade/audiência,
+  explica o `localStorage['jpires-lang']` (não é cookie), o reCAPTCHA do
+  Formsubmit.co e os pedidos externos ao Google Fonts e aos mosaicos Esri do
+  mapa em `/sobre/`.
+- Todas as frases novas foram acrescentadas a `traducoes-extra.ts` nas sete
+  línguas não-PT; o motor runtime traduz também as frases com dados de `site.ts`
+  porque estas são geradas como uma única cadeia no frontmatter.
+- Validação: build com 30 páginas, 0 erros de consola nas três páginas, 8/8
+  idiomas verificados (com RTL em árabe), 0 ocorrências de `⚠️ CONFIRMAR` no
+  HTML gerado, 0 cores literais fora de `tokens.css`, e iframes de
+  1440/768/390 px sem deslocação horizontal.
 - Sem commit/push — é necessária autorização explícita.
