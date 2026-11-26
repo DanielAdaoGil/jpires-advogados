@@ -760,9 +760,9 @@ levando a uma página nova com formulário de dados do cliente e da consulta.
   depois pelo advogado.
 - O Formsubmit continua **por activar** — é preciso clicar no link
   «Activate Form» no email enviado para `geral@jpiresadvogados.com`.
-- O agendamento foi publicado no commit `49c0ac2`; as alterações ao campo de
-  telefone (secção 24), ao `select` de pagamento presencial e à correção das
-  horas ainda não têm commit/push — é necessária autorização explícita.
+- O agendamento foi publicado no commit `49c0ac2`; os ajustes ao campo de
+  telefone (secção 24), ao `select` de pagamento presencial e às horas foram
+  publicados no commit `3e69037`, com autorização do cliente.
 
 ---
 
@@ -821,4 +821,4 @@ campo de contacto e colocar `123456789AB123` como placeholder do BI.
 - O Formsubmit continua **por activar**; não foram feitos envios reais.
 - A validação final incluiu o `select` de pagamento presencial e as horas
   visíveis em Presencial (correção do atributo `hidden`).
-- Sem commit/push — é necessária autorização explícita.
+- Publicado no commit `3e69037`, com autorização do cliente.
