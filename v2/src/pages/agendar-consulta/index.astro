@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BookingForm from '../../components/BookingForm.astro';
+import BackLink from '../../components/BackLink.astro';
+import { getCollection } from 'astro:content';
+import { t } from '../../i18n/index.ts';
+import { withBase } from '../../utils/url.ts';
+
+const lang = 'pt';
+const advogados = (await getCollection('equipa'))
+  .sort((a, b) => a.data.ordem - b.data.ordem)
+  .map((pessoa) => pessoa.data.nome);
+---
+
+<BaseLayout title={t(lang, 'contactos.agendarConsulta')} lang={lang} current="/contactos/">
+  <section class="section">
+    <div class="container">
+      <BackLink href={withBase('/contactos/')} lang={lang} />
+
+      <h1 class="booking-title">{t(lang, 'contactos.agendarConsulta')}</h1>
+      <p class="booking-intro">
+        Preencha os dados abaixo para pedir uma consulta. A referência gerada é enviada por
+        email; as instruções de pagamento e o link da reunião serão enviados depois.
+      </p>
+
+      <BookingForm lang={lang} advogados={advogados} />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .booking-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: var(--text-primary);
+    margin: 0 0 var(--space-3);
+  }
+
+  .booking-intro {
+    max-width: 48rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin: 0 0 var(--space-4);
+  }
+</style>

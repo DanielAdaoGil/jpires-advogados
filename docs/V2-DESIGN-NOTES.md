@@ -688,3 +688,64 @@ pública. Nessa fase o build será gerado com `V2_BASE=/`.
   HTML gerado, 0 cores literais fora de `tokens.css`, e iframes de
   1440/768/390 px sem deslocação horizontal.
 - Sem commit/push — é necessária autorização explícita.
+
+---
+
+## 23. Agendamento de consultas (2026-11-26)
+
+Pedido do cliente: botão **Agendar consulta** abaixo dos dados em Fale Conosco,
+levando a uma página nova com formulário de dados do cliente e da consulta.
+
+### Decisões confirmadas pelo cliente
+
+- **Pagamento:** só geração de referência. Não há gateway, nem detecção
+  automática de pagamento, nem notificação de «pago».
+- **Consulta online:** o link da sala é enviado por email após confirmação.
+  Não inventámos URLs do Teams/Meet/Zoom/WhatsApp nem redirect automático.
+- **Telefone:** selector de país com bandeira (22 países) e validação do formato
+  nacional por país. Não se mostra nome de operadora.
+- **Datas:** segunda a sexta, das 08:00 às 18:00, em blocos de 30 minutos;
+  data mínima = hoje no fuso do visitante.
+
+### Implementação
+
+- `ContactDetails.astro`: botão com `withBase('/agendar-consulta/')`, traduzido
+  nas 8 línguas (`contactos.agendarConsulta` em `pt.ts`/`en.ts` + runtime).
+- `pages/agendar-consulta/index.astro`: H1, introdução, `BackLink` para
+  Contactos e lista de advogados lida de `src/content/equipa` por `ordem`.
+- `BookingForm.astro`: BI com `pattern="[0-9]{9}[A-Z]{2}[0-9]{3}"` e conversão
+  automática de minúsculas para maiúsculas; telefone com DDI visível e campo
+  oculto `telefoneCompleto` (`+DDI número`); tipo de consulta condiciona
+  plataforma (Online) ou data/hora/advogado (Presencial) e as opções de
+  pagamento; pagamento é sempre obrigatório (referência em Online; quatro
+  opções em Presencial). Botão final «Solicitar Consulta».
+- Referência `JP-CONS-YYYYMMDD-XXXX` (4 caracteres de
+  `ABCDEFGHJKLMNPQRSTUVWXYZ23456789`), gerada no browser e enviada em campo
+  oculto. Formsubmit.co para `geral@jpiresadvogados.com`, com `_subject`,
+  `_template=table`, `_url`, honeypot e tratamento explícito de
+  `success:"false"`. Mensagens de estado actualizadas no evento `jp:lang`.
+- 28 novas frases em `traducoes-extra.ts` nas sete línguas não-PT.
+
+### Validação
+
+- `npm run build` → **31 páginas**, sem erros (avisos esperados das colecções
+  vazias `insights`/`noticias`).
+- `fetch` interceptado no browser — nenhum pedido real ao Formsubmit: sucesso
+  Online (BI em maiúsculas, telefone completo, referência válida no FormData e
+  na mensagem), recusa com `success:"false"` (mensagem de erro), ausência de
+  pagamento (bloqueio sem chamada), Presencial sem pagamento (bloqueio) e
+  Presencial com pagamento (dados e nota correctos no email/mensagem).
+- 8/8 idiomas no formulário e na mensagem de sucesso; `dir="rtl"` em árabe.
+- Iframes de 1440/768/390 px: 2 colunas em 1440/768 e 1 coluna em 390, sem
+  deslocação horizontal. 0 erros de consola, 0 `⚠️ CONFIRMAR` no HTML gerado,
+  0 cores literais fora de `tokens.css`, 0 tokens sem definição.
+
+### Limitações (comunicadas ao cliente)
+
+- O site é estático: não sabe quando o pagamento é feito. A referência serve
+  para o cliente pagar e para a firma confirmar manualmente.
+- A plataforma escolhida é apenas informativa; a sala e o link são enviados
+  depois pelo advogado.
+- O Formsubmit continua **por activar** — é preciso clicar no link
+  «Activate Form» no email enviado para `geral@jpiresadvogados.com`.
+- Sem commit/push — é necessária autorização explícita.

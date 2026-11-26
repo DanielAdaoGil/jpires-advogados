@@ -189,6 +189,7 @@ export const pt = {
     email: 'Email',
     telefone: 'Telefone',
     whatsapp: 'WhatsApp',
+    agendarConsulta: 'Agendar consulta',
     formulario: {
       titulo: 'Envie-nos uma SMS',
       nome: 'Nome completo',

@@ -1,6 +1,7 @@
 ---
 import { site } from '../data/site.ts';
 import { t } from '../i18n/index.ts';
+import { withBase } from '../utils/url.ts';
 
 interface Props {
   lang: string;
@@ -32,6 +33,10 @@ const { lang = 'pt' } = Astro.props;
       </a>
     </dd>
   </dl>
+
+  <a class="btn-agendar" href={withBase('/agendar-consulta/')}>
+    {t(lang, 'contactos.agendarConsulta')}
+  </a>
 </section>
 
 <style>
@@ -69,5 +74,28 @@ const { lang = 'pt' } = Astro.props;
   }
   .contact-details__list a:hover {
     text-decoration: underline;
+  }
+
+  .btn-agendar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    margin-top: var(--space-2);
+    padding: 0.85rem 1.75rem;
+    border: 1px solid var(--border-accent);
+    border-radius: 6px;
+    background: var(--surface-accent);
+    color: var(--text-on-accent);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.25s var(--ease);
+  }
+
+  .btn-agendar:hover,
+  .btn-agendar:focus-visible {
+    background: var(--surface-accent-light);
   }
 </style>

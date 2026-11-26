@@ -191,6 +191,7 @@ export const en: typeof pt = {
     email: 'Email',
     telefone: 'Phone',
     whatsapp: 'WhatsApp',
+    agendarConsulta: 'Book a consultation',
     formulario: {
       titulo: 'Send us a message',
       nome: 'Full name',

@@ -1,0 +1,693 @@
+---
+import { site } from '../data/site.ts';
+import { t, type Lang } from '../i18n/index.ts';
+
+interface Props {
+  lang: Lang;
+  advogados: string[];
+}
+
+const { lang = 'pt', advogados = [] } = Astro.props;
+const endpoint = `https://formsubmit.co/ajax/${site.email}`;
+
+// Países com o indicativo e o formato mínimo aceite para o número nacional.
+// A bandeira é um emoji para não depender de mais um serviço externo.
+const paises = [
+  { iso: 'AO', bandeira: '🇦🇴', nome: 'Angola', ddi: '244' },
+  { iso: 'PT', bandeira: '🇵🇹', nome: 'Portugal', ddi: '351' },
+  { iso: 'BR', bandeira: '🇧🇷', nome: 'Brasil', ddi: '55' },
+  { iso: 'MZ', bandeira: '🇲🇿', nome: 'Moçambique', ddi: '258' },
+  { iso: 'CV', bandeira: '🇨🇻', nome: 'Cabo Verde', ddi: '238' },
+  { iso: 'GW', bandeira: '🇬🇼', nome: 'Guiné-Bissau', ddi: '245' },
+  { iso: 'ST', bandeira: '🇸🇹', nome: 'São Tomé e Príncipe', ddi: '239' },
+  { iso: 'CD', bandeira: '🇨🇩', nome: 'Rep. Dem. do Congo', ddi: '243' },
+  { iso: 'CG', bandeira: '🇨🇬', nome: 'Congo', ddi: '242' },
+  { iso: 'ZM', bandeira: '🇿🇲', nome: 'Zâmbia', ddi: '260' },
+  { iso: 'ZW', bandeira: '🇿🇼', nome: 'Zimbabwe', ddi: '263' },
+  { iso: 'BW', bandeira: '🇧🇼', nome: 'Botswana', ddi: '267' },
+  { iso: 'GH', bandeira: '🇬🇭', nome: 'Gana', ddi: '233' },
+  { iso: 'GB', bandeira: '🇬🇧', nome: 'Reino Unido', ddi: '44' },
+  { iso: 'US', bandeira: '🇺🇸', nome: 'Estados Unidos', ddi: '1' },
+  { iso: 'ES', bandeira: '🇪🇸', nome: 'Espanha', ddi: '34' },
+  { iso: 'FR', bandeira: '🇫🇷', nome: 'França', ddi: '33' },
+  { iso: 'DE', bandeira: '🇩🇪', nome: 'Alemanha', ddi: '49' },
+  { iso: 'AE', bandeira: '🇦🇪', nome: 'Emirados Árabes Unidos', ddi: '971' },
+  { iso: 'RU', bandeira: '🇷🇺', nome: 'Rússia', ddi: '7' },
+  { iso: 'CN', bandeira: '🇨🇳', nome: 'China', ddi: '86' },
+  { iso: 'IT', bandeira: '🇮🇹', nome: 'Itália', ddi: '39' },
+];
+---
+
+<form
+  class="booking-form"
+  method="POST"
+  action={`https://formsubmit.co/${site.email}`}
+  data-endpoint={endpoint}
+  novalidate
+  aria-label="Agendar consulta"
+>
+  <input type="hidden" name="_subject" value="Solicitação de consulta — JPires" />
+  <input type="hidden" name="_template" value="table" />
+  <input type="hidden" name="_url" value="" />
+  <input type="hidden" name="referencia" id="referencia" value="" />
+  <input type="hidden" name="telefoneCompleto" id="telefone-completo" value="" />
+  <input
+    class="form-honey"
+    type="text"
+    name="_honey"
+    tabindex="-1"
+    autocomplete="off"
+    aria-hidden="true"
+  />
+
+  <fieldset class="booking-fieldset">
+    <legend>Dados do Cliente</legend>
+
+    <div class="form-group">
+      <label for="nome">{t(lang, 'contactos.formulario.nome')}</label>
+      <input id="nome" name="nome" type="text" required minlength="2" autocomplete="name" />
+    </div>
+
+    <div class="form-group">
+      <label for="pais">País</label>
+      <div class="phone-field">
+        <select id="pais" name="pais" aria-describedby="ddi-atual" data-no-translate>
+          {paises.map((pais) => (
+            <option value={pais.iso} data-ddi={pais.ddi} selected={pais.iso === 'AO'}>
+              {pais.bandeira} {pais.nome} (+{pais.ddi})
+            </option>
+          ))}
+        </select>
+        <span class="phone-prefix" id="ddi-atual" aria-hidden="true">+244</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="telefone">Nº de Telefone</label>
+      <input
+        id="telefone"
+        name="telefone"
+        type="tel"
+        inputmode="tel"
+        autocomplete="tel-national"
+        placeholder="9xx xxx xxx"
+        aria-describedby="erro-telefone"
+      />
+      <span class="form-error" id="erro-telefone" aria-live="polite"></span>
+    </div>
+
+    <div class="form-group">
+      <label for="bi">Nº do BI</label>
+      <input
+        id="bi"
+        name="bi"
+        type="text"
+        required
+        maxlength="14"
+        pattern="[0-9]{9}[A-Z]{2}[0-9]{3}"
+        placeholder="NNNNNNNNNLLNNN"
+        title="Formato: NNNNNNNNNLLNNN"
+        aria-describedby="ajuda-bi"
+      />
+      <span class="form-help" id="ajuda-bi">Formato: NNNNNNNNNLLNNN</span>
+      <span class="form-error" aria-live="polite"></span>
+    </div>
+  </fieldset>
+
+  <fieldset class="booking-fieldset">
+    <legend>Dados da Consulta</legend>
+
+    <div class="form-group">
+      <span class="group-label" id="label-tipo">Tipo de Consulta</span>
+      <div class="radio-row" role="radiogroup" aria-labelledby="label-tipo">
+        <label class="radio-card">
+          <input type="radio" name="tipoConsulta" value="Online" checked />
+          <span>Online</span>
+        </label>
+        <label class="radio-card">
+          <input type="radio" name="tipoConsulta" value="Presencial" />
+          <span>Presencial</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="assunto">Assunto</label>
+      <textarea id="assunto" name="assunto" required minlength="5" rows="5"></textarea>
+      <span class="form-error" aria-live="polite"></span>
+    </div>
+
+    <div class="form-group">
+      <span class="group-label" id="label-pagamento">Tipo de Pagamento</span>
+
+      <div class="radio-stack" data-grupo="pagamento-online">
+        <label class="radio-card">
+          <input type="radio" name="pagamento" value="Pagamento por Referência" checked />
+          <span>Pagamento por Referência</span>
+        </label>
+      </div>
+
+      <div class="radio-stack" data-grupo="pagamento-presencial" hidden>
+        <label class="radio-card">
+          <input type="radio" name="pagamento" value="Pagamento presencial" disabled />
+          <span>Pagamento presencial</span>
+        </label>
+        <label class="radio-card">
+          <input type="radio" name="pagamento" value="Em cache" disabled />
+          <span>Em cache</span>
+        </label>
+        <label class="radio-card">
+          <input type="radio" name="pagamento" value="Por express" disabled />
+          <span>Por express</span>
+        </label>
+        <label class="radio-card">
+          <input type="radio" name="pagamento" value="Transferência bancária" disabled />
+          <span>Transferência bancária</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group" data-grupo="plataforma">
+      <label for="plataforma">Plataforma</label>
+      <select id="plataforma" name="plataforma">
+        <option value="">Seleccione uma opção</option>
+        <option value="Microsoft Teams">Microsoft Teams</option>
+        <option value="Google Meet">Google Meet</option>
+        <option value="Zoom">Zoom</option>
+        <option value="WhatsApp">WhatsApp</option>
+      </select>
+      <span class="form-error" aria-live="polite"></span>
+    </div>
+
+    <div class="form-grid" data-grupo="agendamento" hidden>
+      <div class="form-group">
+        <label for="data">Data</label>
+        <input id="data" name="data" type="date" disabled aria-describedby="erro-data" />
+        <span class="form-error" id="erro-data" aria-live="polite"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="hora">Hora</label>
+        <select id="hora" name="hora" disabled>
+          <option value="">Seleccione uma opção</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group" data-grupo="advogado" hidden>
+      <label for="advogado">Advogado</label>
+      <select id="advogado" name="advogado" disabled>
+        <option value="Nenhum">Nenhum</option>
+        {advogados.map((nome) => <option value={nome}>{nome}</option>)}
+      </select>
+    </div>
+  </fieldset>
+
+  <div class="form-actions">
+    <button type="submit" class="btn-primary" id="btn-solicitar">Solicitar Consulta</button>
+  </div>
+
+  <div id="mensagem-agendamento" role="status" aria-live="polite" class="form-message" data-no-translate></div>
+</form>
+
+<script>
+  import { obterIdioma, traduzir } from '../i18n/runtime.ts';
+
+  const form = document.querySelector<HTMLFormElement>('.booking-form');
+  const btn = document.querySelector<HTMLButtonElement>('#btn-solicitar');
+  const mensagem = document.querySelector<HTMLDivElement>('#mensagem-agendamento');
+  const urlOculta = form?.querySelector<HTMLInputElement>('input[name="_url"]');
+  const pais = document.querySelector<HTMLSelectElement>('#pais');
+  const prefixo = document.querySelector<HTMLElement>('#ddi-atual');
+  const telefone = document.querySelector<HTMLInputElement>('#telefone');
+  const erroTelefone = document.querySelector<HTMLElement>('#erro-telefone');
+  const bi = document.querySelector<HTMLInputElement>('#bi');
+  const data = document.querySelector<HTMLInputElement>('#data');
+  const erroData = document.querySelector<HTMLElement>('#erro-data');
+  const hora = document.querySelector<HTMLSelectElement>('#hora');
+  const plataforma = document.querySelector<HTMLSelectElement>('#plataforma');
+  const referencia = document.querySelector<HTMLInputElement>('#referencia');
+  const telefoneCompleto = document.querySelector<HTMLInputElement>('#telefone-completo');
+
+  const TEXTO_CAMPOS = 'Por favor, corrija os campos assinalados.';
+  const TEXTO_ENVIANDO = 'A enviar pedido...';
+  const TEXTO_ERRO = 'Erro ao enviar o pedido. Tente novamente ou contacte-nos directamente.';
+  const TEXTO_TELEFONE = 'Número de telefone inválido para o país escolhido.';
+  const TEXTO_DATA = 'Escolha uma data de segunda a sexta-feira.';
+  const TEXTO_REFERENCIA = 'Pedido enviado. Referência:';
+  const TEXTO_ONLINE = 'O link da reunião será enviado por email após a confirmação.';
+  const TEXTO_PRESENCIAL = 'As instruções de pagamento e a confirmação serão enviadas por email.';
+
+  // Regras simples por país: o indicativo e o formato do número nacional.
+  const REGRAS: Record<string, RegExp> = {
+    AO: /^9\d{8}$/, PT: /^[92]\d{8}$/, BR: /^[1-9]\d{9,10}$/, MZ: /^[28]\d{8}$/,
+    CV: /^[2-9]\d{6}$/, GW: /^[2-9]\d{6}$/, ST: /^[2-9]\d{6}$/, CD: /^8\d{8}$/,
+    CG: /^\d{9}$/, ZM: /^9\d{8}$/, ZW: /^7\d{8}$/, BW: /^[2-7]\d{7}$/,
+    GH: /^[2-5]\d{8}$/, GB: /^[1-9]\d{9}$/, US: /^[2-9]\d{9}$/, ES: /^[6789]\d{8}$/,
+    FR: /^[1-9]\d{8}$/, DE: /^[1-9]\d{9,10}$/, AE: /^[2-9]\d{8}$/, RU: /^[89]\d{9}$/,
+    CN: /^1[3-9]\d{9}$/, IT: /^3\d{8,9}$/,
+  };
+
+  type Estado = { tipo: 'erro' | 'enviando' | 'campo' | 'sucesso'; original?: string; referencia?: string; online?: boolean };
+  let estado: Estado | null = null;
+
+  function mostrar(original: string, tipo: Estado['tipo']) {
+    estado = { tipo, original };
+    if (!mensagem) return;
+    mensagem.textContent = traduzir(original, obterIdioma());
+    mensagem.className = 'form-message ' + tipo;
+  }
+
+  function mostrarSucesso(ref: string, online: boolean) {
+    estado = { tipo: 'sucesso', referencia: ref, online };
+    actualizarMensagem();
+  }
+
+  function actualizarMensagem() {
+    if (!mensagem || !estado) return;
+    const langAtual = obterIdioma();
+
+    if (estado.tipo === 'sucesso' && estado.referencia) {
+      const nota = estado.online ? TEXTO_ONLINE : TEXTO_PRESENCIAL;
+      mensagem.textContent =
+        traduzir(TEXTO_REFERENCIA, langAtual) +
+        ' ' +
+        estado.referencia +
+        '. ' +
+        traduzir(nota, langAtual);
+    } else if (estado.original) {
+      mensagem.textContent = traduzir(estado.original, langAtual);
+    }
+
+    mensagem.className = 'form-message ' + estado.tipo;
+  }
+
+  function limpar() {
+    estado = null;
+    if (!mensagem) return;
+    mensagem.textContent = '';
+    mensagem.className = 'form-message';
+  }
+
+  document.addEventListener('jp:lang', actualizarMensagem);
+
+  function alternar(grupo: Element | null, visivel: boolean) {
+    if (!grupo) return;
+    grupo.classList.toggle('is-hidden', !visivel);
+    grupo.setAttribute('aria-hidden', String(!visivel));
+    grupo.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('input, select, textarea')
+      .forEach((campo) => { campo.disabled = !visivel; });
+  }
+
+  function aplicarCondicoes() {
+    const tipo = form?.querySelector<HTMLInputElement>('input[name="tipoConsulta"]:checked')?.value || 'Online';
+    const online = tipo === 'Online';
+
+    alternar(form?.querySelector('[data-grupo="plataforma"]'), online);
+    alternar(form?.querySelector('[data-grupo="agendamento"]'), !online);
+    alternar(form?.querySelector('[data-grupo="advogado"]'), !online);
+    alternar(form?.querySelector('[data-grupo="pagamento-online"]'), online);
+    alternar(form?.querySelector('[data-grupo="pagamento-presencial"]'), !online);
+
+    // Só pode haver um método de pagamento activo de cada vez.
+    const pagoReferencia = form?.querySelector<HTMLInputElement>('[data-grupo="pagamento-online"] input');
+    if (pagoReferencia) pagoReferencia.checked = online;
+
+    if (plataforma) plataforma.required = online;
+    if (data) data.required = !online;
+    if (hora) hora.required = !online;
+  }
+
+  function validarPagamento(): boolean {
+    return Boolean(form?.querySelector<HTMLInputElement>('input[name="pagamento"]:checked:not(:disabled)'));
+  }
+
+  form?.querySelectorAll<HTMLInputElement>('input[name="tipoConsulta"]').forEach((radio) => {
+    radio.addEventListener('change', aplicarCondicoes);
+  });
+
+  // BI: o visitante pode escrever em minúsculas; guardamos sempre em maiúsculas.
+  bi?.addEventListener('input', () => {
+    bi.value = bi.value.toUpperCase();
+    bi.setCustomValidity('');
+  });
+
+  pais?.addEventListener('change', () => {
+    const opcao = pais.selectedOptions[0];
+    if (prefixo) prefixo.textContent = `+${opcao?.dataset.ddi ?? ''}`;
+    telefone?.setCustomValidity('');
+  });
+
+  function validarTelefone(): boolean {
+    if (!telefone || !pais) return true;
+    const regra = REGRAS[pais.value];
+    const digitos = telefone.value.replace(/\D/g, '');
+    const valido = Boolean(regra && regra.test(digitos));
+
+    telefone.setCustomValidity(valido ? '' : traduzir(TEXTO_TELEFONE, obterIdioma()));
+    if (erroTelefone) erroTelefone.textContent = valido ? '' : traduzir(TEXTO_TELEFONE, obterIdioma());
+    if (telefoneCompleto) {
+      telefoneCompleto.value = digitos ? `+${pais.selectedOptions[0]?.dataset.ddi ?? ''} ${digitos}` : '';
+    }
+    return valido;
+  }
+
+  function validarData(): boolean {
+    if (!data) return true;
+    if (!data.value) return true; // O campo obrigatório já é tratado pelo navegador.
+    const dia = new Date(`${data.value}T00:00:00`).getDay();
+    const valido = dia !== 0 && dia !== 6;
+    data.setCustomValidity(valido ? '' : traduzir(TEXTO_DATA, obterIdioma()));
+    if (erroData) erroData.textContent = valido ? '' : traduzir(TEXTO_DATA, obterIdioma());
+    return valido;
+  }
+
+  data?.addEventListener('change', validarData);
+  telefone?.addEventListener('blur', validarTelefone);
+
+  // Horário das 08:00 às 18:00, em blocos de 30 minutos.
+  if (hora) {
+    for (let minutos = 8 * 60; minutos <= 18 * 60; minutos += 30) {
+      const h = String(Math.floor(minutos / 60)).padStart(2, '0');
+      const m = String(minutos % 60).padStart(2, '0');
+      const opcao = document.createElement('option');
+      opcao.value = `${h}:${m}`;
+      opcao.textContent = `${h}:${m}`;
+      hora.appendChild(opcao);
+    }
+  }
+
+  // Data mínima: hoje no fuso do visitante (não o UTC do servidor).
+  if (data) {
+    const agora = new Date();
+    const ano = agora.getFullYear();
+    const mes = String(agora.getMonth() + 1).padStart(2, '0');
+    const dia = String(agora.getDate()).padStart(2, '0');
+    data.min = `${ano}-${mes}-${dia}`;
+  }
+
+  function gerarReferencia(): string {
+    const agora = new Date();
+    const ano = agora.getFullYear();
+    const mes = String(agora.getMonth() + 1).padStart(2, '0');
+    const dia = String(agora.getDate()).padStart(2, '0');
+    const letras = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let sufixo = '';
+    for (let i = 0; i < 4; i += 1) sufixo += letras[Math.floor(Math.random() * letras.length)];
+    return `JP-CONS-${ano}${mes}${dia}-${sufixo}`;
+  }
+
+  aplicarCondicoes();
+
+  if (urlOculta) {
+    const url = window.location.href;
+    urlOculta.value = url;
+    urlOculta.setAttribute('value', url);
+  }
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    limpar();
+
+    const telefoneOk = validarTelefone();
+    const dataOk = validarData();
+    const pagamentoOk = validarPagamento();
+
+    if (!form.checkValidity() || !telefoneOk || !dataOk || !pagamentoOk) {
+      mostrar(TEXTO_CAMPOS, 'campo');
+      form.reportValidity();
+      return;
+    }
+
+    const online = form.querySelector<HTMLInputElement>('input[name="tipoConsulta"]:checked')?.value === 'Online';
+    const ref = gerarReferencia();
+    if (referencia) referencia.value = ref;
+
+    if (btn) btn.disabled = true;
+    mostrar(TEXTO_ENVIANDO, 'enviando');
+
+    try {
+      const resposta = await fetch(form.dataset.endpoint ?? '', {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { Accept: 'application/json' },
+        referrerPolicy: 'no-referrer-when-downgrade',
+      });
+
+      let dados = null;
+      try { dados = await resposta.json(); } catch { /* erro em texto simples */ }
+
+      const confirmado =
+        resposta.ok && (!dados || String(dados.success).toLowerCase() === 'true');
+
+      if (!confirmado) {
+        console.warn('[JPires] Formsubmit recusou o pedido:', dados?.message ?? `HTTP ${resposta.status}`);
+        throw new Error('Pedido recusado pelo Formsubmit');
+      }
+
+      form.reset();
+      if (urlOculta) urlOculta.value = window.location.href;
+      if (prefixo) prefixo.textContent = '+244';
+      aplicarCondicoes();
+      mostrarSucesso(ref, online);
+    } catch {
+      mostrar(TEXTO_ERRO, 'erro');
+    } finally {
+      if (btn) btn.disabled = false;
+    }
+  });
+</script>
+
+<style>
+  .booking-form {
+    box-sizing: border-box;
+    width: 100%;
+    padding: clamp(1.5rem, 3vw, 2.75rem);
+    border: 1px solid var(--border-default);
+    border-radius: 8px;
+    background: var(--surface-dark);
+    box-shadow: var(--shadow-form);
+  }
+
+  .booking-fieldset {
+    border: 0;
+    margin: 0 0 var(--space-4);
+    padding: 0;
+    min-width: 0;
+  }
+
+  .booking-fieldset legend {
+    font-family: var(--font-heading);
+    font-size: clamp(1.25rem, 2vw, 1.6rem);
+    color: var(--text-accent-on-dark);
+    margin-bottom: var(--space-3);
+    padding: 0;
+  }
+
+  .form-group {
+    margin-bottom: var(--space-4);
+    min-width: 0;
+  }
+
+  .form-group label,
+  .group-label {
+    display: block;
+    font-family: var(--font-heading);
+    font-size: 0.95rem;
+    color: var(--text-secondary-on-dark);
+    margin-bottom: var(--space-2);
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 3.25rem;
+    padding: 0.9rem 1rem;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.5;
+    border: 1px solid var(--border-field);
+    border-radius: 6px;
+    background: var(--surface-glass);
+    color: var(--text-on-dark);
+  }
+
+  .form-group textarea {
+    min-height: 8rem;
+    resize: vertical;
+  }
+
+  .form-group select option {
+    background: var(--surface-dark);
+    color: var(--text-on-dark);
+  }
+
+  .form-group input::placeholder,
+  .form-group textarea::placeholder {
+    color: var(--text-field-placeholder);
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    outline: 3px solid var(--focus-ring-on-dark);
+    outline-offset: 2px;
+    border-color: var(--border-accent-light);
+    background: var(--surface-glass-strong);
+  }
+
+  .form-group input:invalid:not(:placeholder-shown),
+  .form-group textarea:invalid:not(:placeholder-shown) {
+    border-color: var(--border-danger);
+  }
+
+  .phone-field {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .phone-field select {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .phone-prefix {
+    flex: 0 0 auto;
+    font-family: var(--font-body);
+    font-weight: 600;
+    color: var(--text-accent-on-dark);
+  }
+
+  .radio-row,
+  .radio-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .radio-stack {
+    flex-direction: column;
+  }
+
+  .radio-card {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--border-field);
+    border-radius: 6px;
+    background: var(--surface-glass);
+    color: var(--text-on-dark);
+    font-family: var(--font-body);
+    cursor: pointer;
+  }
+
+  .radio-card:has(input:checked) {
+    border-color: var(--border-accent);
+    background: var(--surface-accent-soft);
+  }
+
+  .radio-card input {
+    width: auto !important;
+    min-height: 0 !important;
+    accent-color: var(--surface-accent);
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-3);
+  }
+
+  @media (min-width: 640px) {
+    .form-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  .form-help,
+  .form-error {
+    display: block;
+    font-size: 0.85rem;
+    margin-top: 0.4rem;
+  }
+
+  .form-help {
+    color: var(--text-secondary-on-dark);
+  }
+
+  .form-error {
+    color: var(--text-danger);
+  }
+
+  .form-error:empty {
+    display: none;
+  }
+
+  .form-actions {
+    display: flex;
+    margin-top: var(--space-2);
+  }
+
+  .btn-primary {
+    background: var(--surface-accent);
+    color: var(--text-on-accent);
+    border: none;
+    padding: 0.85rem 1.75rem;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .btn-primary:hover {
+    background: var(--surface-accent-light);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .form-message {
+    margin-top: var(--space-4);
+    padding: 0.9rem 1rem;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    display: none;
+    line-height: 1.6;
+  }
+
+  .form-message.sucesso {
+    display: block;
+    background: var(--surface-accent);
+    color: var(--text-on-accent);
+  }
+
+  .form-message.erro,
+  .form-message.campo {
+    display: block;
+    background: var(--surface-danger);
+    border: 1px solid var(--border-danger);
+    color: var(--text-danger-strong);
+  }
+
+  .form-message.enviando {
+    display: block;
+    background: var(--surface-glass-strong);
+    border: 1px solid var(--border-accent-soft);
+    color: var(--text-secondary-on-dark);
+  }
+
+  .is-hidden {
+    display: none !important;
+  }
+
+  .form-honey {
+    display: none;
+  }
+</style>
