@@ -10,32 +10,6 @@ interface Props {
 const { lang = 'pt', advogados = [] } = Astro.props;
 const endpoint = `https://formsubmit.co/ajax/${site.email}`;
 
-// Países com o indicativo e o formato mínimo aceite para o número nacional.
-// A bandeira é um emoji para não depender de mais um serviço externo.
-const paises = [
-  { iso: 'AO', bandeira: '🇦🇴', nome: 'Angola', ddi: '244' },
-  { iso: 'PT', bandeira: '🇵🇹', nome: 'Portugal', ddi: '351' },
-  { iso: 'BR', bandeira: '🇧🇷', nome: 'Brasil', ddi: '55' },
-  { iso: 'MZ', bandeira: '🇲🇿', nome: 'Moçambique', ddi: '258' },
-  { iso: 'CV', bandeira: '🇨🇻', nome: 'Cabo Verde', ddi: '238' },
-  { iso: 'GW', bandeira: '🇬🇼', nome: 'Guiné-Bissau', ddi: '245' },
-  { iso: 'ST', bandeira: '🇸🇹', nome: 'São Tomé e Príncipe', ddi: '239' },
-  { iso: 'CD', bandeira: '🇨🇩', nome: 'Rep. Dem. do Congo', ddi: '243' },
-  { iso: 'CG', bandeira: '🇨🇬', nome: 'Congo', ddi: '242' },
-  { iso: 'ZM', bandeira: '🇿🇲', nome: 'Zâmbia', ddi: '260' },
-  { iso: 'ZW', bandeira: '🇿🇼', nome: 'Zimbabwe', ddi: '263' },
-  { iso: 'BW', bandeira: '🇧🇼', nome: 'Botswana', ddi: '267' },
-  { iso: 'GH', bandeira: '🇬🇭', nome: 'Gana', ddi: '233' },
-  { iso: 'GB', bandeira: '🇬🇧', nome: 'Reino Unido', ddi: '44' },
-  { iso: 'US', bandeira: '🇺🇸', nome: 'Estados Unidos', ddi: '1' },
-  { iso: 'ES', bandeira: '🇪🇸', nome: 'Espanha', ddi: '34' },
-  { iso: 'FR', bandeira: '🇫🇷', nome: 'França', ddi: '33' },
-  { iso: 'DE', bandeira: '🇩🇪', nome: 'Alemanha', ddi: '49' },
-  { iso: 'AE', bandeira: '🇦🇪', nome: 'Emirados Árabes Unidos', ddi: '971' },
-  { iso: 'RU', bandeira: '🇷🇺', nome: 'Rússia', ddi: '7' },
-  { iso: 'CN', bandeira: '🇨🇳', nome: 'China', ddi: '86' },
-  { iso: 'IT', bandeira: '🇮🇹', nome: 'Itália', ddi: '39' },
-];
 ---
 
 <form
@@ -68,31 +42,23 @@ const paises = [
       <input id="nome" name="nome" type="text" required minlength="2" autocomplete="name" />
     </div>
 
-    <div class="form-group">
-      <label for="pais">País</label>
-      <div class="phone-field">
-        <select id="pais" name="pais" aria-describedby="ddi-atual" data-no-translate>
-          {paises.map((pais) => (
-            <option value={pais.iso} data-ddi={pais.ddi} selected={pais.iso === 'AO'}>
-              {pais.bandeira} {pais.nome} (+{pais.ddi})
-            </option>
-          ))}
-        </select>
-        <span class="phone-prefix" id="ddi-atual" aria-hidden="true">+244</span>
-      </div>
-    </div>
+    <input type="hidden" id="pais" name="pais" value="AO" />
 
     <div class="form-group">
-      <label for="telefone">Nº de Telefone</label>
-      <input
-        id="telefone"
-        name="telefone"
-        type="tel"
-        inputmode="tel"
-        autocomplete="tel-national"
-        placeholder="9xx xxx xxx"
-        aria-describedby="erro-telefone"
-      />
+      <label for="telefone">{t(lang, 'contactos.formulario.telefone')}</label>
+      <div data-no-translate>
+        <input
+          id="telefone"
+          name="telefone"
+          type="tel"
+          required
+          inputmode="numeric"
+          maxlength="19"
+          autocomplete="tel"
+          aria-required="true"
+          aria-describedby="erro-telefone"
+        />
+      </div>
       <span class="form-error" id="erro-telefone" aria-live="polite"></span>
     </div>
 
@@ -105,11 +71,8 @@ const paises = [
         required
         maxlength="14"
         pattern="[0-9]{9}[A-Z]{2}[0-9]{3}"
-        placeholder="NNNNNNNNNLLNNN"
-        title="Formato: NNNNNNNNNLLNNN"
-        aria-describedby="ajuda-bi"
+        placeholder="123456789AB123"
       />
-      <span class="form-help" id="ajuda-bi">Formato: NNNNNNNNNLLNNN</span>
       <span class="form-error" aria-live="polite"></span>
     </div>
   </fieldset>
@@ -137,34 +100,24 @@ const paises = [
       <span class="form-error" aria-live="polite"></span>
     </div>
 
-    <div class="form-group">
-      <span class="group-label" id="label-pagamento">Tipo de Pagamento</span>
+    <div class="form-group" data-grupo="pagamento-online">
+      <label for="pagamento-online">Pagamento</label>
+      <select id="pagamento-online" name="pagamento" disabled>
+        <option value="Pagamento por Referência" selected>Pagamento por Referência</option>
+      </select>
+      <span class="form-error" aria-live="polite"></span>
+    </div>
 
-      <div class="radio-stack" data-grupo="pagamento-online">
-        <label class="radio-card">
-          <input type="radio" name="pagamento" value="Pagamento por Referência" checked />
-          <span>Pagamento por Referência</span>
-        </label>
-      </div>
-
-      <div class="radio-stack" data-grupo="pagamento-presencial" hidden>
-        <label class="radio-card">
-          <input type="radio" name="pagamento" value="Pagamento presencial" disabled />
-          <span>Pagamento presencial</span>
-        </label>
-        <label class="radio-card">
-          <input type="radio" name="pagamento" value="Em cache" disabled />
-          <span>Em cache</span>
-        </label>
-        <label class="radio-card">
-          <input type="radio" name="pagamento" value="Por express" disabled />
-          <span>Por express</span>
-        </label>
-        <label class="radio-card">
-          <input type="radio" name="pagamento" value="Transferência bancária" disabled />
-          <span>Transferência bancária</span>
-        </label>
-      </div>
+    <div class="form-group" data-grupo="pagamento-presencial" hidden>
+      <label for="pagamento-presencial">Pagamento</label>
+      <select id="pagamento-presencial" name="pagamento" disabled>
+        <option value="">Seleccione uma opção</option>
+        <option value="Pagamento presencial">Pagamento presencial</option>
+        <option value="Em cache">Em cache</option>
+        <option value="Por express">Por express</option>
+        <option value="Transferência bancária">Transferência bancária</option>
+      </select>
+      <span class="form-error" aria-live="polite"></span>
     </div>
 
     <div class="form-group" data-grupo="plataforma">
@@ -212,13 +165,19 @@ const paises = [
 
 <script>
   import { obterIdioma, traduzir } from '../i18n/runtime.ts';
+  import {
+    iniciarTelefone,
+    telefoneValido,
+    numeroTelefone,
+    paisTelefone,
+    limparTelefone,
+  } from '../scripts/telefone.ts';
 
   const form = document.querySelector<HTMLFormElement>('.booking-form');
   const btn = document.querySelector<HTMLButtonElement>('#btn-solicitar');
   const mensagem = document.querySelector<HTMLDivElement>('#mensagem-agendamento');
   const urlOculta = form?.querySelector<HTMLInputElement>('input[name="_url"]');
-  const pais = document.querySelector<HTMLSelectElement>('#pais');
-  const prefixo = document.querySelector<HTMLElement>('#ddi-atual');
+  const pais = document.querySelector<HTMLInputElement>('#pais');
   const telefone = document.querySelector<HTMLInputElement>('#telefone');
   const erroTelefone = document.querySelector<HTMLElement>('#erro-telefone');
   const bi = document.querySelector<HTMLInputElement>('#bi');
@@ -226,8 +185,12 @@ const paises = [
   const erroData = document.querySelector<HTMLElement>('#erro-data');
   const hora = document.querySelector<HTMLSelectElement>('#hora');
   const plataforma = document.querySelector<HTMLSelectElement>('#plataforma');
+  const pagamentoOnline = document.querySelector<HTMLSelectElement>('#pagamento-online');
+  const pagamentoPresencial = document.querySelector<HTMLSelectElement>('#pagamento-presencial');
   const referencia = document.querySelector<HTMLInputElement>('#referencia');
   const telefoneCompleto = document.querySelector<HTMLInputElement>('#telefone-completo');
+
+  iniciarTelefone(telefone);
 
   const TEXTO_CAMPOS = 'Por favor, corrija os campos assinalados.';
   const TEXTO_ENVIANDO = 'A enviar pedido...';
@@ -237,16 +200,6 @@ const paises = [
   const TEXTO_REFERENCIA = 'Pedido enviado. Referência:';
   const TEXTO_ONLINE = 'O link da reunião será enviado por email após a confirmação.';
   const TEXTO_PRESENCIAL = 'As instruções de pagamento e a confirmação serão enviadas por email.';
-
-  // Regras simples por país: o indicativo e o formato do número nacional.
-  const REGRAS: Record<string, RegExp> = {
-    AO: /^9\d{8}$/, PT: /^[92]\d{8}$/, BR: /^[1-9]\d{9,10}$/, MZ: /^[28]\d{8}$/,
-    CV: /^[2-9]\d{6}$/, GW: /^[2-9]\d{6}$/, ST: /^[2-9]\d{6}$/, CD: /^8\d{8}$/,
-    CG: /^\d{9}$/, ZM: /^9\d{8}$/, ZW: /^7\d{8}$/, BW: /^[2-7]\d{7}$/,
-    GH: /^[2-5]\d{8}$/, GB: /^[1-9]\d{9}$/, US: /^[2-9]\d{9}$/, ES: /^[6789]\d{8}$/,
-    FR: /^[1-9]\d{8}$/, DE: /^[1-9]\d{9,10}$/, AE: /^[2-9]\d{8}$/, RU: /^[89]\d{9}$/,
-    CN: /^1[3-9]\d{9}$/, IT: /^3\d{8,9}$/,
-  };
 
   type Estado = { tipo: 'erro' | 'enviando' | 'campo' | 'sucesso'; original?: string; referencia?: string; online?: boolean };
   let estado: Estado | null = null;
@@ -289,11 +242,15 @@ const paises = [
     mensagem.className = 'form-message';
   }
 
-  document.addEventListener('jp:lang', actualizarMensagem);
+  document.addEventListener('jp:lang', () => {
+    actualizarMensagem();
+    if (telefone?.value.trim()) void validarTelefone();
+  });
 
   function alternar(grupo: Element | null, visivel: boolean) {
     if (!grupo) return;
     grupo.classList.toggle('is-hidden', !visivel);
+    grupo.toggleAttribute('hidden', !visivel);
     grupo.setAttribute('aria-hidden', String(!visivel));
     grupo.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('input, select, textarea')
       .forEach((campo) => { campo.disabled = !visivel; });
@@ -310,8 +267,14 @@ const paises = [
     alternar(form?.querySelector('[data-grupo="pagamento-presencial"]'), !online);
 
     // Só pode haver um método de pagamento activo de cada vez.
-    const pagoReferencia = form?.querySelector<HTMLInputElement>('[data-grupo="pagamento-online"] input');
-    if (pagoReferencia) pagoReferencia.checked = online;
+    if (pagamentoOnline) {
+      pagamentoOnline.required = online;
+      if (!online) pagamentoOnline.value = 'Pagamento por Referência';
+    }
+    if (pagamentoPresencial) {
+      pagamentoPresencial.required = !online;
+      if (online) pagamentoPresencial.value = '';
+    }
 
     if (plataforma) plataforma.required = online;
     if (data) data.required = !online;
@@ -319,7 +282,8 @@ const paises = [
   }
 
   function validarPagamento(): boolean {
-    return Boolean(form?.querySelector<HTMLInputElement>('input[name="pagamento"]:checked:not(:disabled)'));
+    const ativo = form?.querySelector<HTMLSelectElement>('select[name="pagamento"]:not(:disabled)');
+    return Boolean(ativo?.value);
   }
 
   form?.querySelectorAll<HTMLInputElement>('input[name="tipoConsulta"]').forEach((radio) => {
@@ -332,23 +296,16 @@ const paises = [
     bi.setCustomValidity('');
   });
 
-  pais?.addEventListener('change', () => {
-    const opcao = pais.selectedOptions[0];
-    if (prefixo) prefixo.textContent = `+${opcao?.dataset.ddi ?? ''}`;
-    telefone?.setCustomValidity('');
-  });
+  // Validação real por país (libphonenumber), através da biblioteca da DIO.
+  async function validarTelefone(): Promise<boolean> {
+    if (!telefone) return true;
+    const valido = await telefoneValido(telefone);
+    const erro = valido ? '' : traduzir(TEXTO_TELEFONE, obterIdioma());
 
-  function validarTelefone(): boolean {
-    if (!telefone || !pais) return true;
-    const regra = REGRAS[pais.value];
-    const digitos = telefone.value.replace(/\D/g, '');
-    const valido = Boolean(regra && regra.test(digitos));
-
-    telefone.setCustomValidity(valido ? '' : traduzir(TEXTO_TELEFONE, obterIdioma()));
-    if (erroTelefone) erroTelefone.textContent = valido ? '' : traduzir(TEXTO_TELEFONE, obterIdioma());
-    if (telefoneCompleto) {
-      telefoneCompleto.value = digitos ? `+${pais.selectedOptions[0]?.dataset.ddi ?? ''} ${digitos}` : '';
-    }
+    telefone.setCustomValidity(erro);
+    if (erroTelefone) erroTelefone.textContent = erro;
+    if (pais) pais.value = paisTelefone(telefone).toUpperCase();
+    if (telefoneCompleto) telefoneCompleto.value = await numeroTelefone(telefone);
     return valido;
   }
 
@@ -363,7 +320,11 @@ const paises = [
   }
 
   data?.addEventListener('change', validarData);
-  telefone?.addEventListener('blur', validarTelefone);
+  telefone?.addEventListener('input', () => {
+    telefone.setCustomValidity('');
+    if (erroTelefone) erroTelefone.textContent = '';
+  });
+  telefone?.addEventListener('blur', () => { void validarTelefone(); });
 
   // Horário das 08:00 às 18:00, em blocos de 30 minutos.
   if (hora) {
@@ -409,7 +370,7 @@ const paises = [
     event.preventDefault();
     limpar();
 
-    const telefoneOk = validarTelefone();
+    const telefoneOk = await validarTelefone();
     const dataOk = validarData();
     const pagamentoOk = validarPagamento();
 
@@ -447,7 +408,9 @@ const paises = [
 
       form.reset();
       if (urlOculta) urlOculta.value = window.location.href;
-      if (prefixo) prefixo.textContent = '+244';
+      limparTelefone(telefone);
+      if (pais) pais.value = 'AO';
+      if (telefoneCompleto) telefoneCompleto.value = '';
       aplicarCondicoes();
       mostrarSucesso(ref, online);
     } catch {
@@ -543,33 +506,10 @@ const paises = [
     border-color: var(--border-danger);
   }
 
-  .phone-field {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-  }
-
-  .phone-field select {
-    flex: 1 1 auto;
-    min-width: 0;
-  }
-
-  .phone-prefix {
-    flex: 0 0 auto;
-    font-family: var(--font-body);
-    font-weight: 600;
-    color: var(--text-accent-on-dark);
-  }
-
-  .radio-row,
-  .radio-stack {
+  .radio-row {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
-  }
-
-  .radio-stack {
-    flex-direction: column;
   }
 
   .radio-card {
@@ -608,18 +548,10 @@ const paises = [
     }
   }
 
-  .form-help,
   .form-error {
     display: block;
     font-size: 0.85rem;
     margin-top: 0.4rem;
-  }
-
-  .form-help {
-    color: var(--text-secondary-on-dark);
-  }
-
-  .form-error {
     color: var(--text-danger);
   }
 

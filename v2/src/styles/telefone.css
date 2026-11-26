@@ -1,0 +1,46 @@
+/* ==========================================================================
+   Campo de telefone internacional (intl-tel-input)
+   As cores vêm sempre dos tokens semânticos de tokens.css.
+   ========================================================================== */
+
+.iti {
+  display: block;
+  width: 100%;
+
+  /* Variáveis da biblioteca ligadas à identidade visual do site. */
+  --iti-hover-color: var(--phone-hover);
+  --iti-border-color: var(--phone-border);
+  --iti-country-selector-bg: var(--phone-selector-bg);
+  --iti-icon-color: var(--phone-icon);
+  --iti-strict-reject-flash-color: var(--phone-flash);
+}
+
+/* A biblioteca desenha uma sombra fixa no botão do país; alinhamos com o site. */
+.iti .iti__country-selector {
+  box-shadow: var(--phone-selector-shadow);
+}
+
+.iti .iti__country-list,
+.iti .iti__search-input {
+  color: var(--phone-panel-text);
+}
+
+/* Os DDI de cada país (incluindo o seleccionado) devem ficar brancos. */
+.iti .iti__dial-code,
+.iti .iti__selected-dial-code {
+  color: var(--phone-dial-code-text);
+}
+
+/* Contorno fino das bandeiras, também tokenizado. */
+.iti .iti__flag {
+  box-shadow: 0 0 1px 0 var(--phone-flag-shadow);
+}
+
+/* Janela grande de países em ecrãs pequenos. */
+.iti--fullscreen-popup.iti--detached-country-selector {
+  background-color: var(--phone-overlay);
+}
+
+.iti--fullscreen-popup .iti__close-button {
+  color: var(--phone-panel-text);
+}

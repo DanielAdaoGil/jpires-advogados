@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "astro": "^5.18.2",
+    "intl-tel-input": "^29.5.12",
     "leaflet": "^1.9.4"
   },
   "devDependencies": {

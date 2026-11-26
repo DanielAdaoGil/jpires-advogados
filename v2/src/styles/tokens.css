@@ -100,6 +100,18 @@
   --hero-image-opacity: 0.46;
   --scrollbar-thumb: var(--brown-medium);
 
+  /* Campo de telefone internacional (intl-tel-input) */
+  --phone-hover: rgb(var(--rgb-paper) / 0.1);
+  --phone-border: var(--border-field);
+  --phone-selector-bg: var(--surface-dark-elevated);
+  --phone-icon: var(--text-accent-on-dark);
+  --phone-flash: rgb(var(--rgb-gold) / 0.22);
+  --phone-overlay: rgb(var(--rgb-black) / 0.55);
+  --phone-flag-shadow: rgb(var(--rgb-black) / 0.35);
+  --phone-selector-shadow: var(--shadow-soft);
+  --phone-panel-text: var(--text-on-dark);
+  --phone-dial-code-text: var(--text-on-dark);
+
   /* Sombras */
   --shadow-card: 0 12px 32px rgb(var(--rgb-ink) / 0.1);
   --shadow-card-soft: 0 12px 26px rgb(var(--rgb-ink) / 0.12);

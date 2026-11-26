@@ -702,8 +702,9 @@ levando a uma página nova com formulário de dados do cliente e da consulta.
   automática de pagamento, nem notificação de «pago».
 - **Consulta online:** o link da sala é enviado por email após confirmação.
   Não inventámos URLs do Teams/Meet/Zoom/WhatsApp nem redirect automático.
-- **Telefone:** selector de país com bandeira (22 países) e validação do formato
-  nacional por país. Não se mostra nome de operadora.
+- **Telefone:** campo internacional com bandeira, pesquisa de país, DDI visível
+  e máscara automática (biblioteca usada pela DIO), com validação real por país.
+  Não se mostra nome de operadora.
 - **Datas:** segunda a sexta, das 08:00 às 18:00, em blocos de 30 minutos;
   data mínima = hoje no fuso do visitante.
 
@@ -713,12 +714,17 @@ levando a uma página nova com formulário de dados do cliente e da consulta.
   nas 8 línguas (`contactos.agendarConsulta` em `pt.ts`/`en.ts` + runtime).
 - `pages/agendar-consulta/index.astro`: H1, introdução, `BackLink` para
   Contactos e lista de advogados lida de `src/content/equipa` por `ordem`.
-- `BookingForm.astro`: BI com `pattern="[0-9]{9}[A-Z]{2}[0-9]{3}"` e conversão
-  automática de minúsculas para maiúsculas; telefone com DDI visível e campo
-  oculto `telefoneCompleto` (`+DDI número`); tipo de consulta condiciona
-  plataforma (Online) ou data/hora/advogado (Presencial) e as opções de
-  pagamento; pagamento é sempre obrigatório (referência em Online; quatro
-  opções em Presencial). Botão final «Solicitar Consulta».
+- `BookingForm.astro`: BI com `pattern="[0-9]{9}[A-Z]{2}[0-9]{3}"`,
+  `placeholder="123456789AB123"` e conversão automática de minúsculas para
+  maiúsculas; telefone internacional com campo oculto `telefoneCompleto`
+  (`+DDI número`) e `pais` (ISO); tipo de consulta condiciona
+  plataforma (Online) ou data/hora/advogado (Presencial) e o modo de pagamento:
+  em Online um `select` com «Pagamento por Referência»; em Presencial um
+  `select` com «Pagamento presencial», «Em cache», «Por express» e
+  «Transferência bancária», no mesmo padrão da plataforma. O pagamento é
+  sempre obrigatório. `alternar()` passou também a remover/colocar o atributo
+  `hidden`, pelo que as horas (08:00–18:00, 30 em 30 min) aparecem em
+  Presencial. Botão final «Solicitar Consulta».
 - Referência `JP-CONS-YYYYMMDD-XXXX` (4 caracteres de
   `ABCDEFGHJKLMNPQRSTUVWXYZ23456789`), gerada no browser e enviada em campo
   oculto. Formsubmit.co para `geral@jpiresadvogados.com`, com `_subject`,
@@ -733,8 +739,14 @@ levando a uma página nova com formulário de dados do cliente e da consulta.
 - `fetch` interceptado no browser — nenhum pedido real ao Formsubmit: sucesso
   Online (BI em maiúsculas, telefone completo, referência válida no FormData e
   na mensagem), recusa com `success:"false"` (mensagem de erro), ausência de
-  pagamento (bloqueio sem chamada), Presencial sem pagamento (bloqueio) e
-  Presencial com pagamento (dados e nota correctos no email/mensagem).
+  pagamento (bloqueio sem chamada), Presencial sem pagamento (bloqueio com
+  0 chamadas) e Presencial com «Em cache» (`pagamento`, `pais`,
+  `telefoneCompleto`, `data` e `hora` correctos no FormData; nota de pagamento
+  presencial na mensagem). Voltar a Online reactiva a plataforma e o
+  pagamento por referência.
+- Alternância validada: horas visíveis e obrigatórias em Presencial, ocultas
+  em Online; `select` de pagamento presencial com as quatro opções no mesmo
+  padrão da plataforma.
 - 8/8 idiomas no formulário e na mensagem de sucesso; `dir="rtl"` em árabe.
 - Iframes de 1440/768/390 px: 2 colunas em 1440/768 e 1 coluna em 390, sem
   deslocação horizontal. 0 erros de consola, 0 `⚠️ CONFIRMAR` no HTML gerado,
@@ -748,4 +760,65 @@ levando a uma página nova com formulário de dados do cliente e da consulta.
   depois pelo advogado.
 - O Formsubmit continua **por activar** — é preciso clicar no link
   «Activate Form» no email enviado para `geral@jpiresadvogados.com`.
+- O agendamento foi publicado no commit `49c0ac2`; as alterações ao campo de
+  telefone (secção 24), ao `select` de pagamento presencial e à correção das
+  horas ainda não têm commit/push — é necessária autorização explícita.
+
+---
+
+## 24. Campo de telefone internacional como na DIO (2026-11-26)
+
+Pedido do cliente: usar o padrão visível em `https://www.dio.me/sign-up` para o
+campo de contacto e colocar `123456789AB123` como placeholder do BI.
+
+### Decisões confirmadas pelo cliente
+
+- **Biblioteca:** `intl-tel-input` v29.5.12 — a mesma usada pela DIO: botão de
+  bandeira com pesquisa de país, DDI separado, máscara automática e validação
+  real por país (`libphonenumber`).
+- **Aplicação:** nos dois formulários — **Agendar consulta** e **Fale Conosco**.
+  No agendamento o telefone é obrigatório; em Fale Conosco continua opcional,
+  mas se preenchido tem de ser válido.
+
+### Implementação
+
+- `v2/src/scripts/telefone.ts`: wrapper partilhado com os 22 países do antigo
+  selector (Angola primeiro), `countrySearch`, `separateDialCode`,
+  `placeholderNumberPolicy: 'AGGRESSIVE'`, `formatAsYouType`, `strictMode` e
+  `loadUtils` dinâmico. A interface e os nomes de país usam os 8 idiomas do
+  site; no evento `jp:lang` a instância é recriada preservando o número.
+  Exporta `iniciarTelefone`, `telefoneValido`, `numeroTelefone`, `paisTelefone`
+  e `limparTelefone`.
+- `BookingForm.astro` e `ContactForm.astro`: campo visível com `inputmode="numeric"`
+  e `maxlength="19"` (como na DIO), dentro de `data-no-translate` para o motor
+  de idiomas não sobrescrever os textos gerados pela biblioteca. Campos ocultos
+  `pais` (ISO) e `telefoneCompleto` (E.164, ex.: `+244923123456`) enviados ao
+  Formsubmit. Depois de um envio com sucesso o campo volta a Angola e fica vazio.
+- `v2/src/styles/telefone.css`: liga `--iti-hover-color`, `--iti-border-color`,
+  `--iti-country-selector-bg`, `--iti-icon-color` e
+  `--iti-strict-reject-flash-color` a tokens semânticos; também substitui as
+  sombras/cores fixas da biblioteca. Os DDI de cada país e o DDI seleccionado
+  usam `--phone-dial-code-text` (branco), em vez do preto da biblioteca.
+  Novos tokens `--phone-*` em `tokens.css`.
+- O texto auxiliar «Formato: NNNNNNNNNLLNNN» abaixo do BI foi removido (assim
+  como o `title`/`aria-describedby` associados); o placeholder continua
+  `123456789AB123` e a validação do formato mantém-se.
+
+### Validação
+
+- `npm run build` → **31 páginas**, sem erros (avisos esperados das colecções
+  vazias `insights`/`noticias`).
+- `fetch` interceptado no browser — nenhum pedido real ao Formsubmit: sucesso
+  com Angola e com Portugal (`pais` e `telefoneCompleto` correctos no FormData),
+  número inválido bloqueado sem chamada, e telefone vazio aceite em Fale Conosco.
+- Alternância de país preserva o número; 8/8 idiomas no botão de país e nas
+  mensagens, com `dir="rtl"` em árabe; máscara e placeholder específicos do país.
+  Os DDI na lista e no botão aparecem brancos (`rgb(250, 247, 242)`), e o BI
+  já não mostra texto de formato por baixo do campo.
+- Iframes de 1440/768/390 px nos dois formulários: sem deslocação horizontal.
+  0 erros de consola, 0 `⚠️ CONFIRMAR` nos 31 HTML gerados, 0 cores literais fora
+  de `tokens.css`, 0 tokens sem definição.
+- O Formsubmit continua **por activar**; não foram feitos envios reais.
+- A validação final incluiu o `select` de pagamento presencial e as horas
+  visíveis em Presencial (correção do atributo `hidden`).
 - Sem commit/push — é necessária autorização explícita.

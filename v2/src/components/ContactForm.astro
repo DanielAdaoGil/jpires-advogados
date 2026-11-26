@@ -24,6 +24,8 @@ const endpoint = `https://formsubmit.co/ajax/${site.email}`;
   <input type="hidden" name="_subject" value="Contacto através do site — JPires" />
   <input type="hidden" name="_template" value="table" />
   <input type="hidden" name="_url" value="" />
+  <input type="hidden" name="telefoneCompleto" id="telefone-completo" value="" />
+  <input type="hidden" name="pais" id="pais" value="AO" />
   <input
     class="form-honey"
     type="text"
@@ -60,13 +62,18 @@ const endpoint = `https://formsubmit.co/ajax/${site.email}`;
 
   <div class="form-group">
     <label for="telefone">{t(lang, 'contactos.formulario.telefone')}</label>
-    <input
-      id="telefone"
-      name="telefone"
-      type="tel"
-      placeholder="+244 9xx xxx xxx"
-    />
-    <span class="form-error" aria-live="polite"></span>
+    <div data-no-translate>
+      <input
+        id="telefone"
+        name="telefone"
+        type="tel"
+        inputmode="numeric"
+        maxlength="19"
+        autocomplete="tel"
+        aria-describedby="erro-telefone"
+      />
+    </div>
+    <span class="form-error" id="erro-telefone" aria-live="polite"></span>
   </div>
 
   <div class="form-group">
@@ -103,14 +110,28 @@ const endpoint = `https://formsubmit.co/ajax/${site.email}`;
 
 <script>
   import { obterIdioma, traduzir } from '../i18n/runtime.ts';
+  import {
+    iniciarTelefone,
+    telefoneValido,
+    numeroTelefone,
+    paisTelefone,
+    limparTelefone,
+  } from '../scripts/telefone.ts';
 
-  const form = document.querySelector('.contact-form');
-  const btnEnviar = document.querySelector('#btn-enviar');
-  const mensagem = document.querySelector('#form-mensagem');
-  const urlOculta = form?.querySelector('input[name="_url"]');
+  const form = document.querySelector<HTMLFormElement>('.contact-form');
+  const btnEnviar = document.querySelector<HTMLButtonElement>('#btn-enviar');
+  const mensagem = document.querySelector<HTMLDivElement>('#form-mensagem');
+  const urlOculta = form?.querySelector<HTMLInputElement>('input[name="_url"]');
+  const telefone = document.querySelector<HTMLInputElement>('#telefone');
+  const erroTelefone = document.querySelector<HTMLElement>('#erro-telefone');
+  const telefoneCompleto = document.querySelector<HTMLInputElement>('#telefone-completo');
+  const pais = document.querySelector<HTMLInputElement>('#pais');
+
+  iniciarTelefone(telefone);
 
   // Textos originais em PT; o motor de idiomas traduz consoante a escolha do visitante.
   const TEXTO_OBRIGATORIO = 'Por favor, preencha todos os campos obrigatórios correctamente.';
+  const TEXTO_TELEFONE = 'Número de telefone inválido para o país escolhido.';
   const TEXTO_ENVIANDO = 'A enviar mensagem...';
   const TEXTO_SUCESSO = 'Mensagem enviada com sucesso. Entraremos em contacto brevemente.';
   const TEXTO_ERRO =
@@ -135,9 +156,31 @@ const endpoint = `https://formsubmit.co/ajax/${site.email}`;
     mensagem.removeAttribute('aria-label');
   }
 
+  // O telefone é opcional, mas se preenchido tem de ser válido para o país escolhido.
+  async function validarTelefone(): Promise<boolean> {
+    if (!telefone || !telefone.value.trim()) {
+      if (erroTelefone) erroTelefone.textContent = '';
+      if (telefoneCompleto) telefoneCompleto.value = '';
+      return true;
+    }
+
+    const valido = await telefoneValido(telefone);
+    const erro = valido ? '' : traduzir(TEXTO_TELEFONE, obterIdioma());
+    if (erroTelefone) erroTelefone.textContent = erro;
+    if (pais) pais.value = paisTelefone(telefone).toUpperCase();
+    if (telefoneCompleto) telefoneCompleto.value = await numeroTelefone(telefone);
+    return valido;
+  }
+
+  telefone?.addEventListener('input', () => {
+    telefone.setCustomValidity('');
+    if (erroTelefone) erroTelefone.textContent = '';
+  });
+
   // Se o visitante mudar de idioma com a mensagem ainda no ecrã, actualiza-a.
   document.addEventListener('jp:lang', () => {
     if (estado) mostrar(estado.textoOriginal, estado.tipo);
+    if (telefone?.value.trim()) void validarTelefone();
   });
 
   // O Formsubmit usa este campo para identificar a página de origem.
@@ -150,10 +193,18 @@ const endpoint = `https://formsubmit.co/ajax/${site.email}`;
   form?.addEventListener('submit', async (event) => {
     event.preventDefault();
     limpar();
+    telefone?.setCustomValidity('');
 
     if (!form.checkValidity()) {
       mostrar(TEXTO_OBRIGATORIO, 'erro');
       form.reportValidity();
+      return;
+    }
+
+    if (!(await validarTelefone())) {
+      const erro = traduzir(TEXTO_TELEFONE, obterIdioma());
+      telefone?.setCustomValidity(erro);
+      mostrar(erro, 'erro');
       return;
     }
 
@@ -191,6 +242,9 @@ const endpoint = `https://formsubmit.co/ajax/${site.email}`;
       }
 
       form.reset();
+      limparTelefone(telefone);
+      if (pais) pais.value = 'AO';
+      if (telefoneCompleto) telefoneCompleto.value = '';
       if (urlOculta) {
         const url = window.location.href;
         urlOculta.value = url;
@@ -277,6 +331,10 @@ const endpoint = `https://formsubmit.co/ajax/${site.email}`;
     font-size: 0.85rem;
     color: var(--text-danger);
     margin-top: 0.4rem;
+  }
+
+  .form-error:not(:empty) {
+    display: block;
   }
 
   .form-group input:invalid:not(:placeholder-shown) ~ .form-error,
